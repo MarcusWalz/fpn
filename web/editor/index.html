@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editor · fpn</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap">
+<link rel="stylesheet" href="/__editor/editor.css">
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="/" title="Back to the site">FPN<span>EDIT</span></a>
+  <div class="file">
+    <label class="sr-only" for="file-input">File</label>
+    <input id="file-input" list="file-list" spellcheck="false" autocomplete="off" placeholder="content/… .md">
+    <datalist id="file-list"></datalist>
+  </div>
+  <span id="status" class="status" aria-live="polite">loading…</span>
+  <button id="toggle" class="btn ghost" type="button" title="Switch between editor and preview">Preview</button>
+  <a id="view" class="btn ghost" href="/" target="_blank" rel="noopener" title="Open the page in a new tab">Open ↗</a>
+  <button id="save" class="btn" type="button" title="Save (⌘S / Ctrl+S)" disabled>Save</button>
+</header>
+<main class="split" id="split">
+  <section class="pane preview-pane" aria-label="Preview">
+    <iframe id="preview" title="Page preview"></iframe>
+  </section>
+  <div class="gutter" id="gutter" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize"></div>
+  <section class="pane editor-pane" aria-label="Markdown editor">
+    <div id="editor" class="editor"></div>
+    <ul id="warnings" class="warnings" hidden></ul>
+  </section>
+</main>
+<script type="module" src="/__editor/editor.js"></script>
+</body>
+</html>

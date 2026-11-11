@@ -68,6 +68,7 @@ type PageData struct {
 	Siblings []*content.Node
 	Prev     *content.Node
 	Next     *content.Node
+	EditPath string // source file, for the dev editor link
 }
 
 type builder struct {
@@ -105,16 +106,7 @@ func Build(cfg Config) (*Result, error) {
 	}
 
 	b := &builder{cfg: cfg, tree: tree, md: newMarkdown(), tpl: tpl}
-	b.site = &SiteData{
-		Title:   tree.Root.Title,
-		Base:    cfg.Base,
-		Root:    tree.Root,
-		Books:   tree.Root.Sections(),
-		Dev:     cfg.Dev,
-		Index:   cfg.AllowIndex,
-		Version: fmt.Sprintf("%x", start.Unix()),
-		Year:    start.Year(),
-	}
+	b.site = newSiteData(tree, cfg, start)
 	if err := os.RemoveAll(cfg.OutDir); err != nil {
 		return nil, err
 	}
@@ -178,6 +170,19 @@ func Build(cfg Config) (*Result, error) {
 	return res, nil
 }
 
+func newSiteData(tree *content.Tree, cfg Config, now time.Time) *SiteData {
+	return &SiteData{
+		Title:   tree.Root.Title,
+		Base:    cfg.Base,
+		Root:    tree.Root,
+		Books:   tree.Root.Sections(),
+		Dev:     cfg.Dev,
+		Index:   cfg.AllowIndex,
+		Version: fmt.Sprintf("%x", now.Unix()),
+		Year:    now.Year(),
+	}
+}
+
 func safeOutDir(out, contentDir string) error {
 	absOut, err := filepath.Abs(out)
 	if err != nil {
@@ -202,10 +207,11 @@ func safeOutDir(out, contentDir string) error {
 
 func loadTemplates(webFS fs.FS, base string) (map[string]*template.Template, error) {
 	funcs := template.FuncMap{
-		"icon":    iconFunc(base),
-		"iconFor": iconFor,
-		"shade":   func(i int) int { return i % 6 },
-		"join":    strings.Join,
+		"icon":     iconFunc(base),
+		"iconFor":  iconFor,
+		"shade":    func(i int) int { return i % 6 },
+		"join":     strings.Join,
+		"pathJoin": func(a, b string) string { return path.Join(a, b) },
 	}
 	out := map[string]*template.Template{}
 	for _, kind := range []string{"home", "section", "page", "sitemap", "progress", "404"} {
@@ -236,15 +242,22 @@ func (b *builder) writeFile(rel string, data []byte) error {
 }
 
 func (b *builder) renderNode(n *content.Node) ([]string, error) {
+	kind, d, warns := b.pageData(n)
+	return warns, b.write(path.Join(n.Slug, "index.html"), kind, d)
+}
+
+// pageData prepares the template data for a page or section node.
+func (b *builder) pageData(n *content.Node) (string, *PageData, []string) {
 	html, toc, warns := b.renderMarkdown(n)
 	d := &PageData{
-		Site:    b.site,
-		Node:    n,
-		Title:   n.Title,
-		IsHome:  n.Parent == nil,
-		Content: html,
-		TOC:     toc,
-		Crumbs:  n.Ancestors(),
+		Site:     b.site,
+		Node:     n,
+		Title:    n.Title,
+		IsHome:   n.Parent == nil,
+		Content:  html,
+		TOC:      toc,
+		Crumbs:   n.Ancestors(),
+		EditPath: n.SourceRel(),
 	}
 	kind := "section"
 	switch {
@@ -254,7 +267,7 @@ func (b *builder) renderNode(n *content.Node) ([]string, error) {
 		kind = "page"
 		d.Siblings = n.Parent.Pages()
 		for i, s := range d.Siblings {
-			if s == n {
+			if s.Rel == n.Rel {
 				if i > 0 {
 					d.Prev = d.Siblings[i-1]
 				}
@@ -264,7 +277,7 @@ func (b *builder) renderNode(n *content.Node) ([]string, error) {
 			}
 		}
 	}
-	return warns, b.write(path.Join(n.Slug, "index.html"), kind, d)
+	return kind, d, warns
 }
 
 func (b *builder) renderSitemapPage() error {

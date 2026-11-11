@@ -45,7 +45,8 @@
   <p><a href="{{.Site.Base}}">{{.Site.Title}}</a> · <a href="{{.Site.Base}}sitemap/">Site map</a> · <a href="{{.Site.Base}}progress/">Progress</a></p>
 </footer>
 <script src="{{.Site.Base}}static/app.js?v={{.Site.Version}}" defer></script>
-{{if .Site.Dev}}<script>new EventSource("/__reload").onmessage=()=>location.reload()</script>{{end}}
+{{if .Site.Dev}}{{with .EditPath}}<a class="edit-fab" href="/__editor/?path={{.}}" title="Edit content/{{.}}">✎ Edit</a>{{end}}
+<script>new EventSource("/__reload").onmessage=()=>location.reload()</script>{{end}}
 </body>
 </html>
 {{end}}

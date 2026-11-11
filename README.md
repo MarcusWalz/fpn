@@ -33,6 +33,17 @@ content/
 - Every folder gets an index page automatically, and `/sitemap/` lists the whole tree.
 - Unknown front-matter keys are kept, ready for future fields such as aliases or tags.
 
+## Local editor (dev only)
+
+While `./fpn serve` is running, open http://localhost:1313/__editor/ or click **✎ Edit** on any page. Each topic idea on a chapter page also has a **✎ write** link that opens a new page pre-filled with its title.
+
+- The page preview is on the left and the Markdown editor (CodeMirror) is on the right. The preview re-renders as you type, before you save, using the real templates. It also shows broken-link warnings.
+- **⌘S / Ctrl+S** saves. The watcher rebuilds the site and other open tabs reload.
+- If the file changed on disk since you opened it (another editor, `git pull`), saving asks before overwriting.
+- Drag the divider to resize. On narrow screens, a button switches between editor and preview.
+- Offline, it falls back to a plain textarea.
+- It only exists in `fpn serve`. The static build has no editor and no edit links. The API only answers on localhost, rejects cross-site requests, and only writes `.md` files inside `content/`.
+
 ## Outline, placeholders and progress
 
 The notebook's outline comes from the 2011 fpnotebook.com sitemap:

@@ -244,13 +244,23 @@ func (t *Tree) loadFile(n *Node, fsPath, rel string) error {
 	if err != nil {
 		return err
 	}
-	meta, body, err := SplitFrontMatter(raw)
-	if err != nil {
+	if err := n.SetSource(raw, rel); err != nil {
 		t.Warnings = append(t.Warnings, fmt.Sprintf("%s: front matter: %v", rel, err))
 	}
+	return nil
+}
+
+// SetSource (re)initializes a node's metadata, body, title and status from
+// raw file contents. rel is the source path, used for the fallback title.
+// A front-matter parse error is returned, but the body is still applied.
+func (n *Node) SetSource(raw []byte, rel string) error {
+	meta, body, ferr := SplitFrontMatter(raw)
+	n.Meta = map[string]any{}
 	if meta != nil {
 		n.Meta = meta
 	}
+	n.Title, n.TitleFromH1, n.Stub, n.hasIntro = "", false, false, false
+	n.Order, n.HasOrder = 0, false
 	n.Body = body
 	if s, ok := n.Meta["title"].(string); ok && strings.TrimSpace(s) != "" {
 		n.Title = strings.TrimSpace(s)
@@ -258,6 +268,8 @@ func (t *Tree) loadFile(n *Node, fsPath, rel string) error {
 		n.Title, n.TitleFromH1 = h1, true
 	} else if !n.IsSection {
 		n.Title = Prettify(strings.TrimSuffix(path.Base(rel), path.Ext(rel)))
+	} else if n.Parent != nil {
+		n.Title = Prettify(path.Base(path.Dir(rel)))
 	}
 	if n.IsSection {
 		n.hasIntro = !isEmptyBody(body, n.TitleFromH1)
@@ -271,7 +283,16 @@ func (t *Tree) loadFile(n *Node, fsPath, rel string) error {
 	case float64:
 		n.Order, n.HasOrder = int(v), true
 	}
-	return nil
+	return ferr
+}
+
+// SourceRel is the Markdown file that defines a node: the page itself, or a
+// section's _index.md (which may not exist yet).
+func (n *Node) SourceRel() string {
+	if n.IsSection {
+		return path.Join(n.Rel, "_index.md")
+	}
+	return n.Rel
 }
 
 // SplitFrontMatter separates an optional leading YAML block ("---" … "---").

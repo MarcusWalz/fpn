@@ -24,6 +24,7 @@ func Serve(cfg Config, addr string, watch []string) error {
 		current atomic.Value // string: dir currently served
 		version atomic.Int64
 		mu      sync.Mutex
+		preview atomic.Pointer[Previewer]
 	)
 	rebuild := func() {
 		mu.Lock()
@@ -50,6 +51,11 @@ func Serve(cfg Config, addr string, watch []string) error {
 		}
 		current.Store(c.OutDir)
 		version.Add(1)
+		if p, err := NewPreviewer(cfg); err != nil {
+			log.Printf("editor preview: %v", err)
+		} else {
+			preview.Store(p)
+		}
 	}
 	rebuild()
 	if current.Load() == nil {
@@ -87,6 +93,7 @@ func Serve(cfg Config, addr string, watch []string) error {
 	})
 
 	mux := http.NewServeMux()
+	(&editorAPI{cfg: cfg, preview: preview.Load}).mount(mux)
 	mux.HandleFunc("/__reload", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/event-stream")
 		w.Header().Set("Cache-Control", "no-store")
@@ -117,6 +124,7 @@ func Serve(cfg Config, addr string, watch []string) error {
 	}
 
 	log.Printf("serving at http://%s%s (watching %s)", addr, cfg.Base, strings.Join(watch, ", "))
+	log.Printf("editor at  http://%s/__editor/  (or use the ✎ Edit button on any page)", addr)
 	return http.ListenAndServe(addr, mux)
 }
 

@@ -1,0 +1,77 @@
+:root {
+  --bg: #eef9f1; --surface: #fff; --ink: #10261a; --muted: #476352;
+  --bar: #14532d; --bar-deep: #0b3b1f; --leaf: #22c55e; --lime: #d9f99d;
+  --line: #14532d; --warn: #fef3c7; --warn-ink: #78350f;
+  --font-px: "Press Start 2P", ui-monospace, monospace;
+  --font-head: "Silkscreen", ui-monospace, monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --split: 55%;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #07130c; --surface: #0d1f15; --ink: #dcf5e4; --muted: #94bba3;
+    --bar: #0a2415; --bar-deep: #051509; --line: #2f7a4d; --warn: #422006; --warn-ink: #fde68a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #07130c; --surface: #0d1f15; --ink: #dcf5e4; --muted: #94bba3;
+  --bar: #0a2415; --bar-deep: #051509; --line: #2f7a4d; --warn: #422006; --warn-ink: #fde68a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; display: flex; flex-direction: column; background: var(--bg); color: var(--ink); font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.bar {
+  flex: none; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+  padding: .5rem 16px; background: var(--bar); color: #ecfdf5; border-bottom: 3px solid #000;
+}
+.logo { font: .7rem var(--font-px); color: #d9f99d; text-decoration: none; text-shadow: 2px 2px 0 #000; }
+.logo span { margin-left: .4rem; color: #22c55e; }
+.file { flex: 1 1 260px; min-width: 0; }
+.file input {
+  width: 100%; padding: .45rem .6rem; font: .9rem var(--font-mono);
+  color: #ecfdf5; background: var(--bar-deep); border: 3px solid #000; border-radius: 0;
+}
+.file input:focus { outline: 3px solid #d9f99d; outline-offset: 0; }
+.status { font: .8rem var(--font-head); text-transform: uppercase; color: #bbf7d0; white-space: nowrap; }
+.status.dirty { color: #d9f99d; }
+.status.dirty::before { content: "● "; }
+.status.error { color: #fca5a5; }
+.btn {
+  padding: .45rem .8rem; font: .6rem var(--font-px); text-transform: uppercase; text-decoration: none;
+  background: var(--leaf); color: #052e16; border: 3px solid #000; box-shadow: 3px 3px 0 #000; cursor: pointer;
+}
+.btn:active { transform: translate(3px, 3px); box-shadow: none; }
+.btn:disabled { opacity: .5; cursor: default; transform: none; box-shadow: 3px 3px 0 #000; }
+.btn.ghost { background: transparent; color: #d9f99d; border-color: #d9f99d; box-shadow: none; }
+#toggle { display: none; }
+
+.split { flex: 1; min-height: 0; display: grid; grid-template-columns: var(--split) 8px 1fr; }
+.pane { min-width: 0; min-height: 0; position: relative; }
+.preview-pane iframe { width: 100%; height: 100%; border: 0; background: var(--bg); display: block; }
+.gutter { background: repeating-linear-gradient(0deg, var(--line) 0 4px, transparent 4px 8px); cursor: col-resize; }
+.gutter:hover, .gutter:focus { background: var(--leaf); outline: none; }
+.editor-pane { display: flex; flex-direction: column; background: var(--surface); }
+.editor { flex: 1; min-height: 0; overflow: hidden; }
+.editor .cm-editor { height: 100%; }
+.editor textarea.fallback {
+  width: 100%; height: 100%; resize: none; border: 0; padding: 1rem;
+  font: 14px/1.6 var(--font-mono); color: var(--ink); background: var(--surface); tab-size: 2;
+}
+.editor textarea.fallback:focus { outline: none; }
+.warnings { flex: none; margin: 0; padding: .5rem 1rem; list-style: none; max-height: 30%; overflow: auto; background: var(--warn); color: var(--warn-ink); font: .85rem var(--font-mono); border-top: 3px solid var(--line); }
+
+/* Phones / narrow windows: one pane at a time, toggled. */
+@media (max-width: 800px) {
+  #toggle { display: inline-block; }
+  .split { grid-template-columns: 1fr; }
+  .gutter { display: none; }
+  .split .preview-pane { display: none; }
+  .split.show-preview .preview-pane { display: block; }
+  .split.show-preview .editor-pane { display: none; }
+}

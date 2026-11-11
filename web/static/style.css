@@ -474,3 +474,15 @@ img { max-width: 100%; height: auto; }
 .tile-empty .tile-icon { opacity: .45; }
 .tile-empty .tile-title { color: var(--muted); }
 .smap-book .smap-sec.stub > a { color: var(--muted); font-weight: 700; text-decoration: underline dotted; }
+
+/* dev-only editor entry points */
+.edit-fab {
+  position: fixed; right: 16px; bottom: 16px; z-index: 40;
+  padding: .7rem .9rem; font: .65rem var(--font-px); text-transform: uppercase; text-decoration: none;
+  background: #d9f99d; color: #1a2e05; border: 3px solid #000; box-shadow: 4px 4px 0 #000;
+}
+.edit-fab:hover { background: #fff; color: #1a2e05; }
+.edit-fab:active { transform: translate(4px, 4px); box-shadow: none; }
+.stub-tag.write { border-style: solid; border-color: var(--leaf-ink); color: var(--leaf-ink); text-decoration: none; }
+.stub-tag.write:hover { background: var(--lime); color: var(--lime-ink); }
+@media print { .edit-fab { display: none; } }
