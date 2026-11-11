@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/marcuswalz/fpn/internal/content"
@@ -21,7 +22,8 @@ import (
 
 // Previewer renders single pages from unsaved Markdown, for the dev editor.
 type Previewer struct {
-	b *builder
+	mu sync.Mutex
+	b  *builder
 }
 
 // NewPreviewer loads the content tree and templates once; create a new one
@@ -38,14 +40,42 @@ func NewPreviewer(cfg Config) (*Previewer, error) {
 	}
 	sd := newSiteData(tree, cfg, time.Now())
 	sd.Dev = false // no live-reload script or edit button inside the preview
-	return &Previewer{b: &builder{cfg: cfg, tree: tree, md: newMarkdown(), tpl: tpl, site: sd}}, nil
+	return &Previewer{b: &builder{cfg: cfg, tree: tree, md: newMarkdown(), tpl: tpl, site: sd, srcLines: true}}, nil
+}
+
+// Tree returns the current content snapshot.
+func (p *Previewer) Tree() *content.Tree {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return p.b.tree
+}
+
+// reload re-reads the content tree (e.g. a folder was just created and the
+// watcher hasn't rebuilt yet).
+func (p *Previewer) reload() error {
+	fresh, err := NewPreviewer(p.b.cfg)
+	if err != nil {
+		return err
+	}
+	p.b = fresh.b
+	return nil
 }
 
 // Render returns the HTML page for source file rel (e.g. "book/chap/x.md" or
 // "book/_index.md") as if its contents were raw. The file need not exist yet,
 // but its folder must. It also returns the page's URL.
 func (p *Previewer) Render(rel string, raw []byte) ([]byte, string, []string, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 	n, err := p.nodeFor(rel)
+	if err != nil {
+		// The folder may be newer than our snapshot of the tree.
+		if st, serr := os.Stat(filepath.Join(p.b.cfg.ContentDir, filepath.FromSlash(path.Dir(rel)))); serr == nil && st.IsDir() {
+			if rerr := p.reload(); rerr == nil {
+				n, err = p.nodeFor(rel)
+			}
+		}
+	}
 	if err != nil {
 		return nil, "", nil, err
 	}
@@ -53,6 +83,9 @@ func (p *Previewer) Render(rel string, raw []byte) ([]byte, string, []string, er
 	if err := n.SetSource(raw, rel); err != nil {
 		warns = append(warns, "front matter: "+err.Error())
 	}
+	// Lines before the body (front matter), so data-src-line matches the editor.
+	norm := strings.ReplaceAll(strings.TrimPrefix(string(raw), "\xef\xbb\xbf"), "\r\n", "\n")
+	p.b.srcLineOffset = strings.Count(norm, "\n") - strings.Count(string(n.Body), "\n")
 	kind, d, w := p.b.pageData(n)
 	warns = append(warns, w...)
 	var buf bytes.Buffer
@@ -64,6 +97,7 @@ func (p *Previewer) Render(rel string, raw []byte) ([]byte, string, []string, er
 
 // nodeFor returns a private copy of the node for rel, or a fresh page node
 // if the file doesn't exist yet.
+// Callers must hold p.mu.
 func (p *Previewer) nodeFor(rel string) (*content.Node, error) {
 	t := p.b.tree
 	if path.Base(rel) == "_index.md" {
@@ -109,6 +143,11 @@ type editorAPI struct {
 
 // cleanRel validates an editor path: a .md file inside the content dir.
 func cleanRel(p string) (string, error) {
+	for _, seg := range strings.Split(strings.ReplaceAll(p, "\\", "/"), "/") {
+		if seg == ".." {
+			return "", errors.New("paths may not contain ..")
+		}
+	}
 	p = strings.TrimPrefix(path.Clean("/"+strings.ReplaceAll(p, "\\", "/")), "/")
 	if p == "" || p == "." || !strings.EqualFold(path.Ext(p), ".md") {
 		return "", errors.New("path must be a .md file inside content/")
@@ -252,7 +291,7 @@ func (a *editorAPI) files(w http.ResponseWriter, r *http.Request) {
 		Title string `json:"title"`
 	}
 	var out []f
-	t := p.b.tree
+	t := p.Tree()
 	for _, s := range t.Sections {
 		out = append(out, f{Path: s.SourceRel(), Title: strings.Join(append(s.Trail(), s.Title), " › ") + " (index)"})
 	}
@@ -293,4 +332,5 @@ func (a *editorAPI) mount(mux *http.ServeMux) {
 	mux.HandleFunc("/__api/file", a.file)
 	mux.HandleFunc("/__api/preview", a.previewHandler)
 	mux.HandleFunc("/__api/files", a.files)
+	a.mountFiles(mux)
 }

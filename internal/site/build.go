@@ -77,6 +77,11 @@ type builder struct {
 	md   goldmark.Markdown
 	tpl  map[string]*template.Template
 	site *SiteData
+
+	// Editor preview only: tag blocks with data-src-line (1-based line in
+	// the source file; srcLineOffset = lines before the body, i.e. front matter).
+	srcLines      bool
+	srcLineOffset int
 }
 
 // NormalizeBase ensures a base path starts and ends with "/".

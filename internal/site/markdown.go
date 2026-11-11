@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/url"
 	"path"
+	"strconv"
 	"strings"
 
 	"github.com/marcuswalz/fpn/internal/content"
@@ -60,6 +61,10 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 	where := n.Rel
 	if n.IsSection {
 		where = path.Join(n.Rel, "_index.md")
+	}
+
+	if b.srcLines {
+		tagSourceLines(doc, src, b.srcLineOffset)
 	}
 
 	var toc []Heading
@@ -160,4 +165,50 @@ func nodeText(n ast.Node, src []byte) string {
 		return ast.WalkContinue, nil
 	})
 	return strings.TrimSpace(sb.String())
+}
+
+// tagSourceLines sets data-src-line on top-level blocks and list items so the
+// editor can keep the preview scrolled to the line being edited.
+func tagSourceLines(doc ast.Node, src []byte, offset int) {
+	starts := []int{0}
+	for i, c := range src {
+		if c == '\n' {
+			starts = append(starts, i+1)
+		}
+	}
+	lineOf := func(pos int) int {
+		lo, hi := 0, len(starts)-1
+		for lo < hi {
+			mid := (lo + hi + 1) / 2
+			if starts[mid] <= pos {
+				lo = mid
+			} else {
+				hi = mid - 1
+			}
+		}
+		return lo + 1 + offset
+	}
+	var first func(n ast.Node) int
+	first = func(n ast.Node) int {
+		if n.Type() == ast.TypeBlock && n.Lines().Len() > 0 {
+			return n.Lines().At(0).Start
+		}
+		for c := n.FirstChild(); c != nil; c = c.NextSibling() {
+			if p := first(c); p >= 0 {
+				return p
+			}
+		}
+		return -1
+	}
+	_ = ast.Walk(doc, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
+		if !entering || n.Type() != ast.TypeBlock || n.Kind() == ast.KindDocument {
+			return ast.WalkContinue, nil
+		}
+		if n.Parent() != nil && (n.Parent().Kind() == ast.KindDocument || n.Kind() == ast.KindListItem) {
+			if p := first(n); p >= 0 {
+				n.SetAttributeString("data-src-line", []byte(strconv.Itoa(lineOf(p))))
+			}
+		}
+		return ast.WalkContinue, nil
+	})
 }

@@ -12,6 +12,7 @@
 </head>
 <body>
 <header class="bar">
+  <button id="tree-toggle" class="btn ghost icon" type="button" title="Show/hide files" aria-controls="tree" aria-expanded="true">☰</button>
   <a class="logo" href="/" title="Back to the site">FPN<span>EDIT</span></a>
   <div class="file">
     <label class="sr-only" for="file-input">File</label>
@@ -23,16 +24,52 @@
   <a id="view" class="btn ghost" href="/" target="_blank" rel="noopener" title="Open the page in a new tab">Open ↗</a>
   <button id="save" class="btn" type="button" title="Save (⌘S / Ctrl+S)" disabled>Save</button>
 </header>
-<main class="split" id="split">
-  <section class="pane preview-pane" aria-label="Preview">
-    <iframe id="preview" title="Page preview"></iframe>
-  </section>
-  <div class="gutter" id="gutter" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize"></div>
-  <section class="pane editor-pane" aria-label="Markdown editor">
-    <div id="editor" class="editor"></div>
-    <ul id="warnings" class="warnings" hidden></ul>
-  </section>
-</main>
+
+<div class="shell" id="shell">
+  <aside class="tree" id="tree" aria-label="Files">
+    <div class="tree-head">
+      <span class="tree-title">Files</span>
+      <button class="tbtn" id="new-page" type="button" title="New page in the selected folder">+ Page</button>
+      <button class="tbtn" id="new-folder" type="button" title="New folder (chapter) in the selected folder">+ Folder</button>
+      <button class="tbtn" id="tree-refresh" type="button" title="Refresh">↻</button>
+    </div>
+    <input id="tree-filter" class="tree-filter" type="search" placeholder="Filter files…" spellcheck="false" autocomplete="off" aria-label="Filter files">
+    <div class="tree-body" id="tree-body" role="tree" tabindex="-1"></div>
+    <p class="tree-hint">Drag files to move them · drop files from your computer onto a folder to upload · drag a file into the editor to link it</p>
+  </aside>
+
+  <main class="split" id="split">
+    <section class="pane left-pane" aria-label="Preview and diff">
+      <div class="tabs" role="tablist">
+        <button class="tab" id="tab-preview" role="tab" aria-selected="true" aria-controls="preview-wrap">Preview</button>
+        <button class="tab" id="tab-diff" role="tab" aria-selected="false" aria-controls="diff-wrap">Diff <span id="diff-badge" class="tab-badge" hidden></span></button>
+      </div>
+      <div class="tabpanel" id="preview-wrap" role="tabpanel">
+        <iframe id="preview" title="Page preview"></iframe>
+      </div>
+      <div class="tabpanel" id="diff-wrap" role="tabpanel" hidden>
+        <div class="diff-bar">
+          <label>Compare with
+            <select id="diff-base">
+              <option value="head">last commit</option>
+              <option value="saved">saved file</option>
+            </select>
+          </label>
+          <label class="chk"><input type="checkbox" id="diff-context" checked> only changes</label>
+          <span id="diff-stats" class="diff-stats"></span>
+        </div>
+        <div class="diff" id="diff" tabindex="0" aria-label="Differences"></div>
+      </div>
+    </section>
+    <div class="gutter" id="gutter" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize"></div>
+    <section class="pane editor-pane" aria-label="Markdown editor">
+      <div id="editor" class="editor"></div>
+      <div id="dropzone" class="dropzone" hidden>Drop to insert</div>
+      <ul id="warnings" class="warnings" hidden></ul>
+    </section>
+  </main>
+</div>
+<div id="toast" class="toast" role="status" hidden></div>
 <script type="module" src="/__editor/editor.js"></script>
 </body>
 </html>

@@ -37,7 +37,14 @@ content/
 
 While `./fpn serve` is running, open http://localhost:1313/__editor/ or click **✎ Edit** on any page. Each topic idea on a chapter page also has a **✎ write** link that opens a new page pre-filled with its title.
 
-- The page preview is on the left and the Markdown editor (CodeMirror) is on the right. The preview re-renders as you type, before you save, using the real templates. It also shows broken-link warnings.
+- **Layout:** the file tree is on the left, then the page **Preview** (with a **Diff** tab), then the Markdown editor (CodeMirror). The preview re-renders as you type, before you save, using the real templates, and shows broken-link warnings. Preview and editor **scroll in sync**, in both directions.
+- **File tree:** click to open. **+ Page** and **+ Folder** create in the selected folder; a new folder gets an `_index.md`, so it's a chapter right away. Use **⋯** to rename, delete, or create inside a folder. Git status badges show **M**odified, **U**ntracked, and so on.
+- **Drag and drop:**
+  - Drag tree items onto a folder to move them. Links to a moved page break, and `fpn check` finds them.
+  - Drop files from your computer onto a folder to upload them.
+  - Drop or paste images into the editor to save them in the page's `images/` folder and insert the Markdown.
+  - Drag a tree item into the editor to insert a link to it.
+- **Diff:** compares the editor buffer against the last commit (git `HEAD`) or the saved file, with only the changed lines (plus context) or the whole file.
 - **⌘S / Ctrl+S** saves. The watcher rebuilds the site and other open tabs reload.
 - If the file changed on disk since you opened it (another editor, `git pull`), saving asks before overwriting.
 - Drag the divider to resize. On narrow screens, a button switches between editor and preview.
