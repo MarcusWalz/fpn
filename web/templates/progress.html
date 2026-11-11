@@ -5,12 +5,12 @@
   <span class="sec-icon">{{icon "star"}}</span>
   <div>
     <h1>Progress</h1>
-    <p class="count">{{$r.DoneCount}} of {{$r.TotalCount}} topics written · {{$r.OutstandingCount}} to go</p>
+    <p class="count">{{$r.WrittenChapters}} of {{$r.ChapterCount}} chapters have content · {{$r.DoneCount}} page{{if ne $r.DoneCount 1}}s{{end}} written</p>
     {{template "bar" $r}}
   </div>
 </header>
 
-<p class="legend">A topic is <strong>outstanding</strong> while it is only listed under <code>planned:</code> in a chapter's <code>_index.md</code>, or its page has <code>status: stub</code> or no content. It counts as written once a page with that title exists in the chapter and has real content.</p>
+<p class="legend">Progress counts <strong>chapters</strong>. A chapter has content once it has at least one written page, or intro text in its <code>_index.md</code>. Topic ideas and pages marked <code>status: stub</code> don't count.</p>
 
 <div class="progress-list">
 {{range $i, $b := .Site.Books}}
@@ -18,14 +18,13 @@
     <summary>
       <span class="mi">{{icon (iconFor $b)}}</span>
       <a href="{{$b.URL}}">{{$b.Title}}</a>
-      <span class="prog-num">{{$b.DoneCount}}/{{$b.TotalCount}}</span>
+      <span class="prog-num">{{$b.WrittenChapters}}/{{$b.ChapterCount}}</span>
       {{template "bar" $b}}
     </summary>
     <ul class="prog-chapters">
-      {{range $b.Sections}}<li>
+      {{range $b.Sections}}<li{{if not .Written}} class="stub"{{end}}>
         <a href="{{.URL}}">{{.Title}}</a>
-        <span class="prog-num">{{.DoneCount}}/{{.TotalCount}}</span>
-        {{template "bar" .}}
+        <span class="prog-num">{{if .Written}}✓ {{.DoneCount}} page{{if ne .DoneCount 1}}s{{end}}{{else}}empty{{end}}</span>
       </li>
       {{end}}
     </ul>

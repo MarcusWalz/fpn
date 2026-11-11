@@ -4,11 +4,12 @@
 </ol></nav>{{end}}{{end}}
 
 {{define "tiles"}}<div class="grid">
-{{range $i, $s := .}}<a class="tile press shade-{{shade $i}}" href="{{$s.URL}}">
+{{range $i, $s := .}}<a class="tile press shade-{{shade $i}}{{if and $s.IsChapter (not $s.Written)}} tile-empty{{end}}" href="{{$s.URL}}">
   <span class="tile-icon">{{icon (iconFor $s)}}</span>
   <span class="tile-title">{{$s.Title}}</span>
-  <span class="tile-meta">{{$s.DoneCount}}/{{$s.TotalCount}} written</span>
-  {{template "bar" $s}}
+  {{if $s.IsChapter}}<span class="tile-meta">{{if $s.Written}}{{$s.DoneCount}} page{{if ne $s.DoneCount 1}}s{{end}}{{else}}empty{{end}}</span>
+  {{else}}<span class="tile-meta">{{$s.WrittenChapters}}/{{$s.ChapterCount}} chapters</span>
+  {{template "bar" $s}}{{end}}
 </a>
 {{end}}</div>{{end}}
 
@@ -16,4 +17,4 @@
 {{range .}}<li{{if .Stub}} class="stub"{{end}}><a href="{{.URL}}">{{icon "page"}}<span>{{.Title}}</span>{{if .Stub}}<span class="stub-tag" title="Placeholder — not written yet">stub</span>{{end}}</a></li>
 {{end}}</ul>{{end}}
 
-{{define "bar"}}<span class="bar" role="img" aria-label="{{.Percent}}% written"><span class="bar-fill" style="width: {{.Percent}}%"></span></span>{{end}}
+{{define "bar"}}<span class="bar" role="img" aria-label="{{.Percent}}% of chapters have content"><span class="bar-fill" style="width: {{.Percent}}%"></span></span>{{end}}

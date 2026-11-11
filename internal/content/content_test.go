@@ -72,29 +72,44 @@ func TestLoadTree(t *testing.T) {
 	}
 }
 
-func TestPlannedTopics(t *testing.T) {
+func TestChapterProgress(t *testing.T) {
 	dir := t.TempDir()
 	write := func(rel, s string) {
 		p := filepath.Join(dir, rel)
 		os.MkdirAll(filepath.Dir(p), 0o755)
 		os.WriteFile(p, []byte(s), 0o644)
 	}
-	write("book/chap/_index.md", "---\ntitle: Chap\nplanned:\n  - title: Alpha\n  - title: Beta\n    legacy: X/Beta.htm\n  - Gamma\n---\n")
-	write("book/chap/alpha.md", "# Alpha\n\nReal content.\n")                               // written: matches by title
-	write("book/chap/b.md", "---\ntitle: Renamed\nlegacy: X/Beta.htm\nstatus: stub\n---\n") // stub: matches by legacy
-	write("book/chap/extra.md", "# Extra\n\nNot in the outline.\n")
+	// written: has a real page; planned topics don't matter
+	write("book/written/_index.md", "---\ntitle: Written\nplanned:\n  - title: Alpha\n  - Gamma\n---\n")
+	write("book/written/alpha.md", "# Alpha\n\nReal content.\n")
+	// empty: only planned topics and a stub page
+	write("book/empty/_index.md", "---\ntitle: Empty\nplanned:\n  - title: Beta\n    legacy: X/Beta.htm\n---\n")
+	write("book/empty/b.md", "---\ntitle: Renamed\nlegacy: X/Beta.htm\nstatus: stub\n---\n")
+	// intro: chapter with intro text but no pages counts as written
+	write("book/intro/_index.md", "# Intro\n\nSome intro text.\n")
+	// planned-only chapter is empty
+	write("other/plan/_index.md", "---\ntitle: Plan\nplanned: [One, Two]\n---\n")
 
 	tr, err := Load(dir, "/")
 	if err != nil {
 		t.Fatal(err)
 	}
-	chap := tr.ByRel["book/chap"]
-	if got := len(chap.OutstandingPlanned()); got != 2 { // Beta (stub) + Gamma (no page)
-		t.Fatalf("outstanding = %d, want 2", got)
+	for rel, want := range map[string]bool{"book/written": true, "book/empty": false, "book/intro": true, "other/plan": false} {
+		if got := tr.ByRel[rel].Written(); got != want {
+			t.Errorf("%s written = %v, want %v", rel, got, want)
+		}
 	}
-	r := tr.Root
-	// pages: alpha, b(stub), extra = 3; todo: Gamma = 1; total 4; done 2
-	if r.TotalCount() != 4 || r.DoneCount() != 2 || r.TodoCount() != 1 || r.OutstandingCount() != 2 || r.Percent() != 50 {
-		t.Fatalf("total=%d done=%d todo=%d outstanding=%d pct=%d", r.TotalCount(), r.DoneCount(), r.TodoCount(), r.OutstandingCount(), r.Percent())
+	if got := len(tr.ByRel["book/written"].OutstandingPlanned()); got != 1 { // Gamma
+		t.Errorf("written chapter outstanding ideas = %d, want 1", got)
+	}
+	if got := len(tr.ByRel["book/empty"].OutstandingPlanned()); got != 1 { // Beta has only a stub page
+		t.Errorf("empty chapter outstanding ideas = %d, want 1", got)
+	}
+	r, book := tr.Root, tr.ByRel["book"]
+	if book.IsChapter() || book.ChapterCount() != 3 || book.WrittenChapters() != 2 || book.Percent() != 66 {
+		t.Errorf("book: chapter=%v chapters=%d written=%d pct=%d", book.IsChapter(), book.ChapterCount(), book.WrittenChapters(), book.Percent())
+	}
+	if r.ChapterCount() != 4 || r.WrittenChapters() != 2 || r.EmptyChapters() != 2 || r.Percent() != 50 || r.DoneCount() != 1 {
+		t.Errorf("root: chapters=%d written=%d empty=%d pct=%d done=%d", r.ChapterCount(), r.WrittenChapters(), r.EmptyChapters(), r.Percent(), r.DoneCount())
 	}
 }

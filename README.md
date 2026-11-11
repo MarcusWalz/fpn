@@ -6,8 +6,8 @@ A small Go static site generator for a medical notebook. Content is plain Markdo
 go build -o fpn ./cmd/fpn
 ./fpn serve          # http://localhost:1313, live reload
 ./fpn build          # writes public/
-./fpn check          # exits 1 on broken links / missing images (-no-stubs: also while topics remain unwritten)
-./fpn status -all    # written vs. planned, per book and chapter
+./fpn check          # exits 1 on broken links / missing images (-no-stubs: also while chapters are empty)
+./fpn status -all    # which chapters have content, per book
 ```
 
 Flags: `-content content`, `-out public`, `-base /` (use a sub-path for GitHub Pages project sites), `-url https://…` (writes sitemap.xml), `-addr`, `-web dir` (override the embedded templates and CSS; `serve` uses `./web` automatically).
@@ -48,14 +48,13 @@ python3 taxonomy/trim.py taxonomy/fpnotebook-2011.json taxonomy/outline.json
 
 The trim drops the Jokes book. It also folds crossover chapters (e.g. Neurology › "Pediatrics") and chapters with 1–2 topics into each book's General chapter.
 
-Scaffolding creates a folder and an `_index.md` for every book and chapter. Topics are recorded as a `planned:` list (title plus legacy fpnotebook path) instead of thousands of empty files. A topic counts as **written** once a page with the same title (or the same `legacy:` path) exists in its chapter and has real content. A page with `status: stub` or an empty body counts as a placeholder.
+Scaffolding creates a folder and an `_index.md` for every book and chapter. The old topic list is kept as a `planned:` list of **topic ideas** (title plus legacy fpnotebook path), shown on each chapter page. Ideas don't count toward anything.
 
-Progress shows up everywhere:
-- `fpn build`/`check` print a written/total line.
-- Every book and chapter has a progress bar.
-- Unwritten topics are grey and dotted in lists, the site map and search.
-- `/progress/` breaks it down by book and chapter.
-- `fpn check -no-stubs` fails until everything is written.
+**Progress counts chapters.** A chapter has content once it has at least one written page, or intro text in its `_index.md`. A page with `status: stub` or an empty body doesn't count.
+- `fpn build`/`check` print `progress: N/373 chapters have content`.
+- Books show a progress bar, and empty chapters are dashed and grey.
+- `/progress/` and `fpn status -all` list every chapter as ✓ or empty.
+- `fpn check -no-stubs` fails while any chapter is empty.
 
 ## Hosting
 

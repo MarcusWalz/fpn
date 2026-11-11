@@ -38,10 +38,12 @@ type Node struct {
 	Stub        bool       // page is a placeholder: `status: stub` or no body content
 	Planned     []*Planned // sections: topics from `planned:` front matter
 
-	pageCount int
-	stubCount int
-	todoCount int // planned topics with no page yet
-	hasIndex  bool
+	pageCount       int
+	stubCount       int
+	chapterCount    int  // chapters at or beneath this section
+	writtenChapters int  // of those, chapters with content
+	hasIntro        bool // _index.md has body text beyond its title
+	hasIndex        bool
 }
 
 // Planned is an outline topic listed in a section's `planned:` front matter.
@@ -257,7 +259,9 @@ func (t *Tree) loadFile(n *Node, fsPath, rel string) error {
 	} else if !n.IsSection {
 		n.Title = Prettify(strings.TrimSuffix(path.Base(rel), path.Ext(rel)))
 	}
-	if !n.IsSection {
+	if n.IsSection {
+		n.hasIntro = !isEmptyBody(body, n.TitleFromH1)
+	} else {
 		status, _ := n.Meta["status"].(string)
 		n.Stub = StubStatuses[strings.ToLower(strings.TrimSpace(status))] || isEmptyBody(body, n.TitleFromH1)
 	}
@@ -399,32 +403,51 @@ func (n *Node) countPages() (pages, stubs int) {
 		}
 		return 1, 0
 	}
-	todo := 0
-	for _, pl := range n.Planned {
-		if pl.Page == nil {
-			todo++
-		}
-	}
+	chapters, written := 0, 0
 	for _, c := range n.Children {
 		p, s := c.countPages()
 		pages += p
 		stubs += s
-		todo += c.todoCount
+		chapters += c.chapterCount
+		written += c.writtenChapters
 	}
-	n.pageCount, n.stubCount, n.todoCount = pages, stubs, todo
+	n.pageCount, n.stubCount = pages, stubs
+	if n.IsChapter() {
+		chapters, written = 1, 0
+		if n.hasIntro || pages > stubs {
+			written = 1
+		}
+	}
+	n.chapterCount, n.writtenChapters = chapters, written
 	return pages, stubs
 }
 
-// TodoCount is the number of planned topics beneath a section that have no page yet.
-func (n *Node) TodoCount() int { return n.todoCount }
+// IsChapter reports whether n is a leaf section: a folder with no sub-folders
+// (other than the root). Progress is counted in chapters.
+func (n *Node) IsChapter() bool {
+	return n.IsSection && n.Parent != nil && len(n.Sections()) == 0
+}
 
-// TotalCount is every topic beneath a section: pages plus planned topics without a page.
-func (n *Node) TotalCount() int { return n.PageCount() + n.todoCount }
+// Written reports whether a chapter has content: at least one non-stub page,
+// or intro text in its _index.md. For a page, whether it isn't a stub.
+func (n *Node) Written() bool {
+	if !n.IsSection {
+		return !n.Stub
+	}
+	return n.writtenChapters > 0 && n.IsChapter()
+}
 
-// OutstandingCount is everything not yet written: stub pages plus unmatched planned topics.
-func (n *Node) OutstandingCount() int { return n.StubCount() + n.todoCount }
+// ChapterCount is the number of chapters at or beneath a section.
+func (n *Node) ChapterCount() int { return n.chapterCount }
 
-// OutstandingPlanned lists this section's planned topics that still need writing.
+// WrittenChapters is the number of chapters at or beneath a section that have content.
+func (n *Node) WrittenChapters() int { return n.writtenChapters }
+
+// EmptyChapters is ChapterCount minus WrittenChapters.
+func (n *Node) EmptyChapters() int { return n.chapterCount - n.writtenChapters }
+
+// OutstandingPlanned lists this section's planned topics that don't have a written page yet.
+// They are suggestions only and do not count toward progress.
 func (n *Node) OutstandingPlanned() []*Planned {
 	var out []*Planned
 	for _, p := range n.Planned {
@@ -449,12 +472,12 @@ func (n *Node) StubCount() int {
 // DoneCount is the number of written (non-placeholder) pages.
 func (n *Node) DoneCount() int { return n.PageCount() - n.StubCount() }
 
-// Percent is the share of topics written, 0–100 (100 for an empty section).
+// Percent is the share of chapters written, 0–100 (100 when there are none).
 func (n *Node) Percent() int {
-	if n.TotalCount() == 0 {
+	if n.chapterCount == 0 {
 		return 100
 	}
-	return n.DoneCount() * 100 / n.TotalCount()
+	return n.writtenChapters * 100 / n.chapterCount
 }
 
 // PageCount is the number of pages beneath a section (1 for a page).

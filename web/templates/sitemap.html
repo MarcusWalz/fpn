@@ -4,15 +4,15 @@
   <span class="sec-icon">{{icon "map"}}</span>
   <div>
     <h1>Site map</h1>
-    <p class="count">{{len .Site.Books}} books · {{.Site.Root.TotalCount}} topics · {{.Site.Root.DoneCount}} written</p>
+    <p class="count">{{len .Site.Books}} books · {{.Site.Root.ChapterCount}} chapters · {{.Site.Root.DoneCount}} pages</p>
   </div>
 </header>
-{{if .Site.Root.OutstandingCount}}<p class="legend"><span class="stub-sample">Dotted grey titles</span> are planned topics that haven't been written yet. See <a href="{{.Site.Base}}progress/">progress</a>.</p>{{end}}
+{{if .Site.Root.EmptyChapters}}<p class="legend"><span class="stub-sample">Dotted grey titles</span> are empty chapters or stub pages. See <a href="{{.Site.Base}}progress/">progress</a>.</p>{{end}}
 
 <div class="sitemap">
 {{range $i, $b := .Site.Books}}
   <details class="card smap-book shade-{{shade $i}}" open>
-    <summary><span class="mi">{{icon (iconFor $b)}}</span><a href="{{$b.URL}}">{{$b.Title}}</a><span class="badge">{{$b.TotalCount}}</span></summary>
+    <summary><span class="mi">{{icon (iconFor $b)}}</span><a href="{{$b.URL}}">{{$b.Title}}</a><span class="badge">{{$b.WrittenChapters}}/{{$b.ChapterCount}}</span></summary>
     {{template "tree" $b}}
   </details>
 {{end}}
@@ -26,7 +26,6 @@
 {{end}}
 
 {{define "tree"}}<ul>
-{{range .Sections}}<li class="smap-sec"><a href="{{.URL}}">{{.Title}}</a>{{if .Children}}{{template "tree" .}}{{end}}</li>
+{{range .Sections}}<li class="smap-sec{{if and .IsChapter (not .Written)}} stub{{end}}"><a href="{{.URL}}">{{.Title}}</a>{{if .Children}}{{template "tree" .}}{{end}}</li>
 {{end}}{{range .Pages}}<li{{if .Stub}} class="stub"{{end}}><a href="{{.URL}}">{{.Title}}</a></li>
-{{end}}{{range .OutstandingPlanned}}{{if not .Page}}<li class="stub"><span>{{.Title}}</span></li>
-{{end}}{{end}}</ul>{{end}}
+{{end}}</ul>{{end}}

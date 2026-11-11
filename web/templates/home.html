@@ -5,7 +5,7 @@
   </div>
   <h1 class="hero-title">{{.Site.Title}}</h1>
   {{with .Content}}<div class="hero-text">{{.}}</div>{{end}}
-  <p class="hero-stats"><span>{{len .Site.Books}} books</span><span>{{.Site.Root.TotalCount}} topics</span><a href="{{.Site.Base}}progress/">{{.Site.Root.DoneCount}} written</a></p>
+  <p class="hero-stats"><span>{{len .Site.Books}} books</span><span>{{.Site.Root.ChapterCount}} chapters</span><a href="{{.Site.Base}}progress/">{{.Site.Root.WrittenChapters}} with content</a></p>
   <div class="grass" aria-hidden="true"></div>
 </section>
 

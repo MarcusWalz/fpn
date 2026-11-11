@@ -40,20 +40,21 @@ If they'd rather you start it, ask, then run it in the background. Ask them to o
 ### 2 · Where things live
 Explain the mapping, using their book as the example:
 - Folder `content/<book>/` is a book, `content/<book>/<chapter>/` is a chapter, and each `.md` file is a page.
-- A chapter's `_index.md` holds its title and a `planned:` list of topics not written yet.
+- A chapter's `_index.md` holds its title and a `planned:` list of **topic ideas** from the old outline. The ideas are only suggestions.
+- Progress counts chapters: a chapter "has content" once it has at least one written page.
 
 Their task: open `content/<their book>/<a chapter>/_index.md` in their editor and find the `planned:` list.
 
-**Quiz**: "If you wanted to write the planned topic *X*" (pick a real one from that file) "which file would you create, and where?" The answer is a `.md` file in that same chapter folder whose title matches the planned title exactly. The suggested file name is the title in lowercase with dashes, e.g. `hypertension-causes.md`. Let them answer before you confirm.
+**Quiz**: "If you wanted to write the topic idea *X*" (pick a real one from that file) "which file would you create, and where?" The answer is a `.md` file in that same chapter folder with that title. The suggested file name is the title in lowercase with dashes, e.g. `hypertension-causes.md`. Let them answer before you confirm.
 
 ### 3 · Pick your topic
-Suggest they run `./fpn status -all` or browse a chapter page's "Planned topics" list. They choose **one topic they know well enough to outline from memory**; a small one is ideal. Wait for their pick.
+Suggest they run `./fpn status -all` to see the empty chapters, or browse a chapter page's "Topic ideas" list. They choose **one topic they know well enough to outline from memory**; a small one is ideal, and filling an empty chapter is a bonus. Wait for their pick.
 
 ### 4 · Write your first page
-Their task: create the file and write a first draft **themselves**. Give them only this skeleton, with the title filled in exactly as it appears in `planned:`:
+Their task: create the file and write a first draft **themselves**. Give them only this skeleton, with their topic's title filled in:
 ```markdown
 ---
-title: <Exact Planned Title>
+title: <Topic Title>
 ---
 
 ## Overview
@@ -64,15 +65,14 @@ title: <Exact Planned Title>
 ```
 Tips to give: use `##` for sections and `-` bullets, indent two spaces for sub-bullets, and use `**bold**` for key terms. Three short sections are plenty for a first page. Remind them **not** to add `status: stub`, since that would mark the page unfinished.
 
-When they say they're done, read the file. Check that the front matter title exactly matches the planned title (case-insensitive is fine) and that the Markdown structure is sound. Comment on structure only, not clinical accuracy; step 7 covers that.
+When they say they're done, read the file. Check that it's in the right chapter folder, that the front matter has a title, and that the Markdown structure is sound. If the title matches a topic idea, it drops off the ideas list. Comment on structure only, not clinical accuracy; step 7 covers that.
 
 ### 5 · Watch it go live
 The server live-reloads. Their task: refresh the chapter page in the browser. Ask them what changed. Expected answers:
-- The topic left "Planned topics" and now appears under "Pages".
-- The progress bar moved.
-- Its title is no longer grey and dotted.
+- Their page appears under "Pages", and the topic left "Topic ideas".
+- If the chapter was empty, it's no longer dashed and grey, and the book's progress bar moved.
 
-Confirm with `./fpn status`. Celebrate: it's their first published topic.
+Confirm with `./fpn status`. Celebrate: it's their first published page.
 
 ### 6 · Links, images, and the safety net
 Three small tasks, done one at a time:
@@ -99,7 +99,7 @@ Give them a short cheat sheet:
 ./fpn check                 broken links, missing images
 ./fpn status [-all]         what's written vs. planned
 /critique-page <file>       study critique (no answers)
-New page = <chapter>/<title-slug>.md with `title:` matching the planned title
+New page = <chapter>/<title-slug>.md with a `title:`. One real page = chapter has content
 ```
 Ask what was confusing, if anything. Note it in one line so the maintainer can improve this exercise. Then suggest a next topic from the same chapter.
 

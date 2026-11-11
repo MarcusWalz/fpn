@@ -38,8 +38,8 @@ type Config struct {
 type Result struct {
 	Pages, Sections, Assets int
 	Stubs                   int // placeholder pages
-	Todo                    int // planned topics with no page yet
-	Total                   int // pages + Todo
+	Chapters                int // leaf sections
+	WrittenChapters         int // chapters with at least one written page or intro
 	Warnings                []string
 	Duration                time.Duration
 }
@@ -122,7 +122,7 @@ func Build(cfg Config) (*Result, error) {
 		return nil, err
 	}
 
-	res := &Result{Pages: len(tree.Pages), Sections: len(tree.Sections), Assets: len(tree.Assets), Stubs: tree.Root.StubCount(), Todo: tree.Root.TodoCount(), Total: tree.Root.TotalCount()}
+	res := &Result{Pages: len(tree.Pages), Sections: len(tree.Sections), Assets: len(tree.Assets), Stubs: tree.Root.StubCount(), Chapters: tree.Root.ChapterCount(), WrittenChapters: tree.Root.WrittenChapters()}
 	res.Warnings = append(res.Warnings, tree.Warnings...)
 
 	// Render all nodes in parallel.
@@ -301,19 +301,11 @@ func (b *builder) writePagesJSON() error {
 	var list []entry
 	for _, s := range b.tree.Sections {
 		if s.Parent != nil {
-			list = append(list, entry{T: s.Title, U: s.URL, C: strings.Join(s.Trail(), " › "), S: true})
+			list = append(list, entry{T: s.Title, U: s.URL, C: strings.Join(s.Trail(), " › "), S: true, P: s.IsChapter() && !s.Written()})
 		}
 	}
 	for _, p := range b.tree.Pages {
 		list = append(list, entry{T: p.Title, U: p.URL, C: strings.Join(p.Trail(), " › "), P: p.Stub})
-	}
-	for _, s := range b.tree.Sections {
-		trail := strings.Join(append(s.Trail(), s.Title), " › ")
-		for _, pl := range s.Planned {
-			if pl.Page == nil {
-				list = append(list, entry{T: pl.Title, U: s.URL + "#planned", C: trail, P: true})
-			}
-		}
 	}
 	data, err := json.Marshal(list)
 	if err != nil {

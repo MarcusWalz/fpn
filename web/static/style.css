@@ -465,12 +465,12 @@ img { max-width: 100%; height: auto; }
   display: grid; grid-template-columns: 1fr auto; gap: .2rem .75rem; align-items: center;
   padding: .45rem 0; border-bottom: 1px dashed color-mix(in srgb, var(--line) 30%, transparent);
 }
-.prog-chapters li .bar { grid-column: 1 / -1; height: 8px; }
-@media (min-width: 720px) {
-  .prog-chapters li { grid-template-columns: 1fr auto 200px; }
-  .prog-chapters li .bar { grid-column: auto; }
-}
+.prog-chapters li.stub > a { color: var(--muted); text-decoration: underline dotted; }
 .planned-item { display: flex; align-items: flex-start; gap: .55rem; padding: .45rem .5rem; color: var(--muted); line-height: 1.35; text-decoration: underline dotted; text-decoration-thickness: 2px; }
 .planned-item .px { color: var(--muted); opacity: .55; margin-top: .1em; }
 .planned-item .stub-tag { text-decoration: none; }
 .smap-book li.stub > span { color: var(--muted); text-decoration: underline dotted; }
+.tile-empty { --tile: var(--surface); border-style: dashed; }
+.tile-empty .tile-icon { opacity: .45; }
+.tile-empty .tile-title { color: var(--muted); }
+.smap-book .smap-sec.stub > a { color: var(--muted); font-weight: 700; text-decoration: underline dotted; }

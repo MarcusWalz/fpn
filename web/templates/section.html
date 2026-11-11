@@ -4,8 +4,12 @@
   <span class="sec-icon">{{icon (iconFor .Node)}}</span>
   <div>
     <h1>{{.Node.Title}}</h1>
-    <p class="count">{{.Node.TotalCount}} topic{{if ne .Node.TotalCount 1}}s{{end}}{{with .Node.Sections}} · {{len .}} {{if eq $.Node.Depth 1}}chapter{{else}}section{{end}}{{if ne (len .) 1}}s{{end}}{{end}} · {{.Node.DoneCount}} written</p>
+    {{if .Node.IsChapter}}
+    <p class="count">{{.Node.DoneCount}} page{{if ne .Node.DoneCount 1}}s{{end}}{{if not .Node.Written}} · empty chapter{{end}}</p>
+    {{else}}
+    <p class="count">{{.Node.ChapterCount}} chapter{{if ne .Node.ChapterCount 1}}s{{end}} · {{.Node.WrittenChapters}} with content</p>
     {{template "bar" .Node}}
+    {{end}}
   </div>
 </header>
 
@@ -22,8 +26,8 @@
 {{end}}
 
 {{with .Node.OutstandingPlanned}}
-<h2 class="px-h" id="planned">Planned topics <span class="prog-num">{{len .}}</span></h2>
-<p class="legend">In the outline but not written yet. To write one, add a page to this folder with the same title, e.g. <code>{{(index . 0).File}}</code>.</p>
+<h2 class="px-h" id="planned">Topic ideas <span class="prog-num">{{len .}}</span></h2>
+<p class="legend">Suggestions from the old outline. They don't count toward progress; a chapter counts as written once it has any page. To write one, add a page to this folder, e.g. <code>{{(index . 0).File}}</code>.</p>
 <ul class="page-list card planned">
 {{range .}}<li class="stub"><span class="planned-item" title="{{.File}}">{{icon "page"}}<span>{{.Title}}</span>{{if .Page}}<a class="stub-tag" href="{{.Page.URL}}">stub</a>{{end}}</span></li>
 {{end}}</ul>

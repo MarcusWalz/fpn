@@ -23,8 +23,8 @@ Usage:
   fpn build  [flags]   render content/ into public/
   fpn serve  [flags]   preview locally with live reload
   fpn check  [flags]   build to a temp dir; exit 1 on broken links or other warnings
-                       (-no-stubs also fails while placeholder pages remain)
-  fpn status [flags]   show how many pages are written vs. placeholders, per book
+                       (-no-stubs also fails while empty chapters or stub pages remain)
+  fpn status [flags]   show how many chapters have content, per book
   fpn scaffold -from taxonomy.json [flags]
                        create placeholder folders/pages from a taxonomy (never overwrites)
 
@@ -44,7 +44,7 @@ func main() {
 	siteURL := fl.String("url", "", "absolute site origin for sitemap.xml, e.g. https://example.org")
 	addr := fl.String("addr", "localhost:1313", "listen address (serve)")
 	allowIndex := fl.Bool("index", false, "allow search engines (default writes noindex meta + robots.txt Disallow)")
-	noStubs := fl.Bool("no-stubs", false, "check: fail if any placeholder pages remain")
+	noStubs := fl.Bool("no-stubs", false, "check: fail while any chapter is empty or any page is a stub")
 	from := fl.String("from", "", "scaffold: taxonomy JSON file")
 	pages := fl.Bool("pages", false, "scaffold: create a stub page per topic instead of planned: lists")
 	all := fl.Bool("all", false, "status: list every chapter, not just books")
@@ -95,8 +95,8 @@ func main() {
 		printWarnings(res.Warnings)
 		printProgress(res)
 		problems := len(res.Warnings)
-		if *noStubs && res.Stubs+res.Todo > 0 {
-			fmt.Fprintf(os.Stderr, "error: %d topic(s) not yet written (-no-stubs)\n", res.Stubs+res.Todo)
+		if empty := res.Chapters - res.WrittenChapters; *noStubs && empty+res.Stubs > 0 {
+			fmt.Fprintf(os.Stderr, "error: %d empty chapter(s), %d stub page(s) (-no-stubs)\n", empty, res.Stubs)
 			problems++
 		}
 		if problems > 0 {
@@ -123,34 +123,38 @@ func main() {
 }
 
 func printProgress(res *site.Result) {
-	if res.Total == 0 {
+	if res.Chapters == 0 {
 		return
 	}
-	done := res.Pages - res.Stubs
-	fmt.Printf("progress: %d/%d topics written (%.1f%%) — %d planned without a page, %d stub pages\n",
-		done, res.Total, float64(done)*100/float64(res.Total), res.Todo, res.Stubs)
+	fmt.Printf("progress: %d/%d chapters have content (%.1f%%) · %d page(s) written, %d stub page(s)\n",
+		res.WrittenChapters, res.Chapters, float64(res.WrittenChapters)*100/float64(res.Chapters),
+		res.Pages-res.Stubs, res.Stubs)
 }
 
 func printStatus(root *content.Node, all bool) {
 	bar := func(n *content.Node) string {
 		const w = 20
 		filled := 0
-		if n.TotalCount() > 0 {
-			filled = n.DoneCount() * w / max(n.TotalCount(), 1)
+		if n.ChapterCount() > 0 {
+			filled = n.WrittenChapters() * w / n.ChapterCount()
 		}
 		return "[" + strings.Repeat("#", filled) + strings.Repeat(".", w-filled) + "]"
 	}
 	tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "BOOK\tWRITTEN\tTOTAL\tPROGRESS\t")
+	fmt.Fprintln(tw, "BOOK\tCHAPTERS WITH CONTENT\tPAGES\tPROGRESS\t")
 	for _, b := range root.Sections() {
-		fmt.Fprintf(tw, "%s\t%d\t%d\t%s %d%%\t\n", b.Title, b.DoneCount(), b.TotalCount(), bar(b), b.Percent())
+		fmt.Fprintf(tw, "%s\t%d/%d\t%d\t%s %d%%\t\n", b.Title, b.WrittenChapters(), b.ChapterCount(), b.DoneCount(), bar(b), b.Percent())
 		if all {
 			for _, c := range b.Sections() {
-				fmt.Fprintf(tw, "  %s\t%d\t%d\t%s %d%%\t\n", c.Title, c.DoneCount(), c.TotalCount(), bar(c), c.Percent())
+				state := "empty"
+				if c.Written() {
+					state = "✓"
+				}
+				fmt.Fprintf(tw, "  %s\t%s\t%d\t\t\n", c.Title, state, c.DoneCount())
 			}
 		}
 	}
-	fmt.Fprintf(tw, "TOTAL\t%d\t%d\t%s %d%%\t\n", root.DoneCount(), root.TotalCount(), bar(root), root.Percent())
+	fmt.Fprintf(tw, "TOTAL\t%d/%d\t%d\t%s %d%%\t\n", root.WrittenChapters(), root.ChapterCount(), root.DoneCount(), bar(root), root.Percent())
 	tw.Flush()
 }
 
