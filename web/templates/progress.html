@@ -1,0 +1,35 @@
+{{define "main"}}
+{{template "crumbs" .}}
+{{$r := .Site.Root}}
+<header class="sec-head card">
+  <span class="sec-icon">{{icon "star"}}</span>
+  <div>
+    <h1>Progress</h1>
+    <p class="count">{{$r.DoneCount}} of {{$r.TotalCount}} topics written · {{$r.OutstandingCount}} to go</p>
+    {{template "bar" $r}}
+  </div>
+</header>
+
+<p class="legend">A topic is <strong>outstanding</strong> while it is only listed under <code>planned:</code> in a chapter's <code>_index.md</code>, or its page has <code>status: stub</code> or no content. It counts as written once a page with that title exists in the chapter and has real content.</p>
+
+<div class="progress-list">
+{{range $i, $b := .Site.Books}}
+  <details class="card smap-book shade-{{shade $i}}">
+    <summary>
+      <span class="mi">{{icon (iconFor $b)}}</span>
+      <a href="{{$b.URL}}">{{$b.Title}}</a>
+      <span class="prog-num">{{$b.DoneCount}}/{{$b.TotalCount}}</span>
+      {{template "bar" $b}}
+    </summary>
+    <ul class="prog-chapters">
+      {{range $b.Sections}}<li>
+        <a href="{{.URL}}">{{.Title}}</a>
+        <span class="prog-num">{{.DoneCount}}/{{.TotalCount}}</span>
+        {{template "bar" .}}
+      </li>
+      {{end}}
+    </ul>
+  </details>
+{{end}}
+</div>
+{{end}}

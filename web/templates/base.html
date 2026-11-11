@@ -1,0 +1,51 @@
+{{define "base"}}<!doctype html>
+<html lang="en" class="no-js" data-base="{{.Site.Base}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{if .IsHome}}{{.Site.Title}}{{else}}{{.Title}} · {{.Site.Title}}{{end}}</title>
+<meta name="theme-color" content="#14532d">
+{{if not .Site.Index}}<meta name="robots" content="noindex, nofollow, noarchive">{{end}}
+<link rel="icon" href="{{.Site.Base}}static/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap">
+<link rel="stylesheet" href="{{.Site.Base}}static/style.css?v={{.Site.Version}}">
+<script>document.documentElement.classList.replace("no-js","js")</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="{{.Site.Base}}" aria-label="{{.Site.Title}} home">{{icon "cross"}}<span>{{.Site.Title}}</span></a>
+    <div class="qs" role="search">
+      <label class="sr-only" for="qs-input">Search page titles</label>
+      <input id="qs-input" type="search" placeholder="Search titles…" autocomplete="off" spellcheck="false"
+             role="combobox" aria-expanded="false" aria-controls="qs-results" aria-autocomplete="list">
+      <ul id="qs-results" class="qs-results" role="listbox" hidden></ul>
+    </div>
+    <details class="menu">
+      <summary aria-label="Browse books">{{icon "menu"}}</summary>
+      <nav class="menu-panel" aria-label="Books">
+        <p class="menu-label">Books</p>
+        <ul>
+          {{range $i, $b := .Site.Books}}<li><a href="{{$b.URL}}"><span class="mi shade-{{shade $i}}">{{icon (iconFor $b)}}</span>{{$b.Title}}</a></li>
+          {{end}}
+        </ul>
+        <a class="menu-all" href="{{.Site.Base}}sitemap/">{{icon "map"}} Full site map</a>
+      </nav>
+    </details>
+  </div>
+</header>
+<main id="main" class="wrap">
+{{template "main" .}}
+</main>
+<footer class="foot">
+  <div class="grass" aria-hidden="true"></div>
+  <p><a href="{{.Site.Base}}">{{.Site.Title}}</a> · <a href="{{.Site.Base}}sitemap/">Site map</a> · <a href="{{.Site.Base}}progress/">Progress</a></p>
+</footer>
+<script src="{{.Site.Base}}static/app.js?v={{.Site.Version}}" defer></script>
+{{if .Site.Dev}}<script>new EventSource("/__reload").onmessage=()=>location.reload()</script>{{end}}
+</body>
+</html>
+{{end}}

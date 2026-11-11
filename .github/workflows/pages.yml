@@ -1,0 +1,44 @@
+name: pages
+# Build the site and publish it to GitHub Pages on every push to main.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go vet ./...
+      - run: go test ./...
+      - run: go run ./cmd/fpn check
+      - id: pages
+        uses: actions/configure-pages@v5
+      # base_path is "/<repo>" for project sites, or "" for a custom domain / user site.
+      - run: go run ./cmd/fpn build -out public -base "${{ steps.pages.outputs.base_path }}/" -url "${{ steps.pages.outputs.origin }}"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

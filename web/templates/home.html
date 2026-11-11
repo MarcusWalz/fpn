@@ -1,0 +1,21 @@
+{{define "main"}}
+<section class="hero">
+  <div class="sprites" aria-hidden="true">
+    <span>{{icon "heart"}}</span><span>{{icon "brain"}}</span><span>{{icon "pill"}}</span><span>{{icon "flask"}}</span><span>{{icon "bone"}}</span>
+  </div>
+  <h1 class="hero-title">{{.Site.Title}}</h1>
+  {{with .Content}}<div class="hero-text">{{.}}</div>{{end}}
+  <p class="hero-stats"><span>{{len .Site.Books}} books</span><span>{{.Site.Root.TotalCount}} topics</span><a href="{{.Site.Base}}progress/">{{.Site.Root.DoneCount}} written</a></p>
+  <div class="grass" aria-hidden="true"></div>
+</section>
+
+{{with .Site.Books}}
+<h2 class="px-h">Pick a book</h2>
+{{template "tiles" .}}
+{{end}}
+
+{{with .Node.Pages}}
+<h2 class="px-h">Pages</h2>
+{{template "pagelist" .}}
+{{end}}
+{{end}}

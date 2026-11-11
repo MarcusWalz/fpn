@@ -1,0 +1,19 @@
+{{define "crumbs"}}{{if .Crumbs}}<nav class="crumbs" aria-label="Breadcrumb"><ol>
+{{range .Crumbs}}<li><a href="{{.URL}}">{{if not .Parent}}{{icon "home"}}<span class="sr-only">Home</span>{{else}}{{.Title}}{{end}}</a></li>
+{{end}}<li aria-current="page">{{.Title}}</li>
+</ol></nav>{{end}}{{end}}
+
+{{define "tiles"}}<div class="grid">
+{{range $i, $s := .}}<a class="tile press shade-{{shade $i}}" href="{{$s.URL}}">
+  <span class="tile-icon">{{icon (iconFor $s)}}</span>
+  <span class="tile-title">{{$s.Title}}</span>
+  <span class="tile-meta">{{$s.DoneCount}}/{{$s.TotalCount}} written</span>
+  {{template "bar" $s}}
+</a>
+{{end}}</div>{{end}}
+
+{{define "pagelist"}}<ul class="page-list card">
+{{range .}}<li{{if .Stub}} class="stub"{{end}}><a href="{{.URL}}">{{icon "page"}}<span>{{.Title}}</span>{{if .Stub}}<span class="stub-tag" title="Placeholder — not written yet">stub</span>{{end}}</a></li>
+{{end}}</ul>{{end}}
+
+{{define "bar"}}<span class="bar" role="img" aria-label="{{.Percent}}% written"><span class="bar-fill" style="width: {{.Percent}}%"></span></span>{{end}}

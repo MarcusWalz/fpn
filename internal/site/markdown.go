@@ -1,0 +1,163 @@
+package site
+
+import (
+	"bytes"
+	"fmt"
+	"html/template"
+	"net/url"
+	"path"
+	"strings"
+
+	"github.com/marcuswalz/fpn/internal/content"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
+	gmhtml "github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/text"
+)
+
+// Heading is a table-of-contents entry.
+type Heading struct {
+	Level int
+	ID    string
+	Text  string
+}
+
+func newMarkdown() goldmark.Markdown {
+	return goldmark.New(
+		goldmark.WithExtensions(extension.GFM, extension.Footnote, extension.DefinitionList),
+		goldmark.WithParserOptions(parser.WithAutoHeadingID(), parser.WithAttribute()),
+		goldmark.WithRendererOptions(gmhtml.WithUnsafe()),
+	)
+}
+
+// renderMarkdown converts a node's body to HTML, rewriting relative links
+// to output URLs and collecting h2/h3 headings for the TOC.
+func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []string) {
+	src := n.Body
+	if len(bytes.TrimSpace(src)) == 0 {
+		return "", nil, nil
+	}
+	doc := b.md.Parser().Parse(text.NewReader(src))
+
+	if n.TitleFromH1 {
+		for c := doc.FirstChild(); c != nil; c = c.NextSibling() {
+			if h, ok := c.(*ast.Heading); ok && h.Level == 1 {
+				doc.RemoveChild(doc, c)
+				break
+			}
+		}
+	}
+
+	srcDir := n.Rel
+	if !n.IsSection {
+		srcDir = path.Dir(n.Rel)
+	}
+	if srcDir == "." {
+		srcDir = ""
+	}
+	where := n.Rel
+	if n.IsSection {
+		where = path.Join(n.Rel, "_index.md")
+	}
+
+	var toc []Heading
+	var warns []string
+	_ = ast.Walk(doc, func(node ast.Node, entering bool) (ast.WalkStatus, error) {
+		if !entering {
+			return ast.WalkContinue, nil
+		}
+		switch v := node.(type) {
+		case *ast.Heading:
+			if v.Level == 2 || v.Level == 3 {
+				if id, ok := v.AttributeString("id"); ok {
+					if idb, ok := id.([]byte); ok {
+						toc = append(toc, Heading{Level: v.Level, ID: string(idb), Text: nodeText(v, src)})
+					}
+				}
+			}
+		case *ast.Link:
+			if u, ok := b.resolve(string(v.Destination), srcDir); ok {
+				v.Destination = []byte(u)
+			} else {
+				warns = append(warns, fmt.Sprintf("%s: broken link %q", where, v.Destination))
+			}
+		case *ast.Image:
+			v.SetAttributeString("loading", []byte("lazy"))
+			v.SetAttributeString("decoding", []byte("async"))
+			if u, ok := b.resolve(string(v.Destination), srcDir); ok {
+				v.Destination = []byte(u)
+			} else {
+				warns = append(warns, fmt.Sprintf("%s: missing image %q", where, v.Destination))
+			}
+		}
+		return ast.WalkContinue, nil
+	})
+
+	var buf bytes.Buffer
+	if err := b.md.Renderer().Render(&buf, src, doc); err != nil {
+		warns = append(warns, fmt.Sprintf("%s: render: %v", where, err))
+	}
+	return template.HTML(buf.String()), toc, warns
+}
+
+// resolve maps a link destination relative to srcDir onto an output URL.
+// External, absolute and fragment-only links are returned unchanged.
+// ok=false means the link looked internal but its target doesn't exist.
+func (b *builder) resolve(dest, srcDir string) (string, bool) {
+	if dest == "" || strings.HasPrefix(dest, "#") || strings.HasPrefix(dest, "/") || strings.HasPrefix(dest, "//") {
+		return dest, true
+	}
+	if u, err := url.Parse(dest); err != nil || u.Scheme != "" {
+		return dest, true
+	}
+	target, frag := dest, ""
+	if i := strings.IndexAny(target, "?#"); i >= 0 {
+		target, frag = target[:i], target[i:]
+	}
+	if unesc, err := url.PathUnescape(target); err == nil {
+		target = unesc
+	}
+	rel := path.Clean(path.Join(srcDir, target))
+	if rel == "." {
+		rel = ""
+	}
+	if strings.HasPrefix(rel, "../") || rel == ".." {
+		return dest, false
+	}
+	if n, ok := b.tree.ByRel[rel]; ok {
+		return n.URL + frag, true
+	}
+	if a, ok := b.tree.Assets[rel]; ok {
+		return a.URL + frag, true
+	}
+	return dest, false
+}
+
+func nodeText(n ast.Node, src []byte) string {
+	var sb strings.Builder
+	_ = ast.Walk(n, func(c ast.Node, entering bool) (ast.WalkStatus, error) {
+		if !entering {
+			return ast.WalkContinue, nil
+		}
+		switch t := c.(type) {
+		case *ast.Text:
+			sb.Write(t.Segment.Value(src))
+			if t.SoftLineBreak() {
+				sb.WriteByte(' ')
+			}
+		case *ast.String:
+			sb.Write(t.Value)
+		case *ast.CodeSpan:
+			for cc := t.FirstChild(); cc != nil; cc = cc.NextSibling() {
+				if tx, ok := cc.(*ast.Text); ok {
+					sb.Write(tx.Segment.Value(src))
+				}
+			}
+			return ast.WalkSkipChildren, nil
+		}
+		return ast.WalkContinue, nil
+	})
+	return strings.TrimSpace(sb.String())
+}

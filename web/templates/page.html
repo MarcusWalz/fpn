@@ -1,0 +1,39 @@
+{{define "main"}}
+{{template "crumbs" .}}
+<div class="layout">
+  <aside class="side">
+    {{if ge (len .TOC) 2}}
+    <details class="panel card" data-auto-open>
+      <summary>{{icon "star"}}<span>On this page</span></summary>
+      <ol class="toc">
+        {{range .TOC}}<li class="l{{.Level}}"><a href="#{{.ID}}">{{.Text}}</a></li>
+        {{end}}
+      </ol>
+    </details>
+    {{end}}
+    {{if gt (len .Siblings) 1}}
+    <details class="panel card" data-auto-open>
+      <summary>{{icon "book"}}<span>{{.Node.Parent.Title}}</span></summary>
+      <ul class="sibs">
+        {{range .Siblings}}<li{{if .Stub}} class="stub"{{end}}><a href="{{.URL}}"{{if eq .URL $.Node.URL}} aria-current="page"{{end}}>{{.Title}}</a></li>
+        {{end}}
+      </ul>
+    </details>
+    {{end}}
+  </aside>
+
+  <article class="card prose"{{if not .Node.Stub}} data-pagefind-body{{end}}>
+    {{with .Node.Book}}<span hidden data-pagefind-filter="book">{{.Title}}</span>{{end}}
+    <h1 class="page-title">{{.Node.Title}}</h1>
+    {{if .Node.Stub}}<div class="stub-banner" role="note"><span class="stub-ico">{{icon "page"}}</span><div><strong>Placeholder page</strong>This topic is in the outline but hasn't been written yet.</div></div>{{end}}
+    {{.Content}}
+  </article>
+</div>
+
+{{if or .Prev .Next}}
+<nav class="pager" aria-label="Previous and next pages">
+  {{with .Prev}}<a class="card press prev" href="{{.URL}}" rel="prev"><small>◀ Prev</small><span>{{.Title}}</span></a>{{end}}
+  {{with .Next}}<a class="card press next" href="{{.URL}}" rel="next"><small>Next ▶</small><span>{{.Title}}</span></a>{{end}}
+</nav>
+{{end}}
+{{end}}

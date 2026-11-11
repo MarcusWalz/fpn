@@ -1,0 +1,4 @@
+---
+title: Endocrinology
+legacy: Endo/
+---

@@ -1,0 +1,4 @@
+---
+title: Pharmacology
+legacy: Pharm/
+---

@@ -1,0 +1,33 @@
+{{define "main"}}
+{{template "crumbs" .}}
+<header class="sec-head card">
+  <span class="sec-icon">{{icon (iconFor .Node)}}</span>
+  <div>
+    <h1>{{.Node.Title}}</h1>
+    <p class="count">{{.Node.TotalCount}} topic{{if ne .Node.TotalCount 1}}s{{end}}{{with .Node.Sections}} · {{len .}} {{if eq $.Node.Depth 1}}chapter{{else}}section{{end}}{{if ne (len .) 1}}s{{end}}{{end}} · {{.Node.DoneCount}} written</p>
+    {{template "bar" .Node}}
+  </div>
+</header>
+
+{{with .Content}}<div class="card prose intro">{{.}}</div>{{end}}
+
+{{with .Node.Sections}}
+<h2 class="px-h">{{if eq $.Node.Depth 1}}Chapters{{else}}Sections{{end}}</h2>
+{{template "tiles" .}}
+{{end}}
+
+{{with .Node.Pages}}
+<h2 class="px-h">Pages</h2>
+{{template "pagelist" .}}
+{{end}}
+
+{{with .Node.OutstandingPlanned}}
+<h2 class="px-h" id="planned">Planned topics <span class="prog-num">{{len .}}</span></h2>
+<p class="legend">In the outline but not written yet. To write one, add a page to this folder with the same title, e.g. <code>{{(index . 0).File}}</code>.</p>
+<ul class="page-list card planned">
+{{range .}}<li class="stub"><span class="planned-item" title="{{.File}}">{{icon "page"}}<span>{{.Title}}</span>{{if .Page}}<a class="stub-tag" href="{{.Page.URL}}">stub</a>{{end}}</span></li>
+{{end}}</ul>
+{{end}}
+
+{{if and (not .Node.Children) (not .Node.Planned)}}<p class="empty card">Nothing here yet. Add some <code>.md</code> files to this folder.</p>{{end}}
+{{end}}
