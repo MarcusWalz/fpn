@@ -155,3 +155,80 @@ func TestHeadingLevelsFixed(t *testing.T) {
 		t.Error("the Markdown file must not be changed")
 	}
 }
+
+func TestCaptionClasses(t *testing.T) {
+	dir := t.TempDir()
+	content := filepath.Join(dir, "content")
+	os.MkdirAll(filepath.Join(content, "book", "chap"), 0o755)
+	page := "# P\n\n**Table 2.1—Criteria** for diagnosis\n\n*Figure: Cuff placement. Source: Own work*\n\n" +
+		"Tablet dosing is separate.\n\nFigures vary.\n\nSee Table 2.1 above.\n\n## Table of values\n"
+	os.WriteFile(filepath.Join(content, "book", "chap", "p.md"), []byte(page), 0o644)
+	out := filepath.Join(dir, "public")
+	if _, err := Build(Config{ContentDir: content, OutDir: out, Base: "/", Web: web.FS}); err != nil {
+		t.Fatal(err)
+	}
+	b, _ := os.ReadFile(filepath.Join(out, "book", "chap", "p", "index.html"))
+	html := string(b)
+	for _, want := range []string{
+		`<p class="cap-table"><strong>Table 2.1—Criteria</strong>`,
+		`<p class="cap-figure"><em>Figure: Cuff placement.`,
+		`<p>Tablet dosing is separate.</p>`, // "Tablet" is not the word "Table"
+		`<p>Figures vary.</p>`,
+		`<p>See Table 2.1 above.</p>`, // only when it's the first word
+		`class="md-h2 cap-table">Table of values`,
+	} {
+		if !strings.Contains(html, want) {
+			t.Errorf("missing %s", want)
+		}
+	}
+}
+
+func TestTableNote(t *testing.T) {
+	dir := t.TempDir()
+	content := filepath.Join(dir, "content")
+	os.MkdirAll(filepath.Join(content, "book", "chap"), 0o755)
+	page := "# P\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\nNote: values in mg/dL.\n\nNote: a second note is ordinary text.\n\n" +
+		"| C |\n|---|\n| 3 |\n\n*NOTE: italic and capitals still count.*\n\n| D |\n|---|\n| 4 |\n\nNormal text after a table.\n\nNote: not after a table.\n"
+	os.WriteFile(filepath.Join(content, "book", "chap", "p.md"), []byte(page), 0o644)
+	out := filepath.Join(dir, "public")
+	if _, err := Build(Config{ContentDir: content, OutDir: out, Base: "/", Web: web.FS}); err != nil {
+		t.Fatal(err)
+	}
+	b, _ := os.ReadFile(filepath.Join(out, "book", "chap", "p", "index.html"))
+	html := string(b)
+	for _, want := range []string{
+		`<p class="table-note">Note: values in mg/dL.</p>`,
+		`<p>Note: a second note is ordinary text.</p>`, // only the paragraph right after the table
+		`<p class="table-note"><em>NOTE: italic and capitals still count.</em></p>`,
+		`<p>Normal text after a table.</p>`,
+		`<p>Note: not after a table.</p>`,
+	} {
+		if !strings.Contains(html, want) {
+			t.Errorf("missing %s", want)
+		}
+	}
+}
+
+func TestHighlight(t *testing.T) {
+	dir := t.TempDir()
+	content := filepath.Join(dir, "content")
+	os.MkdirAll(filepath.Join(content, "book", "chap"), 0o755)
+	page := "# P\n\nA1C is unreliable in ==people on dialysis== and ==**anemia**==.\n\n" +
+		"If x == y it is a comparison. Rows === nothing. Code `==x==` stays.\n\n- list ==item==\n"
+	os.WriteFile(filepath.Join(content, "book", "chap", "p.md"), []byte(page), 0o644)
+	out := filepath.Join(dir, "public")
+	if _, err := Build(Config{ContentDir: content, OutDir: out, Base: "/", Web: web.FS}); err != nil {
+		t.Fatal(err)
+	}
+	b, _ := os.ReadFile(filepath.Join(out, "book", "chap", "p", "index.html"))
+	html := string(b)
+	for _, want := range []string{
+		`unreliable in <mark>people on dialysis</mark> and <mark><strong>anemia</strong></mark>.`,
+		`If x == y it is a comparison. Rows === nothing. Code <code>==x==</code> stays.`,
+		`list <mark>item</mark>`,
+	} {
+		if !strings.Contains(html, want) {
+			t.Errorf("missing %s", want)
+		}
+	}
+}

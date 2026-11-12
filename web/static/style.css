@@ -337,6 +337,28 @@ img { max-width: 100%; height: auto; }
   box-shadow: 3px 3px 0 var(--shadow);
 }
 .prose .md-h5::before { content: none; }
+/* ###### headings: small and underlined */
+.prose .md-h6 {
+  margin: 1.25rem 0 .4rem; padding: 0; background: none;
+  font: 700 1.1rem/1.35 var(--font-head); color: var(--forest);
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em;
+}
+.prose .md-h6::before { content: none; }
+
+/* Lines starting with the word "Table" or "Figure" get their own pixel font */
+.prose .cap-table {
+  font-family: "Press Start 2P", ui-monospace, Menlo, monospace;
+  font-size: .78rem; font-weight: 400; line-height: 1.8; color: var(--forest);
+}
+.prose .cap-figure {
+  font-family: "Doto", ui-monospace, Menlo, monospace;
+  font-size: 1.05rem; font-weight: 800; line-height: 1.45;
+}
+.prose :is(.cap-table, .cap-figure) :is(strong, b, em, i) { font-weight: inherit; font-style: normal; }
+/* a table caption sits right on top of its table (and of a short intro line that leads into it) */
+.prose .cap-table { margin-bottom: .25rem; }
+.prose .cap-table + p:has(+ table) { margin-bottom: .25rem; }
+.prose :is(.cap-table, .cap-figure) sup.cite { font-family: var(--font-body); font-weight: 700; }
 .prose p, .prose ul, .prose ol, .prose dl, .prose table, .prose pre, .prose blockquote { margin: 0 0 1rem; }
 .prose ul, .prose ol { padding-left: 1.45rem; }
 .prose li { margin: .2rem 0; }
@@ -357,6 +379,12 @@ img { max-width: 100%; height: auto; }
 .prose blockquote { padding: .75rem 1rem; background: var(--mint); border-left: 6px solid var(--leaf); }
 .prose blockquote > :last-child { margin-bottom: 0; }
 .prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .95rem; }
+/* ==highlight== in Markdown renders as <mark> */
+.prose mark { background: var(--lime); color: var(--lime-ink); padding: 0 .15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+/* a "Note:" paragraph right after a table: smaller, tucked under it */
+.prose table:has(+ .table-note) { margin-bottom: 0; }
+.prose .table-note { margin-top: 0; padding-top: .35rem; font-size: .85rem; line-height: 1.45; color: var(--muted); }
 .prose th, .prose td { padding: .45rem .65rem; border: 2px solid var(--line); text-align: left; vertical-align: top; }
 .prose th { background: var(--mint); font-family: var(--font-head); font-weight: 700; }
 .prose tr:nth-child(even) td { background: color-mix(in srgb, var(--mint) 55%, transparent); }

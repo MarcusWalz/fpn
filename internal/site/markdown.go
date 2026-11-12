@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/url"
 	"path"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -14,6 +15,7 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/extension"
+	east "github.com/yuin/goldmark/extension/ast"
 	"github.com/yuin/goldmark/parser"
 	gmhtml "github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/text"
@@ -28,7 +30,7 @@ type Heading struct {
 
 func newMarkdown() goldmark.Markdown {
 	return goldmark.New(
-		goldmark.WithExtensions(extension.GFM, extension.Footnote, extension.DefinitionList),
+		goldmark.WithExtensions(extension.GFM, extension.Footnote, extension.DefinitionList, markExtension{}),
 		goldmark.WithParserOptions(parser.WithAutoHeadingID(), parser.WithAttribute()),
 		goldmark.WithRendererOptions(gmhtml.WithUnsafe()),
 	)
@@ -79,7 +81,11 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 			return ast.WalkContinue, nil
 		}
 		switch v := node.(type) {
+		case *ast.Paragraph:
+			tagCaption(v, src)
+			tagTableNote(v, src)
 		case *ast.Heading:
+			tagCaption(v, src)
 			if v.Level == 2 || v.Level == 3 {
 				if id, ok := v.AttributeString("id"); ok {
 					if idb, ok := id.([]byte); ok {
@@ -151,16 +157,44 @@ func fixHeadingLevels(doc ast.Node) {
 			open = open[:len(open)-1]
 		}
 		open = append(open, h.Level)
-		cls := fmt.Sprintf("md-h%d", h.Level)
-		if v, ok := h.AttributeString("class"); ok { // keep {.class} from the Markdown
-			if b, ok := v.([]byte); ok && len(b) > 0 {
-				cls = string(b) + " " + cls
-			}
-		}
-		h.SetAttributeString("class", []byte(cls))
+		addClass(h, fmt.Sprintf("md-h%d", h.Level))
 		h.Level = len(open) + 1 // h2 for top-level body headings
 		return ast.WalkSkipChildren, nil
 	})
+}
+
+// addClass appends a CSS class, keeping any {.class} written in the Markdown.
+func addClass(n ast.Node, cls string) {
+	if v, ok := n.AttributeString("class"); ok {
+		if b, ok := v.([]byte); ok && len(b) > 0 {
+			cls = string(b) + " " + cls
+		}
+	}
+	n.SetAttributeString("class", []byte(cls))
+}
+
+// captionRe matches blocks whose first word is exactly "Table" or "Figure"
+// ("Table 2.1—…", "Figure: …"), but not "Tablet…" or "Figures…".
+var captionRe = regexp.MustCompile(`^(Table|Figure)\b`)
+
+// tagCaption gives table titles and figure captions their own class, so
+// they can use their own font: cap-table or cap-figure.
+func tagCaption(n ast.Node, src []byte) {
+	if m := captionRe.FindStringSubmatch(nodeText(n, src)); m != nil {
+		addClass(n, "cap-"+strings.ToLower(m[1]))
+	}
+}
+
+// tagTableNote marks a paragraph that directly follows a table and starts
+// with "Note:" as that table's note (class table-note): smaller, and set
+// right under the table with no gap.
+func tagTableNote(p *ast.Paragraph, src []byte) {
+	if _, ok := p.PreviousSibling().(*east.Table); !ok {
+		return
+	}
+	if strings.HasPrefix(strings.ToLower(nodeText(p, src)), "note:") {
+		addClass(p, "table-note")
+	}
 }
 
 // imageHasSource reports whether an image is credited: "Source:" appears in

@@ -50,7 +50,7 @@ Apply only the changes below. Keep a short list of everything you changed, to re
 
 **Obsidian formatting**
 - Callouts: `> [!note] Title` followed by `> text` → a plain quote with a bold label, `> **Note: Title**` then `> text`. Keep the callout type as the label (Warning, Tip, Important…). Drop the `+`/`-` folding markers.
-- Highlights: `==text==` → `**text**`.
+- Highlights: keep `==text==` as it is; the site renders it as a green highlight. Coloured text (`<span style="color:…">text</span>`) becomes `==text==` too, since custom colours usually fail contrast in one of the themes.
 - Comments: `%% … %%` (inline or multi-line) are private in Obsidian. **Remove them** so they don't get published, and tell the user how many you removed.
 - Block IDs: remove `^abc123` at the end of lines.
 - Inline `#tags` in the text: leave the words, but move the tags into front matter `tags:` and remove the `#tag` from the text. Don't touch `#` headings.
