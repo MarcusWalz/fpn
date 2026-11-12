@@ -53,6 +53,26 @@ const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html
   function handleLoad() {
     const win = frame.current?.contentWindow;
     if (win) {
+      // The preview only shows the page; it never navigates. Otherwise a click
+      // on a link would load the live site (with its own Edit button) inside
+      // the preview. Same-page links (#ref-1) still scroll; others open in a
+      // new browser tab.
+      const doc = win.document;
+      doc.addEventListener("click", (e) => {
+        const a = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
+        if (!a) return;
+        e.preventDefault();
+        const href = a.getAttribute("href") || "";
+        if (href.startsWith("#")) {
+          const id = decodeURIComponent(href.slice(1));
+          const el = id ? doc.getElementById(id) : null;
+          if (el) win.scrollTo(0, el.getBoundingClientRect().top + win.scrollY - HEADER);
+          else if (!id) win.scrollTo(0, 0);
+          return;
+        }
+        window.open(a.href, "_blank", "noopener");
+      });
+      doc.addEventListener("submit", (e) => e.preventDefault());
       let raf = 0;
       win.addEventListener("scroll", () => {
         cancelAnimationFrame(raf);
