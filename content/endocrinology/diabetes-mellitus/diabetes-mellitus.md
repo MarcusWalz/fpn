@@ -62,12 +62,12 @@ Note: **A1C may not be always be reliable**
 2. **People with prediabetes** (A1C ≥5.7% [≥39 mmol/mol], IGT, or IFG) should be tested yearly.
 3. If **diagnosed with GDM** test q1–3 years.
 4. All others start at age 35
-5. If normal, testing should be repeat at least **q3yrs**.
+5. If normal, repeat at least **q3yrs**.
 
 Note: GDM, gestational diabetes mellitus; IFG, impaired fasting glucose; IGT, impaired glucose tolerance.
 
-### Medication Induced Diabetes (esp Long term use of Glucocorticoids and antipsychotics)
-- Glucocorticoids >= 5mg prednisolone -Screen *random* glucose rather than fasting. Recommended to check glucose twice weekly. 
+### Medication Induced Diabetes (esp long term use of glucocorticoids and antipsychotics)
+- Glucocorticoids ≥ 5mg prednisolone: Screen *random* glucose rather than fasting. Check glucose twice weekly. 
 - Antipsychotics - screen @ initation, 3mo later, and annually
 
 ### People living with HIV
