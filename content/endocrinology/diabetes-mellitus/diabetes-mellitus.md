@@ -3,8 +3,8 @@ title: Diabetes Mellitus
 aliases: []
 ---
 
-#### Section 2: Diagnosis and Classification of Diabetes
-##### Screening
+## Section 2: Diagnosis and Classification of Diabetes
+### Screening
 
 **Table 2.1—Criteria for the diagnosis of diabetes in nonpregnant individuals**[@ADA_2026]
 | Test | Criterion | Notes |
@@ -30,11 +30,11 @@ Any one of the following:
 Note: **A1C may not be always be reliable**
     - “A1C is an indirect measure of glucose exposure, and factors that affect hemoglobin concentrations or erythrocyte turnover can affect A1C (e.g., thalassemia or folate deficiency) (Table 2.3). **A1C may not be a suitable diagnostic test in people with anemia, people treated with erythropoietin, or people undergoing hemodialysis or HIV treatment.**” [@ADA_2026, p. 529]
 
-##### Diagnosis
+### Diagnosis
 - Confirmatory tests are necessary to establish the diagnosis in the absence of clear clinical signs.  **Either 2 tests @ same time, or same test two different times**
 
-##### Classification
-###### Type 1 DM = Autoimmune B-cell destruction
+### Classification
+#### Type 1 DM = Autoimmune B-cell destruction
 - Most useful features: Age <35; BMI <25; Unintentional weight loss; Ketoacidosis; Plasma glucose >360 mg/dL
 - **Stage 1**: Normoglycemia, non symptomatic; **2+ autoantibodies**. 5yr risk ~44%. ==Screen all people w/ FHx of T1DM or other known genetic risk w/ IA, GAD, IA-2 and ZnT8==
   - Free Screening https://www.askhealth.org
@@ -45,7 +45,7 @@ Note: **A1C may not be always be reliable**
 - **Stage 2**: **Dysglycemia**; non symptomatic; Multiple autoantibodies. 5yr risk 75%
 - **Stage 3**: Overt hyperglycemia; **symptomatic** May lose autoantibodies (b/c B cells are dead). 
 
-###### Prediabetes and Type 2 DM 
+#### Prediabetes and Type 2 DM 
 - non autoimmune progressive loss of adequate B cell insulin secretion
 
 **Table 2.5—Criteria for screening for diabetes or prediabetes in asymptomatic adults**[@ADA_2026]
@@ -66,52 +66,17 @@ Note: **A1C may not be always be reliable**
 
 Note: GDM, gestational diabetes mellitus; IFG, impaired fasting glucose; IGT, impaired glucose tolerance.
 
-### Medication Induced Diabetes (esp long term use of glucocorticoids and antipsychotics)
+#### Medication Induced Diabetes (esp long term use of glucocorticoids and antipsychotics)
 - Glucocorticoids ≥ 5mg prednisolone: Screen *random* glucose rather than fasting. Check glucose twice weekly. 
-- Antipsychotics - screen @ initation, 3mo later, and annually
+- Antipsychotics: screen @ initation, 3mo later, and annually
 
-### People living with HIV
+#### People living with HIV
 - Test annually using *plasma glucose* as A1c may be incorrect. 
 
-### Pancreatic Diabetes (CF, post acute or chronic pancreatitis)
+#### Pancreatic Diabetes (CF, post acute or chronic pancreatitis)
 - Screen annually. For CF use OGTT
 
-### Posttransplant DM
+#### Posttransplant DM
 - OGTT should be done after on stable immunosuppressive plan and w/o active infection 
 
-### Gestational DM
 
-**Table 2.8—Screening for and diagnosis of GDM** [@ADA_2026]
-
-**One-step strategy**
-
-- Perform a 75-g OGTT, with plasma glucose measurement when an individual is fasting and at 1 and 2 h, at 24–28 weeks of gestation in individuals not previously diagnosed with diabetes.
-- The OGTT should be performed in the morning after an overnight fast of at least 8 h.
-- The diagnosis of GDM is made when any of the following plasma glucose values are met or exceeded:
-
-| Time | Plasma glucose |
-|---|---|
-| Fasting | 92 mg/dL (5.1 mmol/L) |
-| 1 h | 180 mg/dL (10.0 mmol/L) |
-| 2 h | 153 mg/dL (8.5 mmol/L) |
-
-**Two-step strategy**
-
-*Step 1:*
-
-- Perform a 50-g GLT (nonfasting), with plasma glucose measurement at 1 h, at 24–28 weeks of gestation in individuals not previously diagnosed with diabetes.
-- If the plasma glucose level measured 1 h after the load is ≥130, 135, or 140 mg/dL (7.2, 7.5, or 7.8 mmol/L, respectively),\* proceed to a 100-g OGTT.
-
-*Step 2:*
-
-- The 100-g OGTT should be performed when the individual is fasting.
-- The diagnosis of GDM is made when at least two† of the following four plasma glucose levels (measured fasting and at 1, 2, and 3 h during OGTT) are met or exceeded (Carpenter-Coustan criteria):
-
-| Time | Plasma glucose |
-|---|---|
-| Fasting | 95 mg/dL (5.3 mmol/L) |
-| 1 h | 180 mg/dL (10.0 mmol/L) |
-| 2 h | 155 mg/dL (8.6 mmol/L) |
-| 3 h | 140 mg/dL (7.8 mmol/L) |
-
-GDM, gestational diabetes mellitus; GLT, glucose load test; OGTT, oral glucose tolerance test. \*American College of Obstetricians and Gynecologists (ACOG) recommends any of the commonly used thresholds of 130, 135, or 140 mg/dL for the 1-h 50-g GLT. †ACOG notes that one elevated value can be used for diagnosis.
