@@ -440,6 +440,10 @@ img { max-width: 100%; height: auto; }
 .foot a { color: #d9f99d; text-decoration: none; }
 .foot a:hover { text-decoration: underline; }
 
+/* "Linked from" jump: the link to the page you came from flashes briefly */
+.prose a { transition: background-color .8s ease, box-shadow .8s ease; }
+.prose a.link-flash { background: var(--lime); color: var(--lime-ink); box-shadow: 0 0 0 3px var(--lime); border-radius: 2px; transition: none; }
+
 /* ---------- motion & print ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

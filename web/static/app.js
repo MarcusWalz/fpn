@@ -18,6 +18,31 @@
     });
   }
 
+  // ---- "Linked from" → the spot on that page where the link is ----
+  // Clicking a page in "← Linked from" opens it at its link to this page
+  // (#link-to=<this page>), and briefly highlights the linked words there.
+  const norm1 = (p) => decodeURIComponent(p).replace(/\/?$/, "/");
+  document.querySelectorAll(".links-from a[href]").forEach((a) => {
+    const u = new URL(a.href, location.href);
+    u.hash = "link-to=" + encodeURIComponent(location.pathname);
+    a.href = u.pathname + u.search + u.hash;
+  });
+  const showLink = () => {
+    const m = /^#link-to=(.+)$/.exec(location.hash);
+    if (!m) return;
+    const target = norm1(decodeURIComponent(m[1]));
+    const hits = [...document.querySelectorAll(".prose a[href]")].filter((a) =>
+      !a.closest(".links-panel") && a.origin === location.origin && norm1(a.pathname) === target);
+    history.replaceState(null, "", location.pathname + location.search);
+    if (!hits.length) return;
+    hits.forEach((a) => { for (let d = a.closest("details"); d; d = d.parentElement.closest("details")) d.open = true; });
+    hits[0].scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    hits.forEach((a) => a.classList.add("link-flash"));
+    setTimeout(() => hits.forEach((a) => a.classList.remove("link-flash")), 2600);
+  };
+  showLink();
+  addEventListener("hashchange", showLink);
+
   // ---- quick title search over pages.json ----
   const input = document.getElementById("qs-input");
   const list = document.getElementById("qs-results");

@@ -27,7 +27,7 @@
       <h3>→ Links to</h3>
       {{with .LinksOut}}{{template "linkgroups" .}}{{else}}<p class="links-none">This page doesn't link to other pages yet.</p>{{end}}
     </section>
-    <section>
+    <section class="links-from">
       <h3>← Linked from</h3>
       {{with .LinksIn}}{{template "linkgroups" .}}{{else}}<p class="links-none">No other pages link here yet.</p>{{end}}
     </section>
