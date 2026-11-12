@@ -514,4 +514,4 @@ img { max-width: 100%; height: auto; }
 .prose ol.citations { font-size: .92rem; }
 .prose ol.citations li { margin: .35rem 0; scroll-margin-top: 5rem; }
 .prose ol.citations li:target { background: var(--lime); color: var(--lime-ink); }
-.prose ol.citations .cite-loc { color: var(--muted); font-style: italic; }
+.prose sup.cite .cite-loc { margin-left: .05em; font-weight: 400; }

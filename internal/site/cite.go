@@ -209,13 +209,12 @@ type citeState struct {
 	lib     Library
 	order   []string
 	num     map[string]int
-	locs    map[string][]string // key -> distinct locators ("p. 312"), shown in the reference list
-	unknown map[string]bool     // cited keys not in the library
+	unknown map[string]bool // cited keys not in the library
 	warns   []string
 }
 
 func newCiteState(lib Library) *citeState {
-	return &citeState{lib: lib, num: map[string]int{}, locs: map[string][]string{}, unknown: map[string]bool{}}
+	return &citeState{lib: lib, num: map[string]int{}, unknown: map[string]bool{}}
 }
 
 // preprocess replaces [@key], [@a; @b] and [@key, p. 12] with superscript
@@ -284,9 +283,9 @@ func (c *citeState) render(inner string) (string, bool) {
 				c.num[key] = n
 			}
 			label = fmt.Sprintf(`<a href="#ref-%d">%d</a>`, n, n)
-			// Locators (pages, chapters…) go in the reference list, not inline.
-			if locator != "" && !contains(c.locs[key], locator) {
-				c.locs[key] = append(c.locs[key], locator)
+			// Locators (pages, chapters…) show inline, AMA style: ¹⁽ᵖ· ⁵²⁹⁾.
+			if locator != "" {
+				label += `<span class="cite-loc">(` + html.EscapeString(locator) + `)</span>`
 			}
 		} else {
 			c.unknown[key] = true
@@ -309,11 +308,7 @@ func (c *citeState) appendReferences(body string) string {
 	var list strings.Builder
 	list.WriteString(`<ol class="citations">`)
 	for i, key := range c.order {
-		loc := ""
-		if ls := c.locs[key]; len(ls) > 0 {
-			loc = ` <span class="cite-loc">Cited: ` + html.EscapeString(strings.Join(ls, "; ")) + `.</span>`
-		}
-		fmt.Fprintf(&list, `<li id="ref-%d">%s%s</li>`, i+1, formatRef(c.lib[key]), loc)
+		fmt.Fprintf(&list, `<li id="ref-%d">%s</li>`, i+1, formatRef(c.lib[key]))
 	}
 	list.WriteString(`</ol>`)
 	if loc := refsHeadingRe.FindStringIndex(body); loc != nil {
@@ -325,15 +320,6 @@ func (c *citeState) appendReferences(body string) string {
 		return body + list.String()
 	}
 	return body + `<h2 id="references">References</h2>` + list.String()
-}
-
-func contains(list []string, s string) bool {
-	for _, x := range list {
-		if x == s {
-			return true
-		}
-	}
-	return false
 }
 
 // ---- private source notes ----

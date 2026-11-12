@@ -22,10 +22,10 @@ Every Zotero item now has a **Citation Key**, shown at the top of the item's Inf
 |---|---|
 | `Targets were lowered [@whelton2018].` | Targets were lowered¹ |
 | `[@whelton2018; @carey2022]` | ¹˒² |
-| `[@harrison, p. 312]` | ³ (and the reference says "Cited: p. 312.") |
+| `[@harrison, p. 312]` | ³⁽ᵖ· ³¹²⁾ (the page shows next to the number) |
 
 - Numbers follow the order sources first appear on the page, and the same source keeps its number.
-- Page numbers and other locators (`, p. 312`, `, ch. 4`) don't appear in the text. They're listed in that source's entry in the References section, e.g. "Cited: p. 312; p. 40."
+- Page numbers and other locators (`, p. 312`, `, ch. 4`) appear inline with the number, AMA style, so each citation keeps its own page. The References list shows each source once, without pages.
 - The formatted list is added at the end of your `## References` heading's section. If the page has no such heading, one is added.
 - A key that isn't in the library shows up in the editor's **Problems** list, and `fpn check` fails, so typos can't reach the public site.
 

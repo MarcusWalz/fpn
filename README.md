@@ -99,7 +99,7 @@ Every push to `main` deploys to GitHub Pages through `.github/workflows/pages.ym
 
 ## Citations and image sources
 
-- **Citations:** write `[@citekey]`, `[@a; @b]` or `[@key, p. 12]`. Keys come from CSL-JSON files in `references/` (change the folder with `-refs`). This is typically a Zotero **Better BibTeX** "Better CSL JSON" auto-export; see [docs/zotero.md](docs/zotero.md). To keep a big or private library out of git, `./fpn refs` writes only the cited items to `references/cited.json` for committing. Citations render as numbered superscripts; locators like `, p. 12` are listed in the reference entry ("Cited: p. 12."), not inline. The formatted (AMA-like) list goes at the end of the page's `## References` section, which is added if missing. Unknown keys are reported as problems.
+- **Citations:** write `[@citekey]`, `[@a; @b]` or `[@key, p. 12]`. Keys come from CSL-JSON files in `references/` (change the folder with `-refs`). This is typically a Zotero **Better BibTeX** "Better CSL JSON" auto-export; see [docs/zotero.md](docs/zotero.md). To keep a big or private library out of git, `./fpn refs` writes only the cited items to `references/cited.json` for committing. Citations render as numbered superscripts; locators like `, p. 12` show inline with the number, AMA style (¹⁽ᵖ· ¹²⁾). The formatted (AMA-like) list goes at the end of the page's `## References` section, which is added if missing. Unknown keys are reported as problems.
 - **Image sources:** every image needs "Source:" in its caption line (the italic line under it), in the same paragraph, or in its title. Images without one are reported as problems, so `fpn check` fails.
 
 ## Robots

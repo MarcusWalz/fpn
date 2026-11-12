@@ -40,9 +40,10 @@ func TestCitations(t *testing.T) {
 	html, warns := citeSite(t, "# P\n\nBP targets [@whelton2018]. Again [@harrison, p. 12; @whelton2018]. More [@harrison, p. 40] [@harrison, p. 12].\n"+
 		"Typo [@nobody]. Link [@someone](https://example.com).\n\n```\n[@whelton2018] in code\n```\n\n## References\n\n- Extra note\n\n## After\n")
 	for _, want := range []string{
-		`<sup class="cite"><a href="#ref-1">1</a></sup>`,                         // first citation is 1
-		`<sup class="cite"><a href="#ref-2">2</a>; <a href="#ref-1">1</a></sup>`, // no locator inline; reuse of 1
-		`McGraw Hill; 2022. <span class="cite-loc">Cited: p. 12; p. 40.</span>`,  // locators collected in the list, deduped
+		`<sup class="cite"><a href="#ref-1">1</a></sup>`,                                                              // first citation is 1
+		`<sup class="cite"><a href="#ref-2">2</a><span class="cite-loc">(p. 12)</span>; <a href="#ref-1">1</a></sup>`, // locator inline; reuse of 1
+		`<sup class="cite"><a href="#ref-2">2</a><span class="cite-loc">(p. 40)</span></sup>`,                         // each cite keeps its own page
+		`McGraw Hill; 2022.</li>`, // the reference list has no locators
 		`Whelton PK, Carey RM, Aronow WS, et al. 2017 Guideline for High Blood Pressure in Adults. <em>Hypertension</em>. 2018;71(6):e13–e115.`,
 		`href="https://doi.org/10.1161/HYP.0000000000000065"`,
 		`Loscalzo J, et al. Harrison&#39;s Principles of Internal Medicine. 21 ed. McGraw Hill; 2022.`,
