@@ -187,8 +187,8 @@ func TestTableNote(t *testing.T) {
 	dir := t.TempDir()
 	content := filepath.Join(dir, "content")
 	os.MkdirAll(filepath.Join(content, "book", "chap"), 0o755)
-	page := "# P\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\nNote: values in mg/dL.\n\nNote: a second note is ordinary text.\n\n" +
-		"| C |\n|---|\n| 3 |\n\n*NOTE: italic and capitals still count.*\n\n| D |\n|---|\n| 4 |\n\nNormal text after a table.\n\nNote: not after a table.\n"
+	page := "# P\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\nNote: values in mg/dL.\n\nNote: a second note is a note, but not the table's.\n\n" +
+		"| C |\n|---|\n| 3 |\n\n*NOTE: italic and capitals still count.*\n\n| D |\n|---|\n| 4 |\n\nNormal text after a table.\n\nNote: not after a table.\n\nNotes: plural counts too.\n\nNoted: this is ordinary text.\n\n- a list\n- item\n\nNotes: under a list.\n"
 	os.WriteFile(filepath.Join(content, "book", "chap", "p.md"), []byte(page), 0o644)
 	out := filepath.Join(dir, "public")
 	if _, err := Build(Config{ContentDir: content, OutDir: out, Base: "/", Web: web.FS}); err != nil {
@@ -197,11 +197,14 @@ func TestTableNote(t *testing.T) {
 	b, _ := os.ReadFile(filepath.Join(out, "book", "chap", "p", "index.html"))
 	html := string(b)
 	for _, want := range []string{
-		`<p class="table-note">Note: values in mg/dL.</p>`,
-		`<p>Note: a second note is ordinary text.</p>`, // only the paragraph right after the table
-		`<p class="table-note"><em>NOTE: italic and capitals still count.</em></p>`,
+		`<p class="note table-note">Note: values in mg/dL.</p>`,
+		`<p class="note">Note: a second note is a note, but not the table's.</p>`,
+		`<p class="note table-note"><em>NOTE: italic and capitals still count.</em></p>`,
 		`<p>Normal text after a table.</p>`,
-		`<p>Note: not after a table.</p>`,
+		`<p class="note">Note: not after a table.</p>`,
+		`<p class="note">Notes: plural counts too.</p>`,
+		`<p>Noted: this is ordinary text.</p>`,
+		`<p class="note list-note">Notes: under a list.</p>`,
 	} {
 		if !strings.Contains(html, want) {
 			t.Errorf("missing %s", want)

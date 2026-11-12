@@ -385,7 +385,9 @@ img { max-width: 100%; height: auto; }
 
 /* a "Note:" paragraph right after a table: smaller, tucked under it */
 .prose table:has(+ .table-note) { margin-bottom: 0; }
-.prose .table-note { margin-top: 0; padding-top: .35rem; font-size: .85rem; line-height: 1.45; color: var(--muted); }
+.prose .note { font-size: .85rem; line-height: 1.45; color: var(--muted); }
+.prose :is(ul, ol):has(+ .list-note) { margin-bottom: 0; }
+.prose :is(.table-note, .list-note) { margin-top: 0; padding-top: .35rem; }
 .prose th, .prose td { padding: .45rem .65rem; border: 2px solid var(--line); text-align: left; vertical-align: top; }
 .prose th { background: var(--mint); font-family: var(--font-head); font-weight: 700; }
 .prose tr:nth-child(even) td { background: color-mix(in srgb, var(--mint) 55%, transparent); }

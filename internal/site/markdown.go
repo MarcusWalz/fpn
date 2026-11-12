@@ -185,15 +185,21 @@ func tagCaption(n ast.Node, src []byte) {
 	}
 }
 
-// tagTableNote marks a paragraph that directly follows a table and starts
-// with "Note:" as that table's note (class table-note): smaller, and set
-// right under the table with no gap.
+// tagTableNote marks a paragraph that starts with "Note:" or "Notes:" as a
+// note (class note: smaller text). Right after a table or a list it is also
+// that table's or list's note (class table-note / list-note), set under it
+// with no gap.
 func tagTableNote(p *ast.Paragraph, src []byte) {
-	if _, ok := p.PreviousSibling().(*east.Table); !ok {
+	t := strings.ToLower(nodeText(p, src))
+	if !strings.HasPrefix(t, "note:") && !strings.HasPrefix(t, "notes:") {
 		return
 	}
-	if strings.HasPrefix(strings.ToLower(nodeText(p, src)), "note:") {
+	addClass(p, "note")
+	switch p.PreviousSibling().(type) {
+	case *east.Table:
 		addClass(p, "table-note")
+	case *ast.List:
+		addClass(p, "list-note")
 	}
 }
 
