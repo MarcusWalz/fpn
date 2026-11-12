@@ -43,6 +43,7 @@ func main() {
 	base := fl.String("base", "/", "URL base path, e.g. /notebook/")
 	siteURL := fl.String("url", "", "absolute site origin for sitemap.xml, e.g. https://example.org")
 	addr := fl.String("addr", "localhost:1313", "listen address (serve)")
+	refsDir := fl.String("refs", "references", "folder of CSL-JSON reference libraries for [@key] citations (e.g. a Zotero Better BibTeX auto-export)")
 	allowIndex := fl.Bool("index", false, "allow search engines (default writes noindex meta + robots.txt Disallow)")
 	noStubs := fl.Bool("no-stubs", false, "check: fail while any chapter is empty or any page is a stub")
 	from := fl.String("from", "", "scaffold: taxonomy JSON file")
@@ -64,7 +65,7 @@ func main() {
 	fl.Parse(os.Args[2:])
 
 	var webFS fs.FS = web.FS
-	watch := []string{*contentDir}
+	watch := []string{*contentDir, *refsDir}
 	if *webDir == "" && cmd == "serve" {
 		if st, err := os.Stat(filepath.Join("web", "templates")); err == nil && st.IsDir() {
 			*webDir = "web"
@@ -75,7 +76,7 @@ func main() {
 		watch = append(watch, *webDir)
 	}
 
-	cfg := site.Config{ContentDir: *contentDir, OutDir: *out, Base: *base, SiteURL: *siteURL, Web: webFS, AllowIndex: *allowIndex}
+	cfg := site.Config{ContentDir: *contentDir, OutDir: *out, Base: *base, SiteURL: *siteURL, Web: webFS, AllowIndex: *allowIndex, RefsDir: *refsDir}
 
 	switch cmd {
 	case "build":

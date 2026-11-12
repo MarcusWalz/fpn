@@ -25,6 +25,7 @@ func Serve(cfg Config, addr string, watch []string) error {
 		version atomic.Int64
 		mu      sync.Mutex
 		preview atomic.Pointer[Previewer]
+		probs   atomic.Pointer[[]string] // warnings from the latest build
 	)
 	rebuild := func() {
 		mu.Lock()
@@ -38,6 +39,8 @@ func Serve(cfg Config, addr string, watch []string) error {
 		c.OutDir = filepath.Join(dir, "public")
 		res, err := Build(c)
 		if err != nil {
+			fail := []string{"(build): " + err.Error()}
+			probs.Store(&fail)
 			log.Printf("build failed: %v", err)
 			os.RemoveAll(dir)
 			return
@@ -56,6 +59,8 @@ func Serve(cfg Config, addr string, watch []string) error {
 		} else {
 			preview.Store(p)
 		}
+		w := append([]string{}, res.Warnings...)
+		probs.Store(&w)
 	}
 	rebuild()
 	if current.Load() == nil {
@@ -93,7 +98,12 @@ func Serve(cfg Config, addr string, watch []string) error {
 	})
 
 	mux := http.NewServeMux()
-	(&editorAPI{cfg: cfg, preview: preview.Load}).mount(mux)
+	(&editorAPI{cfg: cfg, preview: preview.Load, problems: func() []string {
+		if p := probs.Load(); p != nil {
+			return *p
+		}
+		return nil
+	}}).mount(mux)
 	mux.HandleFunc("/__reload", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/event-stream")
 		w.Header().Set("Cache-Control", "no-store")

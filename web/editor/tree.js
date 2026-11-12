@@ -23,7 +23,28 @@ export function initTree({ current, onOpen, toast, isDirty }) {
   let data = null, status = {}, selectedDir = dirOf(current);
   let open = new Set();
   try { open = new Set(JSON.parse(localStorage.getItem("fpn-tree-open") || "[]")); } catch {}
-  // Always reveal the current file.
+  // Accordion: only one book (top-level folder) is open at a time.
+  const bookOf = (p) => p.split("/")[0];
+  const collapseOtherBooks = (book) => {
+    for (const p of [...open]) if (bookOf(p) !== book) open.delete(p);
+  };
+  // Inside a folder with many sub-folders (>= 10), only one of them is open
+  // at a time too. Needs the loaded tree to count sub-folders.
+  const ACCORDION_MIN = 10;
+  const entries = new Map();
+  const index = (e) => { entries.set(e.path, e); (e.children || []).forEach(index); };
+  const collapseSiblings = (dirPath) => {
+    const parent = dirOf(dirPath);
+    if (!parent) return; // books are handled by collapseOtherBooks
+    const pe = entries.get(parent);
+    const subdirs = (pe?.children || []).filter((c) => c.dir).length;
+    if (subdirs < ACCORDION_MIN) return;
+    for (const p of [...open]) {
+      if (p.startsWith(parent + "/") && p !== dirPath && !p.startsWith(dirPath + "/")) open.delete(p);
+    }
+  };
+  // Always reveal the current file, and show only its book.
+  if (current.includes("/")) collapseOtherBooks(bookOf(current));
   for (let d = dirOf(current); d; d = dirOf(d)) open.add(d);
   const saveOpen = () => { try { localStorage.setItem("fpn-tree-open", JSON.stringify([...open])); } catch {} };
 
@@ -32,6 +53,11 @@ export function initTree({ current, onOpen, toast, isDirty }) {
       const [tree, st] = await Promise.all([api("/__api/tree"), api("/__api/git/status").catch(() => ({ files: {} }))]);
       data = tree;
       status = st.files || {};
+      entries.clear();
+      index(data);
+      // On load, the current file's folders win over any other open siblings.
+      for (let d = dirOf(current); d.includes("/"); d = dirOf(d)) collapseSiblings(d);
+      saveOpen();
       render();
     } catch (e) {
       body.textContent = "Couldn't load files: " + e.message;
@@ -43,6 +69,14 @@ export function initTree({ current, onOpen, toast, isDirty }) {
 
   // Does a folder contain git changes?
   const dirChanged = (p) => Object.keys(status).some((f) => f.startsWith(p ? p + "/" : ""));
+
+  // Focus mode: hide folders that contain no pages (only _index.md files),
+  // except the folders leading to the open file and the selected folder.
+  const focusBox = document.getElementById("tree-focus");
+  try { focusBox.checked = localStorage.getItem("fpn-tree-focus") !== "0"; } catch {}
+  const hasPages = (e) => (e.children || []).some((c) => (c.dir ? hasPages(c) : c.name !== "_index.md"));
+  const keep = (e) => !e.dir || hasPages(e) || current.startsWith(e.path + "/") || e.path === selectedDir;
+  const hiddenCount = (e) => (e.children || []).reduce((n, c) => n + (c.dir ? (keep(c) ? hiddenCount(c) : 1) : 0), 0);
 
   function matches(e, q) {
     if (!q) return true;
@@ -58,6 +92,15 @@ export function initTree({ current, onOpen, toast, isDirty }) {
     rootRow.classList.add("root");
     frag.append(rootRow);
     walk(data, 1, q, frag);
+    if (focusBox.checked && !q) {
+      const n = hiddenCount(data);
+      if (n) {
+        const note = document.createElement("p");
+        note.className = "tree-hidden-note";
+        note.textContent = `${n} empty folder${n === 1 ? "" : "s"} hidden · type in the filter or untick Focus to see them`;
+        frag.append(note);
+      }
+    }
     body.replaceChildren(frag);
     body.querySelector(".current")?.scrollIntoView({ block: "nearest" });
   }
@@ -65,6 +108,7 @@ export function initTree({ current, onOpen, toast, isDirty }) {
   function walk(dir, depth, q, frag) {
     for (const e of dir.children || []) {
       if (!matches(e, q)) continue;
+      if (focusBox.checked && !q && !keep(e)) continue;
       frag.append(row(e, depth, q));
       if (e.dir && (open.has(e.path) || q)) walk(e, depth + 1, q, frag);
     }
@@ -112,10 +156,38 @@ export function initTree({ current, onOpen, toast, isDirty }) {
       el.append(more);
     }
 
+    // The caret only folds/unfolds, without opening anything.
+    caret.addEventListener("click", (ev) => {
+      if (!e.dir || !e.path) return;
+      ev.stopPropagation();
+      if (open.has(e.path)) open.delete(e.path);
+      else { if (!e.path.includes("/")) collapseOtherBooks(e.path); else collapseSiblings(e.path); open.add(e.path); }
+      saveOpen();
+      render();
+    });
+
     el.addEventListener("click", () => {
+      // Clicking a book unfolds it (folding the others) and opens its index page.
+      if (e.dir && e.path && !e.path.includes("/")) {
+        const idx = join(e.path, "_index.md");
+        collapseOtherBooks(e.path);
+        open.add(e.path);
+        selectedDir = e.path;
+        saveOpen();
+        if (current !== idx) return onOpen(idx);
+        render();
+        return;
+      }
       if (e.dir) {
         selectedDir = e.path;
-        if (e.path) open.has(e.path) ? open.delete(e.path) : open.add(e.path);
+        if (e.path) {
+          if (open.has(e.path)) open.delete(e.path);
+          else {
+            if (!e.path.includes("/")) collapseOtherBooks(e.path); // opening a book closes the others
+            else collapseSiblings(e.path); // ...and a chapter closes its siblings in big books
+            open.add(e.path);
+          }
+        }
         saveOpen();
         render();
       } else if (e.name.endsWith(".md")) {
@@ -270,6 +342,10 @@ export function initTree({ current, onOpen, toast, isDirty }) {
   document.getElementById("new-folder").addEventListener("click", () => newFolder());
   document.getElementById("tree-refresh").addEventListener("click", load);
   filter.addEventListener("input", render);
+  focusBox.addEventListener("change", () => {
+    try { localStorage.setItem("fpn-tree-focus", focusBox.checked ? "1" : "0"); } catch {}
+    render();
+  });
 
   load();
   return { reload: load, refreshStatus, uploadFiles, dirOf, getStatus: () => status };

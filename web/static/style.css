@@ -486,3 +486,31 @@ img { max-width: 100%; height: auto; }
 .stub-tag.write { border-style: solid; border-color: var(--leaf-ink); color: var(--leaf-ink); text-decoration: none; }
 .stub-tag.write:hover { background: var(--lime); color: var(--lime-ink); }
 @media print { .edit-fab { display: none; } }
+
+/* linked pages (forward links + backlinks), collapsed by default */
+.links-panel { margin-top: 1.5rem; }
+.links-cols { display: grid; gap: .25rem 1.5rem; padding: .5rem .9rem .9rem; }
+@media (min-width: 720px) { .links-cols { grid-template-columns: 1fr 1fr; } }
+.links-cols h3 { margin: .6rem 0 .3rem; font: .6rem var(--font-px); text-transform: uppercase; color: var(--leaf-ink); }
+.links-cols ul { list-style: none; margin: 0; padding: 0; }
+.links-cols li a { display: block; padding: .35rem .45rem; color: var(--ink); text-decoration: none; line-height: 1.3; }
+.links-cols li a:hover { background: var(--mint); }
+.links-cols li small { display: block; padding: 0 .45rem .3rem; margin-top: -.2rem; font-size: .78rem; color: var(--muted); }
+.links-cols li.stub a { color: var(--muted); text-decoration: underline dotted; }
+.links-none { margin: .3rem .45rem; color: var(--muted); font-size: .9rem; }
+.links-book { margin: .7rem .45rem .15rem; font: .62rem/1.7 var(--font-px); text-transform: uppercase; color: var(--forest); border-bottom: 2px dashed color-mix(in srgb, var(--line) 35%, transparent); padding-bottom: .15rem; }
+
+/* "Updated … by …" line under titles */
+.updated { display: flex; align-items: center; gap: .4rem; margin: -.6rem 0 1.25rem; font-size: .88rem; color: var(--muted); }
+.updated .px { width: .9rem; height: .9rem; color: var(--leaf-ink); }
+.updated strong { color: var(--ink); font-weight: 600; }
+.sec-head .updated { margin: .2rem 0 .1rem; font-size: .8rem; }
+
+/* citations from the references library */
+.prose sup.cite { font-size: .72em; line-height: 0; margin-left: .1em; white-space: nowrap; }
+.prose sup.cite a { text-decoration: none; font-weight: 700; }
+.prose sup.cite .cite-missing { color: #b91c1c; background: #fee2e2; padding: 0 .2em; }
+.prose ol.citations { font-size: .92rem; }
+.prose ol.citations li { margin: .35rem 0; scroll-margin-top: 5rem; }
+.prose ol.citations li:target { background: var(--lime); color: var(--lime-ink); }
+.prose ol.citations .cite-loc { color: var(--muted); font-style: italic; }

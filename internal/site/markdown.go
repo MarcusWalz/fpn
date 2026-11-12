@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/url"
 	"path"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -40,6 +41,9 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 	if len(bytes.TrimSpace(src)) == 0 {
 		return "", nil, nil
 	}
+	src, notes := extractSourceNotes(src)
+	cites := newCiteState(b.lib)
+	src = cites.preprocess(src)
 	doc := b.md.Parser().Parse(text.NewReader(src))
 
 	if n.TitleFromH1 {
@@ -89,6 +93,13 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 				warns = append(warns, fmt.Sprintf("%s: broken link %q", where, v.Destination))
 			}
 		case *ast.Image:
+			if !imageHasSource(v, src) {
+				if note := notes[string(v.Destination)]; note != "" {
+					warns = append(warns, fmt.Sprintf(`%s: image %q has no "Source:" caption — your note: %q`, where, v.Destination, note))
+				} else {
+					warns = append(warns, fmt.Sprintf(`%s: image %q has no "Source:" caption (add an italic line under it, e.g. *Figure: … Source: …*)`, where, v.Destination))
+				}
+			}
 			v.SetAttributeString("loading", []byte("lazy"))
 			v.SetAttributeString("decoding", []byte("async"))
 			if u, ok := b.resolve(string(v.Destination), srcDir); ok {
@@ -104,7 +115,42 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 	if err := b.md.Renderer().Render(&buf, src, doc); err != nil {
 		warns = append(warns, fmt.Sprintf("%s: render: %v", where, err))
 	}
-	return template.HTML(buf.String()), toc, warns
+	for _, w := range cites.warns {
+		warns = append(warns, where+": "+w)
+	}
+	out := buf.String()
+	if len(cites.order) > 0 {
+		hadRefs := refsHeadingRe.MatchString(out)
+		out = cites.appendReferences(out)
+		if !hadRefs {
+			toc = append(toc, Heading{Level: 2, ID: "references", Text: "References"})
+		}
+	}
+	return template.HTML(out), toc, warns
+}
+
+// imageHasSource reports whether an image is credited: "Source:" appears in
+// its title, in the same paragraph, or in the paragraph right after it
+// (the italic caption line).
+func imageHasSource(img *ast.Image, src []byte) bool {
+	has := func(s string) bool { return strings.Contains(strings.ToLower(s), "source:") }
+	if has(string(img.Title)) {
+		return true
+	}
+	var block ast.Node = img.Parent()
+	for block != nil && block.Type() != ast.TypeBlock {
+		block = block.Parent()
+	}
+	if block == nil {
+		return false
+	}
+	if has(nodeText(block, src)) {
+		return true
+	}
+	if next := block.NextSibling(); next != nil && next.Kind() == ast.KindParagraph && has(nodeText(next, src)) {
+		return true
+	}
+	return false
 }
 
 // resolve maps a link destination relative to srcDir onto an output URL.
@@ -211,4 +257,111 @@ func tagSourceLines(doc ast.Node, src []byte, offset int) {
 		}
 		return ast.WalkContinue, nil
 	})
+}
+
+// resolveNode returns the page or section a Markdown link points to, or nil
+// for external links, assets, fragments and broken links.
+func (b *builder) resolveNode(dest, srcDir string) *content.Node {
+	if dest == "" || strings.HasPrefix(dest, "#") || strings.HasPrefix(dest, "/") {
+		return nil
+	}
+	if u, err := url.Parse(dest); err != nil || u.Scheme != "" {
+		return nil
+	}
+	target := dest
+	if i := strings.IndexAny(target, "?#"); i >= 0 {
+		target = target[:i]
+	}
+	if unesc, err := url.PathUnescape(target); err == nil {
+		target = unesc
+	}
+	rel := path.Clean(path.Join(srcDir, target))
+	if rel == "." {
+		rel = ""
+	}
+	return b.tree.ByRel[rel]
+}
+
+// linkTargets lists the distinct pages/sections that n's body links to
+// (excluding itself), in the order they first appear.
+func (b *builder) linkTargets(n *content.Node) []*content.Node {
+	if len(bytes.TrimSpace(n.Body)) == 0 {
+		return nil
+	}
+	srcDir := n.Rel
+	if !n.IsSection {
+		srcDir = path.Dir(n.Rel)
+	}
+	if srcDir == "." {
+		srcDir = ""
+	}
+	doc := b.md.Parser().Parse(text.NewReader(n.Body))
+	seen := map[string]bool{n.Rel: true}
+	var out []*content.Node
+	_ = ast.Walk(doc, func(node ast.Node, entering bool) (ast.WalkStatus, error) {
+		if l, ok := node.(*ast.Link); ok && entering {
+			if t := b.resolveNode(string(l.Destination), srcDir); t != nil && !seen[t.Rel] {
+				seen[t.Rel] = true
+				out = append(out, t)
+			}
+		}
+		return ast.WalkContinue, nil
+	})
+	return out
+}
+
+// buildBacklinks maps each node's Rel to the nodes that link to it, sorted by title.
+func (b *builder) buildBacklinks() map[string][]*content.Node {
+	in := map[string][]*content.Node{}
+	nodes := append(append([]*content.Node{}, b.tree.Sections...), b.tree.Pages...)
+	for _, src := range nodes {
+		for _, t := range b.linkTargets(src) {
+			in[t.Rel] = append(in[t.Rel], src)
+		}
+	}
+	for k := range in {
+		sort.SliceStable(in[k], func(i, j int) bool { return strings.ToLower(in[k][i].Title) < strings.ToLower(in[k][j].Title) })
+	}
+	return in
+}
+
+// LinkGroup is a set of linked pages that share a top-level folder (book).
+type LinkGroup struct {
+	Book  string
+	Items []*content.Node
+}
+
+// groupByBook groups nodes by their book, books alphabetically and pages
+// alphabetically within each book. Pages outside any book go last.
+func groupByBook(nodes []*content.Node) []LinkGroup {
+	const other = "\uffffOther pages" // sorts after every real title
+	byBook := map[string][]*content.Node{}
+	for _, n := range nodes {
+		name := other
+		if bk := n.Book(); bk != nil {
+			name = bk.Title
+		}
+		byBook[name] = append(byBook[name], n)
+	}
+	names := make([]string, 0, len(byBook))
+	for k := range byBook {
+		names = append(names, k)
+	}
+	sort.Slice(names, func(i, j int) bool { return strings.ToLower(names[i]) < strings.ToLower(names[j]) })
+	out := make([]LinkGroup, 0, len(names))
+	for _, k := range names {
+		items := byBook[k]
+		sort.SliceStable(items, func(i, j int) bool { return strings.ToLower(items[i].Title) < strings.ToLower(items[j].Title) })
+		out = append(out, LinkGroup{Book: strings.TrimPrefix(k, "\uffff"), Items: items})
+	}
+	return out
+}
+
+// chapterTrail is a node's section trail without the book (shown as the group heading).
+func chapterTrail(n *content.Node) string {
+	t := n.Trail()
+	if len(t) > 0 {
+		t = t[1:]
+	}
+	return strings.Join(t, " › ")
 }

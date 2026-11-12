@@ -85,3 +85,20 @@ func TestEditorAPIGuardsAndFiles(t *testing.T) {
 		t.Errorf("preview = %d %s", w.Code, w.Body)
 	}
 }
+
+func TestParseProblems(t *testing.T) {
+	ps := parseProblems([]string{
+		`z/b.md: broken link "../x/oops.md"`,
+		`a/_index.md: front matter: yaml: line 3: could not find expected ':'`,
+		`(build): template error`,
+	})
+	if ps[0].Path != "" || ps[1].Path != "a/_index.md" || ps[2].Path != "z/b.md" {
+		t.Fatalf("paths/sort wrong: %+v", ps)
+	}
+	if ps[2].Message != `broken link "../x/oops.md"` || ps[2].Find != "../x/oops.md" {
+		t.Errorf("broken link parse: %+v", ps[2])
+	}
+	if ps[1].Find != "" && ps[1].Find != ":" {
+		t.Errorf("front matter find: %+v", ps[1])
+	}
+}

@@ -1,4 +1,5 @@
 :root {
+  --danger: #b91c1c;
   --bg: #eef9f1; --surface: #fff; --ink: #10261a; --muted: #476352;
   --bar: #14532d; --bar-deep: #0b3b1f; --leaf: #22c55e; --lime: #d9f99d;
   --line: #14532d; --warn: #fef3c7; --warn-ink: #78350f;
@@ -12,10 +13,12 @@
   :root:not([data-theme="light"]) {
     --bg: #07130c; --surface: #0d1f15; --ink: #dcf5e4; --muted: #94bba3;
     --bar: #0a2415; --bar-deep: #051509; --line: #2f7a4d; --warn: #422006; --warn-ink: #fde68a;
+    --danger: #fca5a5;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
+  --danger: #fca5a5;
   --bg: #07130c; --surface: #0d1f15; --ink: #dcf5e4; --muted: #94bba3;
   --bar: #0a2415; --bar-deep: #051509; --line: #2f7a4d; --warn: #422006; --warn-ink: #fde68a;
   color-scheme: dark;
@@ -161,3 +164,67 @@ body { margin: 0; display: flex; flex-direction: column; background: var(--bg); 
   .split.show-preview .left-pane { display: flex; }
   .split.show-preview .editor-pane { display: none; }
 }
+.tree-focus { display: flex; align-items: center; gap: .4rem; margin: 0 .5rem .45rem; font-size: .8rem; color: var(--muted); cursor: pointer; }
+.tree-hidden-note { margin: .6rem .7rem; font-size: .75rem; color: var(--muted); font-style: italic; }
+
+/* ---------- problems panel ---------- */
+.probs-btn { display: inline-flex; align-items: center; gap: .4rem; }
+.probs-count { font: .55rem var(--font-px); padding: .15rem .3rem; background: #166534; color: #d9f99d; border: 1px solid #d9f99d; }
+.probs-btn.has-problems .probs-count { background: #b91c1c; color: #fff; border-color: #fff; }
+.problems {
+  position: fixed; z-index: 55; top: 58px; right: 16px; width: min(460px, calc(100vw - 32px)); max-height: calc(100vh - 80px);
+  display: flex; flex-direction: column; background: var(--surface); color: var(--ink);
+  border: 3px solid #000; box-shadow: 6px 6px 0 #000;
+}
+.problems[hidden] { display: none; }
+.problems-head { display: flex; align-items: center; justify-content: space-between; padding: .6rem .8rem; font: .6rem var(--font-px); text-transform: uppercase; border-bottom: 2px dashed var(--line); }
+.problems-sub { margin: .5rem .8rem; font-size: .8rem; color: var(--muted); }
+.problems-list { overflow: auto; padding: 0 .5rem .7rem; }
+.problems-none { margin: 1rem .4rem; }
+.pgroup { margin: .4rem 0 .7rem; }
+.pgroup h4 { margin: 0 0 .25rem; padding: .25rem .4rem; font: 600 .82rem var(--font-mono); background: var(--bg); border-left: 4px solid var(--line); overflow-wrap: anywhere; }
+.pgroup.current h4 { border-left-color: var(--leaf); background: var(--lime); color: #1a2e05; }
+.pitem { display: block; width: 100%; text-align: left; padding: .4rem .5rem .4rem 1rem; font: .85rem/1.35 system-ui, sans-serif; color: var(--ink); background: none; border: 0; cursor: pointer; overflow-wrap: anywhere; }
+.pitem:hover:not(:disabled) { background: var(--lime); color: #1a2e05; }
+.pitem:disabled { cursor: default; }
+
+/* ---------- image source dialog ---------- */
+.cap-dialog { width: min(620px, calc(100vw - 24px)); max-height: calc(100vh - 24px); padding: 0; color: var(--ink); background: var(--surface); border: 3px solid #000; box-shadow: 8px 8px 0 #000; }
+.cap-dialog::backdrop { background: rgba(5, 46, 22, .55); }
+.cap-dialog form { padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; gap: .6rem; }
+.cap-dialog h2 { margin: 0 0 .2rem; font: .75rem var(--font-px); text-transform: uppercase; color: var(--ink); }
+.cap-top { display: grid; grid-template-columns: 96px 1fr; gap: .8rem; align-items: start; }
+.cap-top img { width: 96px; height: 96px; object-fit: contain; background: var(--bg); border: 2px solid var(--line); }
+.cap-field { display: flex; flex-direction: column; gap: .2rem; font: 600 .85rem system-ui, sans-serif; }
+.cap-field .hint { font-weight: 400; color: var(--muted); font-size: .78rem; }
+.cap-field input, .cap-field select { font: .95rem system-ui, sans-serif; padding: .45rem .5rem; color: var(--ink); background: var(--bg); border: 2px solid var(--line); border-radius: 0; }
+.cap-field input:focus, .cap-field select:focus { outline: 3px solid var(--leaf); outline-offset: 0; }
+.cap-row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; align-items: end; }
+.cap-fields { display: flex; flex-direction: column; gap: .6rem; }
+.cap-fields[hidden] { display: none; }
+.cap-tip { margin: 0; padding: .55rem .7rem; font-size: .85rem; line-height: 1.4; background: var(--bg); border-left: 4px solid var(--leaf); }
+.cap-adapt { font-size: .85rem; padding-bottom: .5rem; }
+.cap-preview-label { margin: .2rem 0 0; font-size: .78rem; color: var(--muted); }
+.cap-preview { margin: 0; padding: .55rem .7rem; white-space: pre-wrap; overflow-wrap: anywhere; font: .85rem/1.45 var(--font-mono); background: var(--bg); border: 2px dashed var(--leaf); }
+.cap-preview.incomplete { border-color: #b91c1c; }
+.cap-actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: .3rem; }
+.btn.ghost-dark { background: transparent; color: var(--ink); border-color: var(--line); box-shadow: none; }
+@media (max-width: 520px) { .cap-row, .cap-top { grid-template-columns: 1fr; } .cap-top img { display: none; } }
+.cap-note { padding-top: .5rem; border-top: 2px dashed var(--line); color: var(--danger); font-style: italic; }
+.cap-note .hint { color: var(--danger); opacity: .85; }
+.cap-note input { font-style: italic; color: var(--danger); border-color: var(--danger); }
+.cap-note input::placeholder { color: var(--danger); opacity: .55; }
+.pnote { color: var(--danger); font-style: italic; font-weight: 600; }
+
+/* ---------- study critique panel ---------- */
+.critique { width: min(620px, calc(100vw - 32px)); }
+.critique-actions { display: flex; align-items: center; gap: .8rem; margin: 0 .8rem .5rem; flex-wrap: wrap; }
+.critique-state { font-size: .82rem; color: var(--muted); }
+.critique-body { overflow: auto; padding: 0 1rem 1rem; font-size: .92rem; line-height: 1.5; }
+.critique-body h2 { font: .7rem/1.5 var(--font-px); text-transform: uppercase; margin: .8rem 0 .4rem; }
+.critique-body h3 { font-size: 1rem; margin: 1rem 0 .3rem; padding-bottom: .2rem; border-bottom: 2px dashed var(--line); }
+.critique-body ul, .critique-body ol { padding-left: 1.3rem; }
+.critique-body li { margin: .3rem 0; }
+.critique-body code { font: .85em var(--font-mono); background: var(--bg); padding: 0 .2em; }
+.critique-body hr { border: 0; border-top: 2px dashed var(--line); margin: 1rem 0; }
+

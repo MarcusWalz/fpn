@@ -40,7 +40,11 @@ func NewPreviewer(cfg Config) (*Previewer, error) {
 	}
 	sd := newSiteData(tree, cfg, time.Now())
 	sd.Dev = false // no live-reload script or edit button inside the preview
-	return &Previewer{b: &builder{cfg: cfg, tree: tree, md: newMarkdown(), tpl: tpl, site: sd, srcLines: true}}, nil
+	b := &builder{cfg: cfg, tree: tree, md: newMarkdown(), tpl: tpl, site: sd, srcLines: true}
+	b.lib, _ = loadLibrary(cfg.RefsDir)
+	b.backlinks = b.buildBacklinks()
+	b.updated = loadUpdated(cfg.ContentDir)
+	return &Previewer{b: b}, nil
 }
 
 // Tree returns the current content snapshot.
@@ -137,8 +141,9 @@ func (p *Previewer) nodeFor(rel string) (*content.Node, error) {
 // ---- HTTP API (mounted by Serve) ----
 
 type editorAPI struct {
-	cfg     Config
-	preview func() *Previewer
+	cfg      Config
+	preview  func() *Previewer
+	problems func() []string // warnings from the latest full build
 }
 
 // cleanRel validates an editor path: a .md file inside the content dir.

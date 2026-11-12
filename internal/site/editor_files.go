@@ -12,6 +12,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -312,7 +313,12 @@ func sanitizeName(n string) string {
 
 // gitRoot returns the repository root and the content dir relative to it.
 func (a *editorAPI) gitRoot() (root, contentRel string, ok bool) {
-	absContent, err := filepath.Abs(a.cfg.ContentDir)
+	return gitRootFor(a.cfg.ContentDir)
+}
+
+// gitRootFor returns the repository root containing dir, and dir relative to it.
+func gitRootFor(dir string) (root, contentRel string, ok bool) {
+	absContent, err := filepath.Abs(dir)
 	if err != nil {
 		return "", "", false
 	}
@@ -436,4 +442,76 @@ func (a *editorAPI) mountFiles(mux *http.ServeMux) {
 	mux.HandleFunc("/__api/git/status", a.gitStatus)
 	mux.HandleFunc("/__api/git/show", a.gitShow)
 	mux.HandleFunc("/__api/raw", a.raw)
+	mux.HandleFunc("/__api/problems", a.problemsHandler)
+	mux.HandleFunc("/__api/refs", a.refs)
+	mux.HandleFunc("/__api/critique", a.critique)
+}
+
+// ---- problems (all build warnings, for batch fixing) ----
+
+// Problem is one build warning, split into the file and what's wrong.
+type Problem struct {
+	Path    string `json:"path"` // content-relative source file ("" if unknown)
+	Message string `json:"message"`
+	Find    string `json:"find,omitempty"` // text to highlight in the file, e.g. the broken link target
+}
+
+var quoted = regexp.MustCompile(`"([^"]+)"`)
+
+// parseProblems turns "path: message" warnings into Problems, sorted by path.
+func parseProblems(warnings []string) []Problem {
+	out := make([]Problem, 0, len(warnings))
+	for _, w := range warnings {
+		p := Problem{Message: w}
+		if i := strings.Index(w, ": "); i > 0 && !strings.ContainsAny(w[:i], " ()") {
+			p.Path, p.Message = w[:i], w[i+2:]
+		}
+		if m := quoted.FindStringSubmatch(p.Message); m != nil {
+			p.Find = m[1]
+		}
+		out = append(out, p)
+	}
+	sort.SliceStable(out, func(i, j int) bool { return out[i].Path < out[j].Path })
+	return out
+}
+
+func (a *editorAPI) problemsHandler(w http.ResponseWriter, r *http.Request) {
+	if !guard(w, r) {
+		return
+	}
+	var ws []string
+	if a.problems != nil {
+		ws = a.problems()
+	}
+	jsonOut(w, parseProblems(ws))
+}
+
+// refs lists citation keys from the references library, for the editor's
+// image-source helper (autocomplete).
+func (a *editorAPI) refs(w http.ResponseWriter, r *http.Request) {
+	if !guard(w, r) {
+		return
+	}
+	type ref struct {
+		Key   string `json:"key"`
+		Label string `json:"label"`
+	}
+	out := []ref{}
+	if p := a.preview(); p != nil {
+		p.mu.Lock()
+		lib := p.b.lib
+		p.mu.Unlock()
+		for k, it := range lib {
+			label := it.Title
+			if len(it.Author) > 0 {
+				label = it.Author[0].short() + " " + it.Issued.year() + " · " + label
+			}
+			if len(label) > 90 {
+				label = label[:87] + "…"
+			}
+			out = append(out, ref{Key: k, Label: label})
+		}
+		sort.Slice(out, func(i, j int) bool { return out[i].Key < out[j].Key })
+	}
+	jsonOut(w, out)
 }

@@ -32,6 +32,7 @@ type Config struct {
 	Dev        bool   // inject live-reload script
 	AllowIndex bool   // let search engines index the site (default: noindex + robots.txt Disallow)
 	Web        fs.FS  // contains templates/ and static/
+	RefsDir    string // CSL-JSON reference libraries (e.g. Zotero Better BibTeX export); optional
 }
 
 // Result summarizes a build.
@@ -68,7 +69,10 @@ type PageData struct {
 	Siblings []*content.Node
 	Prev     *content.Node
 	Next     *content.Node
-	EditPath string // source file, for the dev editor link
+	EditPath string          // source file, for the dev editor link
+	LinksOut []*content.Node // pages this page links to
+	LinksIn  []*content.Node // pages linking to this page
+	Updated  *Updated        // last change to the source file, if known
 }
 
 type builder struct {
@@ -82,6 +86,10 @@ type builder struct {
 	// the source file; srcLineOffset = lines before the body, i.e. front matter).
 	srcLines      bool
 	srcLineOffset int
+
+	lib       Library                    // citation keys -> references
+	backlinks map[string][]*content.Node // target Rel -> pages linking to it
+	updated   map[string]Updated         // source Rel -> last change (from git)
 }
 
 // NormalizeBase ensures a base path starts and ends with "/".
@@ -112,6 +120,10 @@ func Build(cfg Config) (*Result, error) {
 
 	b := &builder{cfg: cfg, tree: tree, md: newMarkdown(), tpl: tpl}
 	b.site = newSiteData(tree, cfg, start)
+	var libWarns []string
+	b.lib, libWarns = loadLibrary(cfg.RefsDir)
+	b.backlinks = b.buildBacklinks()
+	b.updated = loadUpdated(cfg.ContentDir)
 	if err := os.RemoveAll(cfg.OutDir); err != nil {
 		return nil, err
 	}
@@ -121,6 +133,7 @@ func Build(cfg Config) (*Result, error) {
 
 	res := &Result{Pages: len(tree.Pages), Sections: len(tree.Sections), Assets: len(tree.Assets), Stubs: tree.Root.StubCount(), Chapters: tree.Root.ChapterCount(), WrittenChapters: tree.Root.WrittenChapters()}
 	res.Warnings = append(res.Warnings, tree.Warnings...)
+	res.Warnings = append(res.Warnings, libWarns...)
 
 	// Render all nodes in parallel.
 	nodes := append(append([]*content.Node{}, tree.Sections...), tree.Pages...)
@@ -217,6 +230,8 @@ func loadTemplates(webFS fs.FS, base string) (map[string]*template.Template, err
 		"shade":    func(i int) int { return i % 6 },
 		"join":     strings.Join,
 		"pathJoin": func(a, b string) string { return path.Join(a, b) },
+		"byBook":   groupByBook,
+		"chTrail":  chapterTrail,
 	}
 	out := map[string]*template.Template{}
 	for _, kind := range []string{"home", "section", "page", "sitemap", "progress", "404"} {
@@ -263,6 +278,11 @@ func (b *builder) pageData(n *content.Node) (string, *PageData, []string) {
 		TOC:      toc,
 		Crumbs:   n.Ancestors(),
 		EditPath: n.SourceRel(),
+		LinksOut: b.linkTargets(n),
+		LinksIn:  b.backlinks[n.Rel],
+	}
+	if u, ok := b.updated[n.SourceRel()]; ok {
+		d.Updated = &u
 	}
 	kind := "section"
 	switch {

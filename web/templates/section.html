@@ -4,6 +4,7 @@
   <span class="sec-icon">{{icon (iconFor .Node)}}</span>
   <div>
     <h1>{{.Node.Title}}</h1>
+    {{template "updated" .}}
     {{if .Node.IsChapter}}
     <p class="count">{{.Node.DoneCount}} page{{if ne .Node.DoneCount 1}}s{{end}}{{if not .Node.Written}} · empty chapter{{end}}</p>
     {{else}}
@@ -32,6 +33,8 @@
 {{range .}}<li class="stub"><span class="planned-item" title="{{.File}}">{{icon "page"}}<span>{{.Title}}</span>{{if .Page}}<a class="stub-tag" href="{{.Page.URL}}">stub</a>{{else if $.Site.Dev}}<a class="stub-tag write" href="/__editor/?path={{pathJoin $.Node.Rel .File}}&amp;title={{.Title}}">✎ write</a>{{end}}</span></li>
 {{end}}</ul>
 {{end}}
+
+{{template "linkpanel" .}}
 
 {{if and (not .Node.Children) (not .Node.Planned)}}<p class="empty card">Nothing here yet. Add some <code>.md</code> files to this folder.</p>{{end}}
 {{end}}

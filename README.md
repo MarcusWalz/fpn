@@ -51,6 +51,11 @@ While `./fpn serve` is running, open http://localhost:1313/__editor/ or click **
 - Offline, it falls back to a plain textarea.
 - It only exists in `fpn serve`. The static build has no editor and no edit links. The API only answers on localhost, rejects cross-site requests, and only writes `.md` files inside `content/`.
 
+### Study critique in the editor (needs Claude Code installed)
+
+- **Critique:** runs the `critique-page` skill (read-only) on the saved page: gaps, claims to double-check, and test-yourself questions, with no answers. Results are cached until the page changes.
+- It runs `claude -p` locally on the machine running `fpn serve`, using that machine's Claude login. It isn't part of the static build.
+
 ## Outline, placeholders and progress
 
 The notebook's outline comes from the 2011 fpnotebook.com sitemap:
@@ -77,6 +82,11 @@ Scaffolding creates a folder and an `_index.md` for every book and chapter. The 
 ## Hosting
 
 Every push to `main` deploys to GitHub Pages through `.github/workflows/pages.yml`, which runs the tests, `fpn check`, and a build with the right base path. The site is at https://marcuswalz.github.io/fpn/. Pull requests are checked by `ci.yml`.
+
+## Citations and image sources
+
+- **Citations:** write `[@citekey]`, `[@a; @b]` or `[@key, p. 12]`. Keys come from CSL-JSON files in `references/` (change the folder with `-refs`). This is typically a Zotero **Better BibTeX** "Better CSL JSON" auto-export; see [docs/zotero.md](docs/zotero.md). Citations render as numbered superscripts; locators like `, p. 12` are listed in the reference entry ("Cited: p. 12."), not inline. The formatted (AMA-like) list goes at the end of the page's `## References` section, which is added if missing. Unknown keys are reported as problems.
+- **Image sources:** every image needs "Source:" in its caption line (the italic line under it), in the same paragraph, or in its title. Images without one are reported as problems, so `fpn check` fails.
 
 ## Robots
 

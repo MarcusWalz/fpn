@@ -18,3 +18,26 @@
 {{end}}</ul>{{end}}
 
 {{define "bar"}}<span class="bar" role="img" aria-label="{{.Percent}}% of chapters have content"><span class="bar-fill" style="width: {{.Percent}}%"></span></span>{{end}}
+
+{{define "linkpanel"}}{{if or .LinksOut .LinksIn}}
+<details class="panel card links-panel" data-pagefind-ignore>
+  <summary>{{icon "map"}}<span>Linked pages <span class="prog-num">{{len .LinksOut}} → · ← {{len .LinksIn}}</span></span></summary>
+  <div class="links-cols">
+    <section>
+      <h3>→ Links to</h3>
+      {{with .LinksOut}}{{template "linkgroups" .}}{{else}}<p class="links-none">This page doesn't link to other pages yet.</p>{{end}}
+    </section>
+    <section>
+      <h3>← Linked from</h3>
+      {{with .LinksIn}}{{template "linkgroups" .}}{{else}}<p class="links-none">No other pages link here yet.</p>{{end}}
+    </section>
+  </div>
+</details>
+{{end}}{{end}}
+
+{{define "linkgroups"}}{{range byBook .}}
+<p class="links-book">{{.Book}}</p>
+<ul>{{range .Items}}<li{{if and (not .IsSection) .Stub}} class="stub"{{end}}><a href="{{.URL}}">{{.Title}}</a>{{with chTrail .}}<small>{{.}}</small>{{end}}</li>{{end}}</ul>
+{{end}}{{end}}
+
+{{define "updated"}}{{with .Updated}}<p class="updated">{{icon "star"}}{{if .Committed}}Updated <time datetime="{{.ISO}}">{{.DateText}}</time>{{else}}Edited <time datetime="{{.ISO}}">{{.DateText}}</time> · not saved to git yet{{end}}</p>{{end}}{{end}}

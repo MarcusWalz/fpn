@@ -19,11 +19,32 @@ let tab = "preview";
 // ---------- editor (CodeMirror 6, falling back to a textarea offline) ----------
 async function makeEditor(parent, doc, onChange) {
   try {
-    const [{ EditorView, basicSetup }, { markdown }] = await Promise.all([
+    // language/highlight URLs match the ones codemirror itself imports on
+    // esm.sh, so all modules share one instance.
+    const [{ EditorView, basicSetup }, { markdown }, { HighlightStyle, syntaxHighlighting }, { tags: t }] = await Promise.all([
       import("https://esm.sh/codemirror@6.0.1"),
       import("https://esm.sh/@codemirror/lang-markdown@6.2.5"),
+      import("https://esm.sh/@codemirror/language@^6.0.0?target=es2022"),
+      import("https://esm.sh/@lezer/highlight@^1.0.0?target=es2022"),
     ]);
     const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    // Markdown colors with strong contrast on both backgrounds
+    // (dark: #0d1f15 green-black, light: white).
+    const c = dark
+      ? { heading: "#bbf7d0", link: "#4ade80", url: "#fde68a", mark: "#86efac", code: "#fcd34d", quote: "#a7f3d0", meta: "#a3c9b2", strong: "#f0fdf4" }
+      : { heading: "#14532d", link: "#15803d", url: "#92400e", mark: "#16a34a", code: "#9a3412", quote: "#3f6212", meta: "#476352", strong: "#052e16" };
+    const mdStyle = HighlightStyle.define([
+      { tag: [t.heading, t.heading1, t.heading2, t.heading3, t.heading4, t.heading5, t.heading6], color: c.heading, fontWeight: "700" },
+      { tag: t.link, color: c.link, textDecoration: "underline" },
+      { tag: t.url, color: c.url },
+      { tag: [t.processingInstruction, t.contentSeparator], color: c.mark },
+      { tag: t.monospace, color: c.code },
+      { tag: t.quote, color: c.quote, fontStyle: "italic" },
+      { tag: t.emphasis, fontStyle: "italic" },
+      { tag: t.strong, fontWeight: "700", color: c.strong },
+      { tag: t.strikethrough, textDecoration: "line-through" },
+      { tag: [t.meta, t.comment, t.labelName, t.string, t.escape], color: c.meta },
+    ]);
     const theme = EditorView.theme({
       "&": { height: "100%", fontSize: "14px", backgroundColor: "var(--surface)", color: "var(--ink)" },
       ".cm-scroller": { fontFamily: "var(--font-mono)", lineHeight: "1.6" },
@@ -36,7 +57,7 @@ async function makeEditor(parent, doc, onChange) {
     const view = new EditorView({
       doc,
       parent,
-      extensions: [basicSetup, markdown(), EditorView.lineWrapping, theme,
+      extensions: [basicSetup, markdown(), syntaxHighlighting(mdStyle), EditorView.lineWrapping, theme,
         EditorView.updateListener.of((u) => u.docChanged && onChange())],
     });
     return {
@@ -57,9 +78,33 @@ async function makeEditor(parent, doc, onChange) {
       },
       onScroll: (fn) => view.scrollDOM.addEventListener("scroll", fn, { passive: true }),
       onCursor: (fn) => view.dom.addEventListener("keyup", fn),
-      // Insert text at screen coordinates (a drop) or at the cursor.
-      insert(text, coords) {
-        let pos = coords ? view.posAtCoords(coords) : null;
+      // Select a range and scroll it into the middle of the view.
+      select(from, to) {
+        view.dispatch({ selection: { anchor: from, head: to }, effects: EditorView.scrollIntoView(from, { y: "center" }) });
+        view.focus();
+      },
+      // Document position for screen coordinates (or the cursor).
+      posAt(coords) {
+        const p = coords ? view.posAtCoords(coords) : null;
+        return p == null ? view.state.selection.main.head : p;
+      },
+      // Insert a Markdown block (image + caption) on its own lines: at the end
+      // of the line containing pos, with blank lines around it. Returns the
+      // position right after the block, for inserting the next one.
+      insertBlock(text, pos) {
+        const doc = view.state.doc;
+        const line = doc.lineAt(Math.max(0, Math.min(pos, doc.length)));
+        const at = line.to;
+        const before = line.length && line.text.trim() ? "\n\n" : line.length ? "\n" : "";
+        const after = at < doc.length ? "\n" : "\n";
+        const insert = before + text + after;
+        view.dispatch({ changes: { from: at, insert }, selection: { anchor: at + before.length + text.length } });
+        view.focus();
+        return at + before.length + text.length;
+      },
+      // Insert text at a position, at screen coordinates (a drop), or at the cursor.
+      insert(text, where) {
+        let pos = typeof where === "number" ? where : where ? view.posAtCoords(where) : null;
         if (pos == null) pos = view.state.selection.main.head;
         view.dispatch({ changes: { from: pos, insert: text }, selection: { anchor: pos + text.length } });
         view.focus();
@@ -83,7 +128,22 @@ async function makeEditor(parent, doc, onChange) {
       scrollToLine: (n) => { ta.scrollTop = (n - 1) * lh(); },
       onScroll: (fn) => ta.addEventListener("scroll", fn, { passive: true }),
       onCursor: (fn) => ta.addEventListener("keyup", fn),
-      insert(text) { ta.setRangeText(text, ta.selectionStart, ta.selectionEnd, "end"); onChange(); ta.focus(); },
+      select(from, to) { ta.focus(); ta.setSelectionRange(from, to); ta.scrollTop = (ta.value.slice(0, from).split("\n").length - 5) * lh(); },
+      posAt: () => ta.selectionStart,
+      insertBlock(text, pos) {
+        const v = ta.value;
+        let at = v.indexOf("\n", Math.min(pos, v.length));
+        if (at < 0) at = v.length;
+        const lineStart = v.lastIndexOf("\n", at - 1) + 1;
+        const before = v.slice(lineStart, at).trim() ? "\n\n" : "";
+        ta.setRangeText(before + text + "\n", at, at, "end");
+        onChange(); ta.focus();
+        return at + before.length + text.length;
+      },
+      insert(text, where) {
+        const at = typeof where === "number" ? where : ta.selectionStart;
+        ta.setRangeText(text, at, typeof where === "number" ? at : ta.selectionEnd, "end"); onChange(); ta.focus();
+      },
     };
   }
 }
@@ -168,6 +228,7 @@ async function save(force = false) {
   setStatus("saved ✓");
   if (tab === "diff") diff.render();
   setTimeout(() => (wasNew ? tree.reload() : tree.refreshStatus()), 300);
+  setTimeout(problems.refresh, 1500);
 }
 
 // ---------- dropping / pasting into the editor ----------
@@ -180,6 +241,7 @@ const mdLink = (target, label, isImg) => `${isImg ? "!" : ""}[${label}](${encode
 
 async function uploadAndInsert(files, coords) {
   const parts = [];
+  let pos = editor.posAt(coords);
   for (const f of files) {
     const dir = pageDir ? pageDir + "/images" : "images";
     try {
@@ -187,14 +249,93 @@ async function uploadAndInsert(files, coords) {
       if (!r.ok) throw new Error(await r.text());
       const { path: p, name } = await r.json();
       const alt = name.replace(/\.[^.]+$/, "").replace(/-/g, " ");
-      parts.push(mdLink(relFrom(pageDir, p), alt, IMG.test(name)));
+      if (IMG.test(name)) {
+        tree.reload();
+        const block = await captionDialog(relFrom(pageDir, p), alt, URL.createObjectURL(f));
+        pos = editor.insertBlock(block, pos);
+      } else {
+        parts.push(mdLink(relFrom(pageDir, p), alt, false));
+      }
     } catch (e) { toast(`${f.name}: ${e.message}`, true); }
   }
   if (parts.length) {
-    editor.insert(parts.join("\n\n"), coords);
+    pos = editor.insertBlock(parts.join("\n\n"), pos);
     toast(`Added ${parts.length} file${parts.length > 1 ? "s" : ""} to ${pageDir ? pageDir + "/" : ""}images/`);
     tree.reload();
   }
+}
+
+// ---------- image source / caption helper ----------
+// Every inserted image gets a caption with a "Source:" line. The dialog asks
+// for the source type and shows how to cite it; "Skip" leaves a placeholder
+// that the Problems list keeps flagging until it's filled in.
+const CAP_TIPS = {
+  own: "Use for photos, screenshots or diagrams you made yourself. If you redrew or changed someone else's figure, pick Zotero or Website for the original and tick \u201cadapted\u201d.",
+  zotero: "Type the item's Citation Key from Zotero (Info pane). The full reference is added to this page's References automatically. A page or figure number goes into that reference, not the caption.",
+  web: "Give the organization or author, the page title, the year it was published, the date you looked at it, and the full web address. Check the site's terms or license allow you to reuse the image.",
+};
+let refsLoaded = false;
+async function loadRefKeys() {
+  if (refsLoaded) return;
+  refsLoaded = true;
+  try {
+    const refs = await (await fetch("/__api/refs")).json();
+    $("cap-keys").replaceChildren(...refs.map((r) => Object.assign(document.createElement("option"), { value: r.key, label: r.label })));
+    if (!refs.length) CAP_TIPS.zotero += " (No Zotero library found in references/ yet. See docs/zotero.md. You can still type a key.)";
+  } catch {}
+}
+const clean = (s) => s.trim().replace(/[.\s]+$/, "");
+function buildCaption() {
+  const v = (id) => $(id).value.trim();
+  const type = $("cap-type").value;
+  const adapted = $("cap-adapted").checked ? "Adapted from " : "";
+  let src = "";
+  if (type === "own") src = adapted ? "Own work, adapted" : "Own work";
+  else if (type === "zotero") src = v("cap-key") ? `${adapted}[@${v("cap-key").replace(/^@/, "")}${v("cap-loc") ? ", " + v("cap-loc") : ""}]` : "";
+  else {
+    const bits = [clean(v("cap-org")), clean(v("cap-ptitle")), v("cap-year") && `Published ${v("cap-year")}`,
+      v("cap-accessed") && `Accessed ${new Date(v("cap-accessed") + "T12:00").toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`,
+      v("cap-url")].filter(Boolean);
+    src = bits.length ? adapted + bits.join(". ") : "";
+  }
+  const caption = clean(v("cap-caption")) || "Describe the image";
+  const license = clean(v("cap-license"));
+  if (!src) return { text: `*Figure: ${caption}. Source needed.*`, complete: false };
+  return { text: `*Figure: ${caption}. Source: ${clean(src)}.${license ? " " + license + "." : ""}*`, complete: true };
+}
+function captionDialog(target, alt, thumbURL) {
+  return new Promise((resolve) => {
+    const dlg = $("cap-dialog");
+    $("cap-form").reset();
+    $("cap-accessed").value = new Date().toISOString().slice(0, 10);
+    $("cap-thumb").src = thumbURL || "";
+    loadRefKeys();
+    const sync = () => {
+      const type = $("cap-type").value;
+      $("cap-tip").textContent = "💡 " + CAP_TIPS[type];
+      dlg.querySelectorAll(".cap-fields").forEach((f) => (f.hidden = f.dataset.for !== type));
+      const c = buildCaption();
+      $("cap-preview").textContent = c.text;
+      $("cap-preview").classList.toggle("incomplete", !c.complete);
+    };
+    dlg.oninput = sync;
+    dlg.onchange = sync;
+    sync();
+    const finish = (skip) => {
+      const c = skip ? { text: `*Figure: ${clean($("cap-caption").value) || "Describe the image"}. Source needed.*`, complete: false } : buildCaption();
+      const altText = clean($("cap-caption").value) || alt;
+      // A private note (hidden from the site, shown in Problems) when the source is still missing.
+      const note = $("cap-note").value.replace(/-->/g, "").replace(/\s+/g, " ").trim();
+      const noteLine = !c.complete && note ? `\n<!-- source note: ${note} -->` : "";
+      dlg.close();
+      resolve(`${mdLink(target, altText, true)}\n\n${c.text}${noteLine}`);
+    };
+    $("cap-form").onsubmit = (e) => { e.preventDefault(); finish(false); };
+    $("cap-skip").onclick = () => finish(true);
+    dlg.oncancel = (e) => { e.preventDefault(); finish(true); }; // Escape = skip, image still inserted
+    dlg.showModal();
+    $("cap-caption").focus();
+  });
 }
 
 function setupEditorDrop() {
@@ -217,7 +358,13 @@ function setupEditorDrop() {
       if (src.dir) { toast("Drop a file, not a folder, to insert a link.", true); return; }
       const name = src.path.split("/").pop();
       const label = src.title || name.replace(/\.[^.]+$/, "").replace(/-/g, " ");
-      editor.insert(mdLink(relFrom(pageDir, src.path), label, IMG.test(name)), coords);
+      if (IMG.test(name)) {
+        const pos = editor.posAt(coords);
+        const block = await captionDialog(relFrom(pageDir, src.path), label, "/__api/raw?path=" + encodeURIComponent(src.path));
+        editor.insertBlock(block, pos);
+      } else {
+        editor.insert(mdLink(relFrom(pageDir, src.path), label, false), coords);
+      }
     } else {
       await uploadAndInsert([...e.dataTransfer.files], coords);
     }
@@ -284,8 +431,114 @@ async function loadFileList() {
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
 }
 
-function openFile(p) {
-  location.search = "?path=" + encodeURIComponent(p); // beforeunload guards unsaved work
+function openFile(p, find) {
+  // beforeunload guards unsaved work
+  location.search = "?path=" + encodeURIComponent(p) + (find ? "&find=" + encodeURIComponent(find) : "");
+}
+
+// ---------- problems: every build warning on the site, for batch fixing ----------
+const problems = (() => {
+  const btn = $("problems-btn"), panel = $("problems"), list = $("problems-list"), count = $("problems-count");
+  let last = "";
+  async function refresh() {
+    let ps;
+    try { ps = await (await fetch("/__api/problems")).json(); } catch { return; }
+    const key = JSON.stringify(ps);
+    if (key === last) return;
+    last = key;
+    count.textContent = ps.length ? String(ps.length) : "✓";
+    btn.classList.toggle("has-problems", ps.length > 0);
+    list.replaceChildren();
+    if (!ps.length) {
+      list.append(Object.assign(document.createElement("p"), { className: "problems-none", textContent: "🎉 No problems. Everything checks out." }));
+      return;
+    }
+    const byFile = new Map();
+    for (const p of ps) { if (!byFile.has(p.path)) byFile.set(p.path, []); byFile.get(p.path).push(p); }
+    for (const [file, items] of byFile) {
+      const group = document.createElement("section");
+      group.className = "pgroup" + (file === path ? " current" : "");
+      group.append(Object.assign(document.createElement("h4"), { textContent: file || "Site" }));
+      for (const p of items) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "pitem";
+        // Show the private source note (if any) in red italics so it stands out.
+        const [msg, note] = p.message.split(" — your note: ");
+        b.textContent = "⚠ " + msg;
+        if (note) b.append(" — ", Object.assign(document.createElement("span"), { className: "pnote", textContent: "your note: " + note }));
+        if (file) b.addEventListener("click", () => {
+          if (file === path) { panel.hidden = true; btn.setAttribute("aria-expanded", "false"); reveal(p.find); }
+          else openFile(file, p.find);
+        });
+        else b.disabled = true;
+        group.append(b);
+      }
+      list.append(group);
+    }
+  }
+  function toggle(force) {
+    const show = force ?? panel.hidden;
+    panel.hidden = !show;
+    btn.setAttribute("aria-expanded", String(show));
+    if (show) { refresh(); $("critique").hidden = true; $("critique-btn").setAttribute("aria-expanded", "false"); }
+  }
+  btn.addEventListener("click", () => toggle());
+  $("problems-close").addEventListener("click", () => toggle(false));
+  setInterval(refresh, 3000);
+  return { refresh, toggle };
+})();
+
+// ---------- study critique (runs the critique-page skill via Claude Code) ----------
+const critique = (() => {
+  const btn = $("critique-btn"), panel = $("critique"), body = $("critique-body"), state = $("critique-state"), run = $("critique-run");
+  let busy = false;
+  const show = (res) => {
+    body.innerHTML = res.html || "";
+    state.textContent = res.html ? (res.cached ? `from ${res.when} · page unchanged since` : `done at ${res.when}`) : "";
+    run.textContent = res.html ? "Run again" : "Run critique";
+  };
+  async function load() {
+    try {
+      const r = await fetch("/__api/critique?path=" + encodeURIComponent(path));
+      if (r.ok) show(await r.json());
+      else { body.replaceChildren(); state.textContent = (await r.text()).trim(); run.disabled = r.status === 404; }
+    } catch {}
+  }
+  async function go() {
+    if (busy) return;
+    if (dirty && !confirm("You have unsaved changes. The critique reads the saved version.\n\nSave first?")) {
+      // run on the saved version anyway
+    } else if (dirty) { await save(); }
+    busy = true; run.disabled = true;
+    state.textContent = "📖 Your study partner is reading… (about a minute)";
+    body.replaceChildren();
+    try {
+      const r = await fetch("/__api/critique?path=" + encodeURIComponent(path), { method: "POST", headers: H });
+      if (!r.ok) throw new Error((await r.text()).trim());
+      show(await r.json());
+    } catch (e) {
+      state.textContent = "";
+      body.replaceChildren(Object.assign(document.createElement("p"), { className: "problems-none", textContent: "⚠ " + e.message }));
+    } finally { busy = false; run.disabled = false; }
+  }
+  function toggle(force) {
+    const open = force ?? panel.hidden;
+    panel.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+    if (open) { $("problems").hidden = true; $("problems-btn").setAttribute("aria-expanded", "false"); if (!busy) load(); }
+  }
+  btn.addEventListener("click", () => toggle());
+  $("critique-close").addEventListener("click", () => toggle(false));
+  run.addEventListener("click", go);
+  return { toggle };
+})();
+
+// Highlight the first occurrence of text in the editor (e.g. a broken link target).
+function reveal(text) {
+  if (!text || !editor) return;
+  const i = editor.get().indexOf(text);
+  if (i >= 0) editor.select(i, i + text.length);
 }
 
 // ---------- scroll sync: editor <-> preview ----------
@@ -401,6 +654,8 @@ async function boot() {
   setTab(startTab);
   diff.stats();
   editor.focus();
+  if (params.get("find")) setTimeout(() => reveal(params.get("find")), 50);
+  problems.refresh();
 
   saveBtn.addEventListener("click", () => save());
   window.addEventListener("keydown", (e) => {
