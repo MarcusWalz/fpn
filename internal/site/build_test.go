@@ -232,3 +232,21 @@ func TestHighlight(t *testing.T) {
 		}
 	}
 }
+
+func TestAliasesInSearch(t *testing.T) {
+	dir := t.TempDir()
+	content := filepath.Join(dir, "content")
+	os.MkdirAll(filepath.Join(content, "book", "chap"), 0o755)
+	os.WriteFile(filepath.Join(content, "book", "chap", "a.md"), []byte("---\ntitle: Polyendocrine Metabolic Ovarian Syndrome\naliases: [PMOS, PCOS]\n---\n\nText.\n"), 0o644)
+	os.WriteFile(filepath.Join(content, "book", "chap", "b.md"), []byte("---\ntitle: B\naliases: BB\n---\n\nText.\n"), 0o644)
+	out := filepath.Join(dir, "public")
+	if _, err := Build(Config{ContentDir: content, OutDir: out, Base: "/", Web: web.FS}); err != nil {
+		t.Fatal(err)
+	}
+	b, _ := os.ReadFile(filepath.Join(out, "pages.json"))
+	for _, want := range []string{`"t":"Polyendocrine Metabolic Ovarian Syndrome"`, `"a":["PMOS","PCOS"]`, `"a":["BB"]`} {
+		if !strings.Contains(string(b), want) {
+			t.Errorf("pages.json missing %s: %s", want, b)
+		}
+	}
+}

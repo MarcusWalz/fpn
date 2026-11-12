@@ -330,20 +330,21 @@ func (b *builder) render404() error {
 // pages.json: a compact listing for title search (and future indexers).
 func (b *builder) writePagesJSON() error {
 	type entry struct {
-		T string `json:"t"`           // title
-		U string `json:"u"`           // url
-		C string `json:"c,omitempty"` // trail: Book › Chapter
-		S bool   `json:"s,omitempty"` // is a section
-		P bool   `json:"p,omitempty"` // is a placeholder page
+		T string   `json:"t"`           // title
+		U string   `json:"u"`           // url
+		C string   `json:"c,omitempty"` // trail: Book › Chapter
+		S bool     `json:"s,omitempty"` // is a section
+		P bool     `json:"p,omitempty"` // is a placeholder page
+		A []string `json:"a,omitempty"` // aliases (other names)
 	}
 	var list []entry
 	for _, s := range b.tree.Sections {
 		if s.Parent != nil {
-			list = append(list, entry{T: s.Title, U: s.URL, C: strings.Join(s.Trail(), " › "), S: true, P: s.IsChapter() && !s.Written()})
+			list = append(list, entry{T: s.Title, U: s.URL, C: strings.Join(s.Trail(), " › "), S: true, P: s.IsChapter() && !s.Written(), A: s.Aliases()})
 		}
 	}
 	for _, p := range b.tree.Pages {
-		list = append(list, entry{T: p.Title, U: p.URL, C: strings.Join(p.Trail(), " › "), P: p.Stub})
+		list = append(list, entry{T: p.Title, U: p.URL, C: strings.Join(p.Trail(), " › "), P: p.Stub, A: p.Aliases()})
 	}
 	data, err := json.Marshal(list)
 	if err != nil {

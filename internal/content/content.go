@@ -566,3 +566,26 @@ func (n *Node) MetaString(key string) string {
 	s, _ := n.Meta[key].(string)
 	return s
 }
+
+// Aliases returns other names for the page from `aliases:` front matter
+// (a list, or one string), e.g. abbreviations like "PMOS". Search finds the
+// page by any of them.
+func (n *Node) Aliases() []string {
+	var out []string
+	add := func(s string) {
+		if s = strings.TrimSpace(s); s != "" {
+			out = append(out, s)
+		}
+	}
+	switch v := n.Meta["aliases"].(type) {
+	case string:
+		add(v)
+	case []any:
+		for _, x := range v {
+			if s, ok := x.(string); ok {
+				add(s)
+			}
+		}
+	}
+	return out
+}

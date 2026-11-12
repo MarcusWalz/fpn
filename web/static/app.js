@@ -29,7 +29,7 @@
   const load = () =>
     (loading ||= fetch(base + "pages.json")
       .then((r) => r.json())
-      .then((d) => (pages = d.map((p) => ({ ...p, nt: norm(p.t), k: norm(p.t + " " + (p.c || "")) }))))
+      .then((d) => (pages = d.map((p) => ({ ...p, nt: norm(p.t), na: (p.a || []).map(norm), k: norm([p.t, ...(p.a || []), p.c || ""].join(" ")) }))))
       .catch(() => (pages = [])));
 
   function search(q) {
@@ -41,6 +41,8 @@
       if (!terms.every((w) => p.k.includes(w))) continue;
       let s = 0;
       if (p.nt === whole) s += 100;
+      if (p.na.includes(whole)) s += 100; // exact alias, e.g. "PMOS"
+      else if (p.na.some((a) => a.startsWith(whole))) s += 40;
       if (p.nt.startsWith(whole)) s += 40;
       if (terms.every((w) => p.nt.includes(w))) s += 20;
       if (p.nt.split(/\W+/).some((w) => w.startsWith(terms[0]))) s += 10;
@@ -92,6 +94,8 @@
       const a = document.createElement("a");
       a.href = p.u;
       highlight(a, p.t, terms);
+      const alias = p.a && p.a.find((x, j) => terms.some((w) => p.na[j].includes(w)));
+      if (alias) { const al = document.createElement("span"); al.className = "qs-alias"; al.append(" ("); highlight(al, alias, terms); al.append(")"); a.append(al); }
       if (p.s) { const t = document.createElement("span"); t.className = "sec-tag"; t.textContent = "SECTION"; a.append(t); }
       if (p.p) { a.classList.add("stub"); const t = document.createElement("span"); t.className = "sec-tag"; t.textContent = "STUB"; a.append(t); }
       if (p.c) { const sm = document.createElement("small"); sm.textContent = p.c; a.append(sm); }

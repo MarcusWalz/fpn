@@ -146,6 +146,7 @@ img { max-width: 100%; height: auto; }
 }
 .qs-results a { display: block; padding: .5rem .6rem; color: var(--ink); text-decoration: none; line-height: 1.3; }
 .qs-results a small { display: block; color: var(--muted); font-size: .8rem; margin-top: .15rem; }
+.qs-results a .qs-alias { color: var(--muted); }
 .qs-results a mark { background: var(--lime); color: var(--lime-ink); padding: 0 1px; }
 .qs-results [aria-selected="true"] a, .qs-results a:hover { background: var(--mint); outline: 2px solid var(--forest); outline-offset: -2px; }
 .qs-results .qs-empty { padding: .6rem; color: var(--muted); font-family: var(--font-head); font-size: .85rem; }
