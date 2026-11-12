@@ -1,6 +1,6 @@
 ---
 title: Diabetes Mellitus
-aliases: []
+aliases: [DM, Diabetes, diabetes]
 ---
 
 ## Section 2: Diagnosis and Classification of Diabetes
@@ -33,7 +33,7 @@ Note: **A1C may not be always be reliable**
 **Table 2.5—Criteria for screening for diabetes or prediabetes in asymptomatic adults**[@ADA_2026]
 
 1. **adults with overweight or obesity (BMI ≥25 kg/m²)** w/ risk factors:
-    - FHx DM, ==Screen all people w/ FHx of [T1DM](type-1-diabetes-mellitus.md) or other known genetic risk w/ IA, GAD, IA-2 and ZnT8==
+    - FHx DM. ==Screen all people w/ FHx of [T1DM](type-1-diabetes-mellitus.md) or other known genetic risk w/ IA, GAD, IA-2 and ZnT8==
     - High-risk race, ethnicity, and ancestry (e.g., African American, Latino, Native American, Asian American)
     - Hx CVD
     - [Hypertension](../../cardiovascular-medicine/hypertension/hypertension.md)
@@ -85,25 +85,122 @@ Note: GDM, gestational diabetes mellitus; IFG, impaired fasting glucose; IGT, im
 - T2DM: Diabetes Prevention Program + Pharmacologic interventions to preserve B cell function
 
 ## Section 4: Comprehensive Medical Evaluation and Assessment of Comorbidities
-![[Pasted image 20261031152457.png]]
-![[Pasted image 20261031152515.png]]
-![[Pasted image 20261031152752.png]]
-### Autoimmune Disease
-- T1DM -Screen for Thyroid and Celiac disease. Check B12 if peripheral neuropathy or unexplained anemia
-- All autoimmune diseases are more common if has T1DM. 
-### Bone Health
-#### Screening
-- T1DM - Fracture risk up to 4x (hip) nondiabetics. 
-	- <span style="color:rgb(0, 176, 240)">DEXA for all >= 50</span>
-- T2DM - Fracture risk 1.7x non diabetics
-	- <span style="color:rgb(0, 176, 240)">DEXA for all >= 65 and >=50 if use insulin or DM for 10+ yrs.</span> <span style="color:rgb(248, 89, 182)">Repeat every 3 yrs</span>
-- FRAX is NOT useful in this population as signficantly underestimates
-#### Prevention 
-- General Recommendations: Ensure adequate intake of protein, Ca2+ (1000-1200 mg), D (serum levels 20-30 mg/mL; greater if taking bisphosphonates); Stop smoking; Regular physical activity
-- <span style="color:rgb(0, 176, 240)">Pharmacological treatment</span>: Consider if *T-score <-2, FRAX >= 3% for hip or 20% for major fracture*
-	- <span style="color:rgb(146, 208, 80)">Denosumab</span> - shown in phase 3 FREEDOM study to be efficacious. MUST be able to maintain the every 6 mo injection or may experience rebound bone loss. 
-	- <span style="color:rgb(146, 208, 80)">Bisphosophonates</span> - may be more appropriate if gaps are expected 
-	- <span style="color:rgb(146, 208, 80)">Teriperatide</span> - Osteoanabolic. Only for very high risk
+**Table 4.1—Components of the comprehensive diabetes medical evaluation at initial, follow-up, and annual visits** [@ADA_2026]
+
+| Component | Initial visit | Every follow-up | Annual |
+|---|:-:|:-:|:-:|
+| **Past medical and family history** |  |  |  |
+| *Diabetes history* |  |  |  |
+| Age and symptoms @ onset | ✓ |  |  |
+| Review previous treatment plans| ✓ |  |  |
+| Assess past hospitalizations | ✓ |  |  |
+| *Family history* |  | |  |
+| FHx of diabetes in a first-degree relative | ✓ |  |  |
+| FHx of autoimmune disorders | ✓ |  |  |
+| *Personal history of complications and common comorbidities* |  |  |  |
+| Common comorbidities (e.g., obesity, OSA, and MASLD) | ✓ |  | ✓ |
+| ⬆BP or abnormal lipids | ✓ |  | ✓ |
+| Macrovascular and microvascular complications | ✓ |  | ✓ |
+| Hypoglycemia: awareness, frequency, causes, and timing of episodes | ✓ | ✓ | ✓ |
+| Hemoglobinopathies or anemias | ✓ |  | ✓ |
+| Last dental visit | ✓ |  | ✓ |
+| Last foot exam | ✓ |  | ✓ |
+| Last dilated eye exam | ✓ |  | ✓ |
+| Visits to specialists | ✓ |  |  |
+| Disability assessment and use of assistive devices (e.g., physical, cognitive, vision and auditory, history of fractures, and podiatry) | ✓ | ✓ | ✓ |
+| Hx of autoimmune disease | ✓ |  |  |
+| *Surgical and procedure history* |  |  |  |
+| Surgeries (e.g., metabolic surgery and transplantation) | ✓ | ✓ | ✓ |
+| *Interval history* |  |  |  |
+| Changes in MHx or FHx |  | ✓ | ✓ |
+| *Behavioral factors* |  |  |  |
+| Physical activity, sleep behaviors, eating patterns and weight history | ✓ | ✓ | ✓ |
+| Assess familiarity with carbohydrate counting (e.g., type 1 diabetes or type 2 diabetes treated with MDI) | ✓ |  | ✓ |
+| Screen for OSA | ✓ | ✓ | ✓ |
+| Substance Use | ✓ | ✓ | ✓ |
+| *Medications and vaccinations* |  |  |  |
+| Current medication plan | ✓ | ✓ | ✓ |
+| Medication-taking behavior, including rationing of medications and/or medical equipment | ✓ | ✓ | ✓ |
+| Medication intolerance or side effects | ✓ | ✓ | ✓ |
+| CAM use | ✓ | ✓ | ✓ |
+| Vaccination history and needs | ✓ |  | ✓ |
+| *Technology use* |  |  |  |
+| Assess use of health apps, online education, patient portals, etc. | ✓ | ✓ | ✓ |
+| Glucose monitoring (meter/CGM): results and data use | ✓ | ✓ | ✓ |
+| Review insulin pump settings and use and connected pen and glucose data | ✓ | ✓ | ✓ |
+| *Social life assessment* |  |  |  |
+| *Social network* |  |  |  |
+| Identify existing social supports | ✓ |  | ✓ |
+| Identify surrogate decision maker and advanced care plan | ✓ |  | ✓ |
+| Identify SDoH | ✓ |  | ✓ |
+| Assess daily routine and ability to engage in diabetes self-management | ✓ | ✓ | ✓ |
+| **Physical examination** |  |  |  |
+| Height, weight, and BMI; growth and pubertal development in children and adolescents | ✓ | ✓ | ✓ |
+| Blood pressure | ✓ | ✓ | ✓ |
+| Orthostatic BP (when indicated) | ✓ |  | ✓ |
+| Fundoscopic examination (refer to eye specialist) | ✓ |  | ✓ |
+| Thyroid palpation | ✓ |  | ✓ |
+| Skin examination (e.g., acanthosis nigricans, insulin injection or insertion sites, and lipodystrophy) | ✓ | ✓ | ✓ |
+| Comprehensive foot examination, determination of temperature, vibration or pinprick sensation, and 10-g monofilament exam | ✓ |  | ✓ |
+| Foot Visual inspection (e.g., skin integrity, callous formation, foot deformity or ulcer, and toenails)\* | ✓ | ✓ | ✓ |
+| Check pedal pulses and screen for PAD with ABI testing if a PAD diagnosis would change management | ✓ |  | ✓ |
+| Screen for depression, anxiety, diabetes distress, fear of hypoglycemia, and disordered eating | ✓ |  | ✓ |
+| Cognitive performance | ✓ |  | ✓ |
+| Functional performance | ✓ |  | ✓ |
+| Assessment for bone health (e.g., loss of height and kyphosis) | ✓ |  | ✓ |
+| **Laboratory evaluation** |  |  |  |
+| A1c | ✓ | ✓ | ✓ |
+| Lipid profile | ✓ |  |  |
+| LFTs (i.e., FIB-4)‡ | ✓ |  | ✓ |
+| Urinary albumin-to-creatinine ratio | ✓ |  | ✓ |
+| Serum Cr and eGFR | ✓ |  | ✓ |
+| TSH (T1DM only) | ✓ |  | ✓ |
+| Celiac disease screening in people with type 1 diabetes | ✓ |  |  |
+| Vitamin B12 if taking metformin for >5 years | ✓ |  | ✓ |
+| CBC with platelets | ✓ |  | ✓ |
+| Serum potassium levels in people treated with ACE inhibitors, ARBs, or diuretics§ | ✓ |  | ✓ |
+| Calcium, vitamin D, and phosphorous as appropriate | ✓ |  | ✓ |
+
+Note: ABI, ankle brachial index; CAM, Complementary and alternative medicine; FIB-4, fibrosis-4 index; MDI, multiple daily injections; \*Should be performed at every visit in people with diabetes with sensory loss, previous foot ulcers, or amputations. †At 65 years of age or older.
+
+**Table 4.2—Essential components for assessment, planning, and referral** [@ADA_2026]
+
+- **Assessing risk of diabetes complications**
+  - ASCVD and heart failure history
+  - ASCVD risk factors and 10-year ASCVD risk assessment
+  - Staging of chronic kidney disease (see Table 11.2)
+  - Hypoglycemia risk (see section 6, “Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises”)
+  - Assessment for retinopathy
+  - Assessment for neuropathy
+  - Assessment for MASLD and MASH
+- **Goal setting**
+  - Set A1C, blood glucose, and time-in-range goals
+  - Set lipid goal
+  - If hypertension is present, establish blood pressure goal
+  - Weight management and physical activity goals
+  - Diabetes self-management goals
+- **Therapeutic treatment plans**
+  - Lifestyle management (e.g., registered dietitian nutritionist)
+  - Pharmacologic therapy: glucose lowering
+  - Pharmacologic therapy: cardiovascular and kidney disease risk factors
+  - Weight management with pharmacotherapy or metabolic surgery, as appropriate
+  - Use of glucose monitoring and insulin delivery devices
+  - Referral to diabetes education and medical specialists (as needed)
+- **Referrals for initial care management**
+  - Eye care professional for annual dilated eye exam
+  - Family planning for individuals of childbearing potential
+  - Registered dietitian nutritionist for medical nutrition therapy
+  - Diabetes self-management education and support
+  - Dentist for comprehensive dental and periodontal examination
+  - Behavioral health professional, if indicated
+  - Audiology, if indicated
+  - Social worker and community resources, if indicated
+  - Rehabilitation medicine or another relevant health care professional for physical and cognitive disability evaluation, if indicated
+  - Other appropriate health care professionals
+
+Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction-associated steatohepatitis; MASLD, metabolic dysfunction-associated steatotic liver disease.
+
+#### Considerations for Bone Health
 - Effect of Diabetes medications on bone metabolism
 	- Metformin - neutral
 	- DPP4i - neutral 
@@ -112,44 +209,44 @@ Note: GDM, gestational diabetes mellitus; IFG, impaired fasting glucose; IGT, im
 	- Sulfonylureas - RR 1.30
 	- SGLT2i - questionable
 	- Insulin - likely due to higher risk of hypoglycemia
-### Cancer
+#### Cancer
 - Increased risk of cancers of liver, pancreas, endometrium, colon, rectum, breast, and bladder
 - Undergo age appropriate screenings
-### Cognitive Impairment/Dementia
-- Significantly increased risk and rate of cognitive decline and an increased risk of dementia
-### Dental Care
+#### Cognitive Impairment/Dementia
+- Significantly increased risk and rate of cognitive decline
+#### Dental Care
 - Periodontal disease is more severe in people w/ DM than those without and w/ higher A1c levels. 
 - Recommend to discuss oral health with all diabetics
 - Be aware of upcoming dental procedures as may need to monitor and adjust therapy during procedure
-### Disability
+#### Disability
 - Assess for disability and for decline in function yearly (ADLs and IADLs)
-- <span style="color:rgb(146, 208, 80)">Diabetic Peripheral Neuropathy</span> is a common complication which may lead to functional disability. Glycemic managements help in T1DM but not in T2DM
-- <span style="color:rgb(146, 208, 80)">Microvascular complications leading to disability</span>. 
-- Assess for <span style="color:rgb(146, 208, 80)">Frailty</span> annually
-- Behavioral Health - <span style="color:rgb(146, 208, 80)">Anxiety, Depression, Diabetes Distress</span>
-	- <span style="color:rgb(0, 176, 240)">Diabetes Distress Scale (DDS)</span> - available on MD Calc
-	- Screen Regularly
-### Sexual Health in Men
+-  **Diabetic Peripheral Neuropathy** is a common complication which may lead to functional disability. Glycemic management helps in T1DM but not in T2DM
+-  Microvascular complications leading to disability. 
+- Assess for  Frailty annually
+- Behavioral Health -  Anxiety, Depression, Diabetes Distress
+	-  [Diabetes Distress Scale](https://www.mdcalc.com/calc/10523/diabetes-distress-scale-dds17$0) (DDS) 
+
+#### Sexual Health in Men
 - Screen for erectile dysfunction (52.5%). Treat w/ PDE5i
-- Hypogonadism is common. Test <span style="color:rgb(0, 176, 240)">morning total testosterone </span>level. If low or towards lower limit consider <span style="color:rgb(146, 208, 80)">testosterone replacement</span>
+- Hypogonadism is common. Test morning total testosterone level. If low or towards lower limit consider  testosterone replacement
 ### Sexual Health in Women
-- <span style="color:rgb(0, 176, 240)">Female sexual dysfunction</span> is very common - consider screening with the <span style="color:rgb(248, 89, 182)">FSFI- Female Sexual Function Index. </span>Score <=26 is + for FSD screen.
+-  Female sexual dysfunction is very common - consider screening with the [Female Sexual Function Index (FSFI)](https://www.apta.org/contentassets/a10dbafd45234c7a98ae3dd98385cdab/fsfi_test.pdf$0). Score ≤ 26 is (+) 
 - Treatment -> Lifestyle factors, improve glycemic management, hormonal therapies, consider FDA-approved meds for hypoactive sexual desire disorder
 ### Metabolic Dysfunction-Associated Steatotic Liver Disease (MASLD) and Metabolic Dysfunction-Associated Steatohepatitis (MASH)
 #### Screening
-- *Screen all adults with T2DM for MASH spectrum* <span style="color:rgb(146, 208, 80)">using FIB-4 score</span> even if they have normal liver enzymes
+- *Screen all adults with T2DM for MASH spectrum*  using FIB-4 score even if they have normal liver enzymes
 	- “The goal of screening for MASLD is to identify people with at-risk MASH to prevent future cirrhosis, HCC, liver transplantation, and all-cause mortality (193–196).” pg S76
 	- ~70% of people w/T2DM have MASLD; ~50% of T2DM + MASLD have MASH
 - MASLD - Steatotic Liver disease + sign of insulin resistance
 - MASH - >= 5% hepatic steatosis w/ hepatocyte injury +/- fibrosis
-- <span style="color:rgb(146, 208, 80)">FIB-4</span>: estimates risk of hepatic cirrhosis. Uses age, AST, ALT, platelets. 
-	- <1.3 is low risk
-	- >=1.3 is higher risk of clinically significant fibrosis; <span style="color:rgb(248, 89, 182)">Get a Liver Stiffness Measurement</span>. <8.0kPa has good NPV. Continue to follow in Primary Care w/ repeate testing every 3 years. 
-	- >=2.67 high risk of advanced fibrosis -> <span style="color:rgb(248, 89, 182)">refer to GI w/o additional testing</span>
+-  FIB-4: estimates risk of hepatic cirrhosis. Uses age, AST, ALT, platelets. 
+	- < 1.3 is low risk
+	- >=1.3 is higher risk of clinically significant fibrosis;  Get a Liver Stiffness Measurement. <8.0kPa has good NPV. Continue to follow in Primary Care w/ repeate testing every 3 years. 
+	- >=2.67 high risk of advanced fibrosis ->  refer to GI w/o additional testing
 #### Management
 - Weight loss: 5-10% loss improves liver histology
-- Pharma: <span style="color:rgb(56, 229, 163)">Semaglutide</span> is FDA approved for treatment of MASH. <span style="color:rgb(56, 229, 163)">Pioglitazone</span> has also been shown to reverse steatohepatitis. 
-	- Yes to <span style="color:rgb(56, 229, 163)">Statin</span> use unless has decompensated cirrhosis. 
+- Pharma:  style="color:rgb(56, 229, 163)">Semaglutide is FDA approved for treatment of MASH.  style="color:rgb(56, 229, 163)">Pioglitazone has also been shown to reverse steatohepatitis. 
+	- Yes to  style="color:rgb(56, 229, 163)">Statin use unless has decompensated cirrhosis. 
 - Metabolic surgery can improve MASH and Cardiometabolic health.
 ### Obstructive Sleep Apnea
 - Rates are likely very high in DM + Obesity
