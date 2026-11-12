@@ -18,6 +18,79 @@
     });
   }
 
+  // ---- collapsible sections ----
+  // Every heading folds the content under it (down to the next heading of
+  // the same or a higher level). Pages open with everything collapsed;
+  // "Expand all" / "Collapse all" sit above the first heading. Links to a
+  // spot inside a collapsed section (contents, citations, "Linked from")
+  // open the sections around it. Not in the editor preview, which shows the
+  // whole page so it can scroll with the text.
+  const article = document.querySelector("article.prose");
+  let reveal = () => {};
+  if (article && location.protocol !== "about:") {
+    const lvl = (el) => +((/^H([2-6])$/.exec(el.tagName) || [])[1] || 0);
+    const heads = [...article.children].filter(lvl);
+    const setFolded = (h, v) => { h.dataset.folded = v ? "1" : ""; h.querySelector(".fold-btn").setAttribute("aria-expanded", String(!v)); };
+    const update = () => {
+      const stack = [];
+      for (const el of article.children) {
+        const L = lvl(el);
+        if (L) while (stack.length && stack[stack.length - 1] >= L) stack.pop();
+        if (stack.length) { if (!el.hidden) el.setAttribute("hidden", "until-found"); }
+        else el.removeAttribute("hidden");
+        if (L && el.dataset.folded) stack.push(L);
+      }
+    };
+    reveal = (el) => {
+      let b = el;
+      while (b && b.parentElement !== article) b = b.parentElement;
+      if (!b) return;
+      let L = lvl(b) || 7;
+      if (lvl(b)) setFolded(b, false);
+      for (let p = b.previousElementSibling; p; p = p.previousElementSibling) {
+        const pl = lvl(p);
+        if (pl && pl < L) { setFolded(p, false); L = pl; }
+      }
+      update();
+    };
+    if (heads.length) {
+      heads.forEach((h) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "fold-btn";
+        if (h.querySelector("a, button")) { btn.classList.add("fold-icon"); btn.setAttribute("aria-label", "Show or hide this section"); h.prepend(btn); }
+        else { btn.append(...h.childNodes); h.append(btn); }
+        btn.addEventListener("click", () => { setFolded(h, !h.dataset.folded); update(); });
+        setFolded(h, true);
+      });
+      const tools = document.createElement("div");
+      tools.className = "fold-tools";
+      for (const [label, folded] of [["Expand all", false], ["Collapse all", true]]) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = label;
+        b.addEventListener("click", () => { heads.forEach((h) => setFolded(h, folded)); update(); });
+        tools.append(b);
+      }
+      heads[0].before(tools);
+      update();
+      // Browser find (Cmd+F) opens the section a match is in.
+      article.addEventListener("beforematch", (e) => reveal(e.target));
+      // Same-page links (contents, citations): open the section first.
+      document.addEventListener("click", (e) => {
+        const a = e.target.closest && e.target.closest('a[href^="#"]');
+        const t = a && document.getElementById(decodeURIComponent(a.getAttribute("href").slice(1)));
+        if (t && article.contains(t)) reveal(t);
+      }, true);
+      const fromHash = () => {
+        const t = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (t && article.contains(t)) { reveal(t); t.scrollIntoView(); }
+      };
+      fromHash();
+      addEventListener("hashchange", fromHash);
+    }
+  }
+
   // ---- "Linked from" → the spot on that page where the link is ----
   // Clicking a page in "← Linked from" opens it at its link to this page
   // (#link-to=<this page>), and briefly highlights the linked words there.
@@ -35,7 +108,7 @@
       !a.closest(".links-panel") && a.origin === location.origin && norm1(a.pathname) === target);
     history.replaceState(null, "", location.pathname + location.search);
     if (!hits.length) return;
-    hits.forEach((a) => { for (let d = a.closest("details"); d; d = d.parentElement.closest("details")) d.open = true; });
+    hits.forEach((a) => { reveal(a); for (let d = a.closest("details"); d; d = d.parentElement.closest("details")) d.open = true; });
     hits[0].scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     hits.forEach((a) => a.classList.add("link-flash"));
     setTimeout(() => hits.forEach((a) => a.classList.remove("link-flash")), 2600);
