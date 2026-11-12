@@ -25,6 +25,8 @@ Usage:
   fpn check  [flags]   build to a temp dir; exit 1 on broken links or other warnings
                        (-no-stubs also fails while empty chapters or stub pages remain)
   fpn status [flags]   show how many chapters have content, per book
+  fpn refs   [flags]   write only the cited references to references/cited.json
+                       (commit that file; keep your full Zotero export private)
   fpn scaffold -from taxonomy.json [flags]
                        create placeholder folders/pages from a taxonomy (never overwrites)
 
@@ -49,11 +51,12 @@ func main() {
 	from := fl.String("from", "", "scaffold: taxonomy JSON file")
 	pages := fl.Bool("pages", false, "scaffold: create a stub page per topic instead of planned: lists")
 	all := fl.Bool("all", false, "status: list every chapter, not just books")
+	citedOut := fl.String("cited", "", "refs: output file (default <refs>/cited.json)")
 	webDir := fl.String("web", "", "use templates/static from this dir instead of the embedded ones (serve defaults to ./web if present)")
 	fl.Usage = func() { fmt.Fprint(os.Stderr, usage); fl.PrintDefaults() }
 
 	switch cmd {
-	case "build", "serve", "check", "status", "scaffold":
+	case "build", "serve", "check", "status", "scaffold", "refs":
 	case "-h", "--help", "help":
 		fl.Usage()
 		return
@@ -108,6 +111,20 @@ func main() {
 		fmt.Printf("ok: %d pages, %d sections, no problems\n", res.Pages, res.Sections)
 	case "serve":
 		exitOn(site.Serve(cfg, *addr, watch))
+	case "refs":
+		outFile := *citedOut
+		if outFile == "" {
+			outFile = site.CitedFile(*refsDir)
+		}
+		res, err := site.ExportCited(*contentDir, *refsDir, outFile)
+		exitOn(err)
+		fmt.Printf("wrote %d cited reference(s) to %s\n", len(res.Keys), outFile)
+		if len(res.Missing) > 0 {
+			for _, k := range res.Missing {
+				fmt.Fprintf(os.Stderr, "warn: @%s is cited but not in the references library\n", k)
+			}
+			os.Exit(1)
+		}
 	case "status":
 		tree, err := content.Load(*contentDir, "/")
 		exitOn(err)

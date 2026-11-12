@@ -41,8 +41,28 @@ Every image needs a caption line containing **"Source:"**, usually an italic lin
 
 `Source: Own work` is fine for your own screenshots and diagrams. Images without a source show up in **Problems**.
 
+## Keeping your library private
+
+GitHub needs the references you cite to publish the site, but it doesn't need your whole library. To share only what you cite:
+
+1. Keep your full export out of git. Add these two lines to the project's `.git/info/exclude` (your own computer only):
+   ```
+   references/*
+   !references/cited.json
+   ```
+2. Before you commit, run:
+   ```sh
+   ./fpn refs
+   ```
+   It writes `references/cited.json` with only the sources your pages cite, copied unchanged from your library. It exits with an error if a page cites a key that isn't in the library.
+3. Commit `references/cited.json` along with your pages.
+
+Locally, the site reads both files. On GitHub, only `cited.json` is there, and that's all the published pages need.
+
+Once `cited.json` exists, `./fpn serve` keeps it up to date for you: every time you save a page (in the editor or any other app), it adds new citations and drops ones you removed. It only rewrites the file when the list actually changes. Without `fpn serve` running, run `./fpn refs` yourself before committing.
+
 ## Notes
 
-- `references/zotero.json` is committed to git, so everyone builds the same references, including GitHub when it publishes the site.
+- If you're happy to share your whole library, you can commit `references/zotero.json` instead, so everyone builds the same references.
 - You can add more `.json` files to `references/` (for example, one per collection); all of them are read.
 - The reference style is AMA-like: authors, title, journal, year;volume(issue):pages, with a DOI link.

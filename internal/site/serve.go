@@ -61,6 +61,7 @@ func Serve(cfg Config, addr string, watch []string) error {
 		}
 		w := append([]string{}, res.Warnings...)
 		probs.Store(&w)
+		refreshCited(cfg)
 	}
 	rebuild()
 	if current.Load() == nil {

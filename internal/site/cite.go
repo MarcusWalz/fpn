@@ -206,15 +206,16 @@ var citeRe = regexp.MustCompile(`\[(-?@[^\[\]\n]+)\]`)
 
 // citeState numbers citations in order of first appearance on one page.
 type citeState struct {
-	lib   Library
-	order []string
-	num   map[string]int
-	locs  map[string][]string // key -> distinct locators ("p. 312"), shown in the reference list
-	warns []string
+	lib     Library
+	order   []string
+	num     map[string]int
+	locs    map[string][]string // key -> distinct locators ("p. 312"), shown in the reference list
+	unknown map[string]bool     // cited keys not in the library
+	warns   []string
 }
 
 func newCiteState(lib Library) *citeState {
-	return &citeState{lib: lib, num: map[string]int{}, locs: map[string][]string{}}
+	return &citeState{lib: lib, num: map[string]int{}, locs: map[string][]string{}, unknown: map[string]bool{}}
 }
 
 // preprocess replaces [@key], [@a; @b] and [@key, p. 12] with superscript
@@ -288,6 +289,7 @@ func (c *citeState) render(inner string) (string, bool) {
 				c.locs[key] = append(c.locs[key], locator)
 			}
 		} else {
+			c.unknown[key] = true
 			c.warns = append(c.warns, fmt.Sprintf(`unknown citation "@%s" (not in the references library)`, key))
 			label = `<span class="cite-missing" title="Not found in the references library">?` + html.EscapeString(key) + `</span>`
 		}
