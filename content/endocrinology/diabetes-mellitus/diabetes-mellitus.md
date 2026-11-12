@@ -16,7 +16,7 @@ aliases: []
 
 Note: FPG, fasting plasma glucose; OGTT, oral glucose tolerance test; NGSP, National Glycohemoglobin Standardization Program; WHO, World Health Organization.
 
-**Table 2.2—Criteria defining Prediabetes in nonpregnant individuals** [@ADA_2026]
+**Table 2.2—Criteria defining [Prediabetes](prediabetes.md) in nonpregnant individuals** [@ADA_2026]
 
 Any one of the following:
 
@@ -45,11 +45,12 @@ Note: **A1C may not be always be reliable**
 - **Stage 2**: **Dysglycemia**; non symptomatic; Multiple autoantibodies. 5yr risk 75%
 - **Stage 3**: Overt hyperglycemia; **symptomatic** May lose autoantibodies (b/c B cells are dead). 
 
-###### Prediabetes and Type 2 DM - non autoimmune progressive loss of adequate B cell insulin secretion
+###### Prediabetes and Type 2 DM 
+- non autoimmune progressive loss of adequate B cell insulin secretion
 
 **Table 2.5—Criteria for screening for diabetes or prediabetes in asymptomatic adults**[@ADA_2026]
 
-1. **adults with overweight or obesity (BMI ≥25 kg/m²)** who have one or more of the following risk factors:
+1. **adults with overweight or obesity (BMI ≥25 kg/m²)** w/ risk factors:
     - FHx DM
     - High-risk race, ethnicity, and ancestry (e.g., African American, Latino, Native American, Asian American)
     - Hx CVD
@@ -57,14 +58,13 @@ Note: **A1C may not be always be reliable**
     - [Dyslipidemia](../../cardiovascular-medicine/hyperlipidemia/dyslipidemia.md)
     - [PMOS](../metabolic-disorders/polyendocrine-metabolic-ovarian-syndrome.md)
     - Physical inactivity
-    - Other clinical conditions associated with insulin resistance (e.g., severe obesity, acanthosis nigricans, metabolic dysfunction-associated steatotic liver disease)
+    - Other clinical conditions associated with insulin resistance (e.g., severe obesity, acanthosis nigricans, [MASLD](../../gastroenterology/liver/metabolic-associated-steatotic-liver-disease.md))
 2. **People with prediabetes** (A1C ≥5.7% [≥39 mmol/mol], IGT, or IFG) should be tested yearly.
-3. People who were **diagnosed with GDM** should have testing at least every 1–3 years.
-4. For all other people, testing should begin at age 35 years.
-5. If results are normal, testing should be repeated at a **minimum of 3-year intervals**, with consideration of more frequent testing depending on initial results and risk status.
-6. Individuals in other high-risk groups (e.g., people with HIV, exposure to high-risk medicines, evidence of periodontal disease, history of pancreatitis) should also be closely monitored.
+3. If **diagnosed with GDM** test q1–3 years.
+4. All others start at age 35
+5. If normal, testing should be repeat at least **q3yrs**.
 
-GDM, gestational diabetes mellitus; IFG, impaired fasting glucose; IGT, impaired glucose tolerance.
+Note: GDM, gestational diabetes mellitus; IFG, impaired fasting glucose; IGT, impaired glucose tolerance.
 
 ### Medication Induced Diabetes (esp Long term use of Glucocorticoids and antipsychotics)
 - Glucocorticoids >= 5mg prednisolone -Screen *random* glucose rather than fasting. Recommended to check glucose twice weekly. 
