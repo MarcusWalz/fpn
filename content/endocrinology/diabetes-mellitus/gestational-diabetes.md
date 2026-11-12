@@ -1,6 +1,6 @@
 ---
 title: Gestational Diabetes
-aliases: [Gestational DM, GDM, gestational diabetes, Gestational diabetes, gestational dm]
+aliases: [Gestational DM, GDM, gestational diabetes, Gestational diabetes, gestational dm, gestational diabetes mellitus]
 ---
 
 ## Overview
@@ -34,6 +34,6 @@ aliases: [Gestational DM, GDM, gestational diabetes, Gestational diabetes, gesta
 | 2 h | 155 mg/dL (8.6 mmol/L) |
 | 3 h | 140 mg/dL (7.8 mmol/L) |
 
-Notes: GDM, gestational diabetes mellitus; GLT, glucose load test; OGTT, oral glucose tolerance test.
+Notes: GDM, gestational [diabetes mellitus](diabetes-mellitus.md); GLT, glucose load test; OGTT, oral glucose tolerance test.
 
-- 
+
