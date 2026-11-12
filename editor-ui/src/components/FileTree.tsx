@@ -183,9 +183,14 @@ const FileTree = forwardRef<FileTreeHandle, Props>(function FileTree({ current, 
     return IMG.test(e.name) ? "file-media" : "file";
   }
   function clickRow(e: TreeEntry) {
-    if (e.dir && e.path && !e.path.includes("/")) { // a book: unfold it and open its index
-      const idx = join(e.path, "_index.md");
-      withOpen((s) => { collapseOtherBooks(s, e.path); s.add(e.path); });
+    // A book or chapter: unfold it and open its index. (The chevron still just
+    // folds/unfolds.) Folders without an index, like images/, only toggle.
+    const idx = e.dir && e.path ? join(e.path, "_index.md") : "";
+    if (idx && entries.has(idx)) {
+      withOpen((s) => {
+        if (!e.path.includes("/")) collapseOtherBooks(s, e.path); else collapseSiblings(s, e.path);
+        s.add(e.path);
+      });
       setSelectedDir(e.path);
       if (current !== idx) onOpen(idx);
       return;
