@@ -20,4 +20,4 @@ export const mdLink = (target: string, label: string, image: boolean) => `${imag
 export const yamlTitle = (t: string) => (/[:#'"{}[\],&*!|>%@`]/.test(t) ? JSON.stringify(t) : t);
 
 export const pageSkeleton = (title: string, index: boolean) =>
-  index ? `---\ntitle: ${yamlTitle(title)}\n---\n` : `---\ntitle: ${yamlTitle(title)}\n---\n\n## Overview\n\n- \n`;
+  index ? `---\ntitle: ${yamlTitle(title)}\n---\n` : `---\ntitle: ${yamlTitle(title)}\naliases: []\n---\n\n## Overview\n\n- \n`;

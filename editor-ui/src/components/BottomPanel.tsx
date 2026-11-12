@@ -3,22 +3,26 @@ import * as api from "../api";
 import type { CritiqueResult, Problem } from "../types";
 
 interface Props {
-  tab: "problems" | "critique";
-  onTab(t: "problems" | "critique"): void;
+  tab: "problems" | "links" | "critique";
+  onTab(t: "problems" | "links" | "critique"): void;
   onClose(): void;
   problems: Problem[];
+  links: Problem[];
   current: string;
   onJump(p: Problem): void;
   dirty: boolean;
   save(): Promise<void>;
 }
 
-export default function BottomPanel({ tab, onTab, onClose, problems, current, onJump, dirty, save }: Props) {
+export default function BottomPanel({ tab, onTab, onClose, problems, links, current, onJump, dirty, save }: Props) {
   return (
     <section className="panel" aria-label="Panel">
       <div className="panel-tabs" role="tablist">
         <button role="tab" aria-selected={tab === "problems"} className={"ptab" + (tab === "problems" ? " active" : "")} onClick={() => onTab("problems")}>
           Problems {problems.length > 0 && <vscode-badge variant="counter">{problems.length}</vscode-badge>}
+        </button>
+        <button role="tab" aria-selected={tab === "links"} className={"ptab" + (tab === "links" ? " active" : "")} onClick={() => onTab("links")}>
+          Backlinks {links.length > 0 && <vscode-badge variant="counter">{links.length}</vscode-badge>}
         </button>
         <button role="tab" aria-selected={tab === "critique"} className={"ptab" + (tab === "critique" ? " active" : "")} onClick={() => onTab("critique")}>
           Study critique
@@ -27,14 +31,17 @@ export default function BottomPanel({ tab, onTab, onClose, problems, current, on
         <button className="icon-btn codicon codicon-close" title="Close panel" onClick={onClose} />
       </div>
       <div className="panel-body">
-        {tab === "problems" ? <Problems problems={problems} current={current} onJump={onJump} /> : <Critique path={current} dirty={dirty} save={save} />}
+        {tab === "problems" ? <Problems problems={problems} current={current} onJump={onJump} />
+          : tab === "links" ? <Problems problems={links} current={current} onJump={onJump} icon="link" empty="No missed links: every page that mentions another page links to it." />
+          : <Critique path={current} dirty={dirty} save={save} />}
       </div>
     </section>
   );
 }
 
-function Problems({ problems, current, onJump }: { problems: Problem[]; current: string; onJump(p: Problem): void }) {
-  if (!problems.length) return <p className="empty"><span className="codicon codicon-pass" /> No problems have been detected on the site.</p>;
+function Problems({ problems, current, onJump, icon = "warning", empty = "No problems have been detected on the site." }:
+  { problems: Problem[]; current: string; onJump(p: Problem): void; icon?: string; empty?: string }) {
+  if (!problems.length) return <p className="empty"><span className="codicon codicon-pass" /> {empty}</p>;
   const groups = new Map<string, Problem[]>();
   for (const p of problems) groups.set(p.path, [...(groups.get(p.path) || []), p]);
   return (
@@ -49,7 +56,7 @@ function Problems({ problems, current, onJump }: { problems: Problem[]; current:
             const [msg, note] = p.message.split(" — your note: ");
             return (
               <button key={i} className="pitem" disabled={!file} onClick={() => onJump(p)}>
-                <span className="codicon codicon-warning" />
+                <span className={"codicon codicon-" + icon} />
                 <span>{msg}{note && <> — <span className="pnote">your note: {note}</span></>}</span>
               </button>
             );

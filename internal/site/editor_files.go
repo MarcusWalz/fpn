@@ -443,6 +443,7 @@ func (a *editorAPI) mountFiles(mux *http.ServeMux) {
 	mux.HandleFunc("/__api/git/show", a.gitShow)
 	mux.HandleFunc("/__api/raw", a.raw)
 	mux.HandleFunc("/__api/problems", a.problemsHandler)
+	mux.HandleFunc("/__api/link-suggestions", a.linkSuggestionsHandler)
 	mux.HandleFunc("/__api/refs", a.refs)
 	mux.HandleFunc("/__api/critique", a.critique)
 }
@@ -484,6 +485,21 @@ func (a *editorAPI) problemsHandler(w http.ResponseWriter, r *http.Request) {
 		ws = a.problems()
 	}
 	jsonOut(w, parseProblems(ws))
+}
+
+// linkSuggestionsHandler lists unlinked mentions of other pages (the
+// editor's Backlinks tab).
+func (a *editorAPI) linkSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
+	if !guard(w, r) {
+		return
+	}
+	out := []Problem{}
+	if p := a.preview(); p != nil {
+		if s := linkSuggestions(p.Tree()); s != nil {
+			out = s
+		}
+	}
+	jsonOut(w, out)
 }
 
 // refs lists citation keys from the references library, for the editor's

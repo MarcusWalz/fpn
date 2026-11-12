@@ -35,7 +35,8 @@ export default function App() {
   const [stats, setStats] = useState({ add: 0, del: 0 });
   const [diffMounted, setDiffMounted] = useState(leftTab === "diff");
   const [problems, setProblems] = useState<Problem[]>([]);
-  const [panel, setPanel] = useState<null | "problems" | "critique">(null);
+  const [panel, setPanel] = useState<null | "problems" | "links" | "critique">(null);
+  const [links, setLinks] = useState<Problem[]>([]);
   const [cursor, setCursor] = useState({ line: 1, col: 1 });
   const [treeHidden, setTreeHidden] = useState(ls.get("fpn-tree-hidden") === "1" || innerWidth < 900);
   const [split, setSplit] = useState(ls.get("fpn-split") || "50%");
@@ -160,7 +161,10 @@ export default function App() {
   }, [dirty, isNew]);
 
   // ---------- problems ----------
-  const refreshProblems = useCallback(async () => { try { setProblems(await api.problems()); } catch { /* server restarting */ } }, []);
+  const refreshProblems = useCallback(async () => {
+    try { setProblems(await api.problems()); } catch { /* server restarting */ }
+    try { setLinks(await api.linkSuggestions()); } catch { /* server restarting */ }
+  }, []);
   useEffect(() => { refreshProblems(); const t = setInterval(refreshProblems, 3000); return () => clearInterval(t); }, [refreshProblems]);
   const jump = (p: Problem) => {
     if (!p.path) return;
@@ -266,6 +270,7 @@ export default function App() {
 
   const problemCount = problems.length;
   const here = problems.filter((p) => p.path === path).length;
+  const linksHere = links.filter((p) => p.path === path).length;
 
   return (
     <div className={"workbench" + (treeHidden ? " tree-hidden" : "") + (panel ? " with-panel" : "")}>
@@ -327,7 +332,7 @@ export default function App() {
               )}
             </section>
           </div>
-          {panel && <BottomPanel tab={panel} onTab={setPanel} onClose={() => setPanel(null)} problems={problems} current={path} onJump={jump} dirty={dirty} save={() => save()} />}
+          {panel && <BottomPanel tab={panel} onTab={setPanel} onClose={() => setPanel(null)} problems={problems} links={links} current={path} onJump={jump} dirty={dirty} save={() => save()} />}
         </div>
       </div>
 
@@ -337,6 +342,9 @@ export default function App() {
         </span>
         <button className={"sb-item sb-btn" + (problemCount ? " has" : "")} title="Problems on the whole site (⌘J)" onClick={() => setPanel(panel === "problems" ? null : "problems")}>
           <span className="codicon codicon-warning" /> {problemCount}{here ? ` (${here} here)` : ""}
+        </button>
+        <button className={"sb-item sb-btn" + (links.length ? " has-links" : "")} title="Missed links: pages that mention another page without linking to it" onClick={() => setPanel(panel === "links" ? null : "links")}>
+          <span className="codicon codicon-link" /> {links.length}{linksHere ? ` (${linksHere} here)` : ""}
         </button>
         <span className="spacer" />
         <span className="sb-item">Ln {cursor.line}, Col {cursor.col}</span>

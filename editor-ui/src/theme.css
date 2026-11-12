@@ -211,6 +211,7 @@ button { font: inherit; color: inherit; }
 .sb-item { display: inline-flex; align-items: center; gap: 4px; height: 100%; padding: 0 8px; }
 .sb-btn { background: none; border: 0; cursor: pointer; }
 .sb-btn:hover { background: #ffffff1f; }
+.sb-btn.has-links { background: #0e6b74; }
 .sb-btn.has { background: #b45309; }
 .sb-status.dirty { color: var(--lime); }
 .sb-status.error { color: #fecaca; }

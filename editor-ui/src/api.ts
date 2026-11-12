@@ -41,6 +41,7 @@ export async function preview(path: string, text: string): Promise<PreviewResult
 export const tree = async (): Promise<TreeEntry> => (await check(await fetch("/__api/tree"))).json();
 export const files = async (): Promise<FileEntry[]> => (await check(await fetch("/__api/files"))).json();
 export const problems = async (): Promise<Problem[]> => (await check(await fetch("/__api/problems"))).json();
+export const linkSuggestions = async (): Promise<Problem[]> => (await check(await fetch("/__api/link-suggestions"))).json();
 export const refs = async (): Promise<RefEntry[]> => (await check(await fetch("/__api/refs"))).json();
 
 export async function gitStatus(): Promise<Record<string, string>> {
