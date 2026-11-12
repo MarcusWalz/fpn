@@ -3,6 +3,8 @@ import { DiffEditor } from "@monaco-editor/react";
 import { fpnTheme } from "../monaco";
 import { useVsEvent } from "../lib/useVsEvent";
 
+const HIDE = { enabled: true, contextLineCount: 3, minimumLineCount: 3, revealLineCount: 20 };
+
 interface Props {
   base: "head" | "saved";
   onBase(b: "head" | "saved"): void;
@@ -36,7 +38,18 @@ export default function DiffPane({ base, onBase, sideBySide, onSideBySide, origi
           theme={fpnTheme()}
           original={original ?? ""}
           modified={modified}
-          options={{ readOnly: true, renderSideBySide: sideBySide, wordWrap: "on", minimap: { enabled: false }, automaticLayout: true, scrollBeyondLastLine: false, renderOverviewRuler: false }}
+          onMount={(d) => {
+            (window as unknown as { __fpnDiff: unknown }).__fpnDiff = d;
+            // Monaco ignores hideUnchangedRegions until it is toggled after the first diff.
+            const once = d.onDidUpdateDiff(() => {
+              once.dispose();
+              d.updateOptions({ hideUnchangedRegions: { enabled: false } });
+              d.updateOptions({ hideUnchangedRegions: { ...HIDE, enabled: true } });
+            });
+          }}
+          keepCurrentOriginalModel
+          keepCurrentModifiedModel
+          options={{ readOnly: true, renderSideBySide: sideBySide, hideUnchangedRegions: HIDE, wordWrap: "on", minimap: { enabled: false }, automaticLayout: true, scrollBeyondLastLine: false, renderOverviewRuler: false }}
         />
       </div>
     </div>

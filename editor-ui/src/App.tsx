@@ -32,6 +32,7 @@ export default function App() {
   const [sideBySide, setSideBySide] = useState(ls.get("fpn-diff-sbs") === "1");
   const [head, setHead] = useState<string | null>(null);
   const [stats, setStats] = useState({ add: 0, del: 0 });
+  const [diffMounted, setDiffMounted] = useState(leftTab === "diff");
   const [problems, setProblems] = useState<Problem[]>([]);
   const [panel, setPanel] = useState<null | "problems" | "critique">(null);
   const [cursor, setCursor] = useState({ line: 1, col: 1 });
@@ -42,6 +43,7 @@ export default function App() {
   const [quick, setQuick] = useState(false);
   const [toasts, setToasts] = useState<ToastMsg[]>([]);
   const [dropHint, setDropHint] = useState("");
+  const [previewTick, setPreviewTick] = useState(0); // re-render the preview after uploads land
 
   const editor = useRef<MarkdownEditorHandle>(null);
   const previewRef = useRef<PreviewHandle>(null);
@@ -122,7 +124,7 @@ export default function App() {
       setStats(diffStats(diffBase === "head" ? head ?? "" : saved, text));
     }, 200);
     return () => clearTimeout(t);
-  }, [text, path, initial, head, diffBase, saved]);
+  }, [text, path, initial, head, diffBase, saved, previewTick]);
 
   // ---------- save ----------
   const save = useCallback(async (force = false) => {
@@ -196,6 +198,8 @@ export default function App() {
       } catch (e) { toast(`${f.name}: ${(e as Error).message}`, true); }
     }
     if (others.length) { pos = ed.insertBlock(others.join("\n\n"), pos); treeRef.current?.reload(); }
+    // The site rebuild that picks up new files takes a moment; re-check then.
+    setTimeout(() => setPreviewTick((t) => t + 1), 1500);
   }
 
   const wanted = (dt: DataTransfer | null) => !!dt && (dt.types.includes("Files") || dt.types.includes(DRAG_TYPE));
@@ -255,7 +259,7 @@ export default function App() {
     el.addEventListener("pointerup", up, { once: true });
   };
   const toggleTree = () => setTreeHidden((h) => { ls.set("fpn-tree-hidden", h ? "0" : "1"); return !h; });
-  const setTab = (t: "preview" | "diff") => { setLeftTab(t); ls.set("fpn-left-tab", t); };
+  const setTab = (t: "preview" | "diff") => { setLeftTab(t); ls.set("fpn-left-tab", t); if (t === "diff") setDiffMounted(true); };
 
   const problemCount = problems.length;
   const here = problems.filter((p) => p.path === path).length;
@@ -290,13 +294,16 @@ export default function App() {
                 </button>
               </div>
               <div className="tabcontent">
-                {leftTab === "preview" ? (
+                <div className="tabpane" hidden={leftTab !== "preview"}>
                   <PreviewPane ref={previewRef} html={html} onScrollLine={onPreviewScrollLine}
                     onLoad={() => editor.current && previewRef.current?.syncToLine(editor.current.topLine(), editor.current.lineCount(), true)} />
-                ) : (
-                  <DiffPane base={diffBase} onBase={(b) => { setDiffBase(b); ls.set("fpn-diff-base", b); }} sideBySide={sideBySide}
-                    onSideBySide={(v) => { setSideBySide(v); ls.set("fpn-diff-sbs", v ? "1" : "0"); }}
-                    original={diffBase === "head" ? head : saved} modified={text} stats={stats} />
+                </div>
+                {diffMounted && (
+                  <div className="tabpane" hidden={leftTab !== "diff"}>
+                    <DiffPane base={diffBase} onBase={(b) => { setDiffBase(b); ls.set("fpn-diff-base", b); }} sideBySide={sideBySide}
+                      onSideBySide={(v) => { setSideBySide(v); ls.set("fpn-diff-sbs", v ? "1" : "0"); }}
+                      original={diffBase === "head" ? head : saved} modified={text} stats={stats} />
+                  </div>
                 )}
               </div>
             </section>

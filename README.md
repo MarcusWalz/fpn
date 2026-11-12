@@ -44,7 +44,7 @@ While `./fpn serve` is running, open http://localhost:1313/__editor/ or click **
   - Drop files from your computer onto a folder to upload them.
   - Drop or paste images into the editor to save them in the page's `images/` folder and insert the Markdown.
   - Drag a tree item into the editor to insert a link to it.
-- **Diff:** compares the editor buffer against the last commit (git `HEAD`) or the saved file, with only the changed lines (plus context) or the whole file.
+- **Diff:** VS Code's diff view, comparing the editor buffer against the last commit (git `HEAD`) or the saved file. Unchanged stretches are collapsed (click to expand), and there's an optional side-by-side mode.
 - **Keyboard:** **⌘S / Ctrl+S** saves (the watcher rebuilds the site and other open tabs reload). **⌘P / Ctrl+P** quick-opens any page by name. **⌘J / Ctrl+J** toggles the **Problems** panel, which lists every build warning; click one to jump to it.
 - If the file changed on disk since you opened it (another editor, `git pull`), saving asks before overwriting.
 - Drag the divider to resize. On narrow screens, a button switches between editor and preview.
@@ -68,7 +68,7 @@ npm run typecheck
 npm run build      # writes ../web/editor; commit it together with the source change
 ```
 
-Then rebuild `fpn` so the binary embeds the new files.
+Then rebuild `fpn` so the binary embeds the new files. More detail in [editor-ui/README.md](editor-ui/README.md).
 
 ## Outline, placeholders and progress
 

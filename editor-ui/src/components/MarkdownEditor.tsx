@@ -54,7 +54,13 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle, Props>(function Markdown
     insertBlock(text, offset) {
       const m = model();
       const pos = m.getPositionAt(Math.min(offset, m.getValueLength()));
-      const line = pos.lineNumber;
+      let line = pos.lineNumber;
+      // Never insert inside the front matter: move to just after its closing ---.
+      if (m.getLineContent(1).trim() === "---") {
+        for (let l = 2; l <= m.getLineCount(); l++) {
+          if (m.getLineContent(l).trim() === "---") { if (line <= l) line = l; break; }
+        }
+      }
       const content = m.getLineContent(line);
       const endCol = m.getLineMaxColumn(line);
       const before = content.trim() ? "\n\n" : content.length ? "\n" : "";

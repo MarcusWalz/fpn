@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
 
 // Built into ../web/editor (embedded in the Go binary and served by `fpn serve`
 // at /__editor/). `npm run dev` proxies the API and site to a running
@@ -7,6 +8,12 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base: "/__editor/",
   plugins: [react()],
+  resolve: {
+    alias: {
+      // Monaco's internals, bypassing its package "exports" (used by src/monaco-slim.js).
+      "monaco-esm": fileURLToPath(new URL("./node_modules/monaco-editor/esm/vs", import.meta.url)),
+    },
+  },
   build: {
     outDir: "../web/editor",
     emptyOutDir: true,

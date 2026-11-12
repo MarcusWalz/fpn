@@ -20,6 +20,8 @@
   --sel: #1e4d2f;
   --hover: #143022;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --logo: #d9f99d;
+  --logo2: #22c55e;
 
   --vscode-font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   --vscode-font-size: 13px;
@@ -86,6 +88,7 @@
     --vscode-list-highlightForeground: #15803d;
     --vscode-input-placeholderForeground: #7a9585;
   }
+  :root { --logo: #14532d; --logo2: #16a34a; }
 }
 
 * { box-sizing: border-box; }
@@ -110,8 +113,8 @@ button { font: inherit; color: inherit; }
 
 /* ---------- title bar ---------- */
 .titlebar { display: flex; align-items: center; gap: 8px; padding: 0 8px; background: var(--side); border-bottom: 1px solid var(--line); }
-.logo { font: 700 13px/1 var(--mono); letter-spacing: .08em; color: var(--lime); text-decoration: none; }
-.logo span { color: var(--accent); margin-left: 4px; }
+.logo { font: 700 13px/1 var(--mono); letter-spacing: .08em; color: var(--logo); text-decoration: none; }
+.logo span { color: var(--logo2); margin-left: 4px; }
 .command-center { flex: 0 1 520px; margin: 0 auto; display: flex; align-items: center; gap: 8px; height: 24px; padding: 0 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; color: var(--muted); cursor: pointer; min-width: 0; }
 .command-center:hover { border-color: var(--accent); color: var(--ink); }
 .cc-path { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; font-family: var(--mono); font-size: 12px; }
@@ -163,6 +166,8 @@ button { font: inherit; color: inherit; }
 .file-tab { cursor: default; font-family: var(--mono); font-size: 12px; }
 .file-tab .dot { margin-left: 4px; color: var(--ink); }
 .tabcontent { flex: 1; min-height: 0; background: var(--surface); }
+.tabpane { height: 100%; }
+.tabpane[hidden] { display: none; }
 .preview { width: 100%; height: 100%; border: 0; display: block; background: var(--surface); }
 .monaco-host { flex: 1; min-height: 0; position: relative; }
 .dropzone { position: absolute; inset: 8px; z-index: 5; display: grid; place-items: center; pointer-events: none; font-weight: 600; color: var(--accent-ink); background: #d9f99dd9; border: 2px dashed #15803d; border-radius: 8px; }

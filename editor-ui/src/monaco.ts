@@ -1,5 +1,5 @@
 // Bundle Monaco locally (no CDN) and define fpn's green themes.
-import * as monaco from "monaco-editor";
+import * as monaco from "./monaco-slim.js";
 import EditorWorker from "monaco-editor/editor/editor.worker?worker";
 import { loader } from "@monaco-editor/react";
 

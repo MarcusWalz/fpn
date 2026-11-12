@@ -19,9 +19,9 @@ const HEADER = 80; // the site's sticky header inside the preview
 
 const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html, onScrollLine, onLoad }, ref) {
   const frame = useRef<HTMLIFrameElement>(null);
-  const lock = useRef({ side: "", until: 0 });
-  const locked = (side: string) => lock.current.side !== side && performance.now() < lock.current.until;
-  const setLock = (side: string) => { lock.current = { side, until: performance.now() + 160 }; };
+  // After we scroll the preview ourselves, ignore its scroll events briefly so
+  // they don't echo back to the editor.
+  const quietUntil = useRef(0);
 
   function anchors() {
     const doc = frame.current?.contentDocument, win = frame.current?.contentWindow;
@@ -35,7 +35,8 @@ const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html
   useImperativeHandle(ref, () => ({
     syncToLine(line, totalLines, force) {
       const win = frame.current?.contentWindow;
-      if (!win || (!force && locked("editor"))) return;
+      if (!win) return;
+      void force;
       const as = anchors();
       let y = 0;
       if (as.length && line > as[0].line) {
@@ -44,7 +45,7 @@ const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html
         const a = as[i], b = as[i + 1] || { line: totalLines + 1, y: win.document.documentElement.scrollHeight };
         y = a.y + (b.y - a.y) * ((line - a.line) / Math.max(1, b.line - a.line)) - HEADER;
       }
-      setLock("preview");
+      quietUntil.current = performance.now() + 200;
       win.scrollTo(0, Math.max(0, y));
     },
   }));
@@ -56,16 +57,15 @@ const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html
       win.addEventListener("scroll", () => {
         cancelAnimationFrame(raf);
         raf = requestAnimationFrame(() => {
-          if (locked("preview")) return;
+          if (performance.now() < quietUntil.current) return;
           const as = anchors();
           if (!as.length) return;
-          if (win.scrollY <= 2) { setLock("editor"); onScrollLine(1); return; }
+          if (win.scrollY <= 2) { onScrollLine(1); return; }
           const y = win.scrollY + HEADER;
           let i = as.length - 1;
           while (i > 0 && as[i].y > y) i--;
           const a = as[i], b = as[i + 1];
           const line = b && b.y > a.y ? a.line + (b.line - a.line) * Math.min(1, (y - a.y) / (b.y - a.y)) : a.line;
-          setLock("editor");
           onScrollLine(line);
         });
       }, { passive: true });
