@@ -1,0 +1,77 @@
+{{define "main"}}
+{{template "crumbs" .}}
+{{$s := .Site.Base}}
+<header class="sec-head card hudson-head">
+  <button class="hudson-portrait" id="hudson-poke" type="button" aria-label="Poke Hudson for feedback">
+    <img src="{{$s}}static/hudson/hudson.svg" alt="Hudson, a black dog, in pixel art" width="120" height="88">
+  </button>
+  <div>
+    <h1>Hudson</h1>
+    <p class="count">Head of Quality Assurance (self-appointed) · Very good boy (disputed)</p>
+  </div>
+</header>
+
+<div class="hudson-speech card" id="hudson-says" role="status" aria-live="polite">
+  <b>Hudson</b>
+  <span>Oh. You found my page. Click me if you want feedback. You won't like it.</span>
+</div>
+
+<section class="hudson-about">
+  <h2>About</h2>
+  <ul>
+    <li><strong>Breed:</strong> Black lab mix, with strong opinions.</li>
+    <li><strong>Job:</strong> Watches every edit in the notebook editor and throws shade at it. His feedback is <em>never constructive</em>. That's policy.</li>
+    <li><strong>Hours:</strong> Closes the editor from 11 pm to 5 am. It's for your own good.</li>
+    <li><strong>Staff:</strong> Four hens, who mostly peck at things and agree with him.</li>
+  </ul>
+</section>
+
+<section class="hudson-hens">
+  <h2>The hens</h2>
+  <ul class="hen-grid">
+    <li class="card"><img src="{{$s}}static/hudson/hen-buff.svg" alt="" width="44" height="44"><strong>Buff</strong><span>Has notes.</span></li>
+    <li class="card"><img src="{{$s}}static/hudson/hen-blue.svg" alt="" width="44" height="44"><strong>Blue</strong><span>Disappointed, quietly.</span></li>
+    <li class="card"><img src="{{$s}}static/hudson/hen-ginger.svg" alt="" width="44" height="44"><strong>Ginger</strong><span>Pecks at typos. Literally.</span></li>
+    <li class="card"><img src="{{$s}}static/hudson/hen-red.svg" alt="" width="44" height="44"><strong>Red</strong><span>In charge of the coop. Not of you.</span></li>
+  </ul>
+</section>
+
+<section class="hudson-hits">
+  <h2>Greatest hits</h2>
+  <ul>
+    <li>"Twelve new lines and zero citations. Bold of you to just know things."</li>
+    <li>"A TODO. Love that for you. It'll live there forever."</li>
+    <li>"Unsaved for 7 minutes. Commitment issues?"</li>
+    <li>"The chickens laid three eggs today. What have you produced?"</li>
+    <li>"I'd help, but I'm a dog. Also, no."</li>
+  </ul>
+</section>
+
+<p class="legend">In the editor (<code>fpn serve</code>), Hudson reads what you just changed and writes a fresh remark each time. Here on the site there's nothing for him to read, so he repeats himself. Like most critics.</p>
+
+<script>
+(() => {
+  const lines = [
+    "Bark. That was my feedback.",
+    "I'm not judging. (Side-eye.)",
+    "I've seen better notes on the side of the chicken coop.",
+    "Interesting. Not good. Interesting.",
+    "Buff says hi. Buff also has notes.",
+    "Do you poke your attending like this?",
+    "I'd help, but I'm a dog. Also, no.",
+    "The chickens laid three eggs today. What have you produced?",
+    "Hm. The hens are unimpressed. So am I.",
+    "Stop poking me.",
+  ];
+  const btn = document.getElementById("hudson-poke"), says = document.querySelector("#hudson-says span");
+  if (!btn || !says) return;
+  let last = -1;
+  btn.addEventListener("click", () => {
+    let i; do { i = Math.floor(Math.random() * lines.length); } while (i === last && lines.length > 1);
+    last = i;
+    says.textContent = lines[i];
+    btn.classList.remove("bark"); void btn.offsetWidth; btn.classList.add("bark");
+  });
+})();
+</script>
+{{end}}

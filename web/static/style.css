@@ -592,3 +592,19 @@ img { max-width: 100%; height: auto; }
 .prose ol.citations li { margin: .35rem 0; scroll-margin-top: 5rem; }
 .prose ol.citations li:target { background: var(--lime); color: var(--lime-ink); }
 .prose sup.cite .cite-loc { margin-left: .05em; font-weight: 400; }
+
+/* ---------- /hudson/ ---------- */
+.hudson-head { align-items: center; }
+.hudson-portrait { flex: none; padding: 0; border: 0; background: none; cursor: pointer; }
+.hudson-portrait img { display: block; width: 120px; height: auto; image-rendering: pixelated; }
+.hudson-portrait.bark img { animation: bark .32s steps(2) 2; }
+@keyframes bark { 50% { transform: translateY(-4px) rotate(-3deg); } }
+.hudson-speech { position: relative; margin-top: 1rem; padding: .8rem 1rem; }
+.hudson-speech b { display: block; margin-bottom: .2rem; font: 700 .7rem/1 var(--font-px); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.hudson-about ul, .hudson-hits ul { padding-left: 1.2rem; }
+.hudson-hits li { margin: .35rem 0; font-style: italic; }
+.hen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .75rem; margin: 0; padding: 0; list-style: none; }
+.hen-grid li { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: .7rem; align-items: center; padding: .7rem .8rem; }
+.hen-grid img { grid-row: span 2; width: 44px; height: auto; image-rendering: pixelated; }
+.hen-grid span { color: var(--muted); font-size: .9rem; }
+@media (prefers-reduced-motion: reduce) { .hudson-portrait.bark img { animation: none; } }

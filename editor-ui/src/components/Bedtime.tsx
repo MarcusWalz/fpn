@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { HudsonSprite } from "./Pixels";
 
 // The editor closes overnight (browser's local time). Reading the site is unaffected.
 export const CLOSED_FROM = 23; // 11 pm
@@ -28,7 +29,7 @@ export default function Bedtime() {
   return (
     <div className="bedtime" role="dialog" aria-modal="true" aria-labelledby="bedtime-title">
       <div className="bedtime-card">
-        <div className="bedtime-moon" aria-hidden="true">☾</div>
+        <div className="bedtime-moon" aria-hidden="true"><HudsonSprite eyes="closed" tongue={false} scale={4} /><span className="zzz">z<sup>z</sup><sup>z</sup></span></div>
         <h2 id="bedtime-title">Hudson demands you sleep</h2>
         <p>It's late. Your work is saved, and the notebook will be here in the morning.</p>
         <p className="bedtime-sub">The editor is closed from 11 pm to 5 am. You can still read the site.</p>

@@ -272,8 +272,40 @@ button { font: inherit; color: inherit; }
 /* ---------- overnight lock (11 pm – 5 am) ---------- */
 .bedtime { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 16px; background: #020f08f2; }
 .bedtime-card { max-width: 420px; padding: 28px 24px; text-align: center; color: var(--ink); background: var(--raised); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 16px 60px #000a; }
-.bedtime-moon { font-size: 44px; line-height: 1; color: var(--logo); }
+.bedtime-moon { position: relative; display: inline-block; line-height: 0; }
+.bedtime-moon .zzz { position: absolute; right: -18px; top: -6px; font: 700 18px/1 monospace; color: var(--logo); animation: zzz 2.4s ease-in-out infinite; }
+@keyframes zzz { 0%,100% { opacity: .35; transform: translateY(2px); } 50% { opacity: 1; transform: translateY(-4px); } }
 .bedtime-card h2 { margin: 12px 0 8px; font-size: 18px; }
 .bedtime-card p { margin: 6px 0; line-height: 1.5; }
 .bedtime-sub { opacity: .75; font-size: 12px; }
 .bedtime-card a { display: inline-block; margin-top: 14px; color: var(--logo); font-weight: 600; }
+
+/* ---------- Hudson (the assistant nobody asked for) and the hens ---------- */
+.px { display: block; image-rendering: pixelated; overflow: visible; }
+.crew { position: fixed; left: 0; right: 0; bottom: 22px; height: 0; z-index: 50; pointer-events: none; }
+.actor { position: absolute; left: 0; bottom: 0; transition-property: transform; transition-timing-function: linear; will-change: transform; }
+.actor .face { display: block; pointer-events: auto; }
+.actor .face.flip { transform: scaleX(-1); }
+.hen .face { filter: drop-shadow(0 1px 0 #0005); }
+.hudson-dog { padding: 0; border: 0; background: none; cursor: pointer; filter: drop-shadow(0 0 1px #ffffff40) drop-shadow(0 2px 0 #0006); }
+/* two-frame walk cycle: frame b is the standing pose */
+.px .frame-a, .px .tail-b { opacity: 0; }
+.walking .px .frame-a, .walking .px .tail-b, .speaking .px .tail-b { animation: frame-on .36s steps(1) infinite; }
+.walking .px .frame-b, .walking .px .tail-a, .speaking .px .tail-a { animation: frame-off .36s steps(1) infinite; }
+@keyframes frame-on { 0% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes frame-off { 0% { opacity: 0; } 50% { opacity: 1; } }
+.walking .px { animation: trot .36s steps(1) infinite; }
+@keyframes trot { 50% { transform: translateY(-2px); } }
+.hen .hen-body { transform-box: fill-box; transform-origin: 30% 100%; transition: transform .1s steps(2); }
+.hen.peck .hen-body { transform: rotate(-28deg) translateY(2px); }
+.dog.speaking .px { animation: hudson-bob .3s steps(2) 4; }
+@keyframes hudson-bob { 50% { transform: translateY(-3px); } }
+.hudson-bubble { position: absolute; bottom: calc(100% + 12px); left: 30px; width: max-content; max-width: min(270px, 70vw); padding: 9px 26px 9px 11px; color: #10240f; background: #f4fbe9; border: 3px solid #10240f; box-shadow: 4px 4px 0 #10240f99; font-size: 13px; line-height: 1.4; pointer-events: auto; animation: bubble-in .18s steps(3); }
+.hudson-bubble.to-left { left: auto; right: 30px; }
+.hudson-bubble::after { content: ""; position: absolute; left: 22px; bottom: -12px; width: 12px; height: 12px; background: #f4fbe9; border-left: 3px solid #10240f; border-bottom: 3px solid #10240f; transform: skewY(-40deg); }
+.hudson-bubble.to-left::after { left: auto; right: 22px; border-left: 0; border-right: 3px solid #10240f; transform: skewY(40deg); }
+.hudson-bubble b { display: block; margin-bottom: 2px; font: 700 10px/1 monospace; letter-spacing: .1em; text-transform: uppercase; color: #2f6b2a; }
+.hudson-x { position: absolute; top: 4px; right: 4px; padding: 2px; border: 0; background: none; color: #10240f; cursor: pointer; opacity: .6; }
+.hudson-x:hover { opacity: 1; }
+@keyframes bubble-in { from { transform: translateY(6px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .actor { transition: none !important; } .px, .px *, .hudson-bubble { animation: none !important; } }

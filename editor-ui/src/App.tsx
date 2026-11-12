@@ -11,6 +11,7 @@ import CaptionDialog, { type CaptionRequest } from "./components/CaptionDialog";
 import QuickOpen from "./components/QuickOpen";
 import Toasts, { type ToastMsg } from "./components/Toast";
 import Bedtime, { useBedtime } from "./components/Bedtime";
+import Hudson from "./components/Hudson";
 import { IMG, dirOf, mdLink, pageSkeleton, relFrom, slugify } from "./lib/paths";
 import { diffStats } from "./lib/diff";
 
@@ -33,6 +34,9 @@ export default function App() {
   const [diffBase, setDiffBase] = useState<"head" | "saved">((ls.get("fpn-diff-base") as "head" | "saved") || "head");
   const [sideBySide, setSideBySide] = useState(ls.get("fpn-diff-sbs") === "1");
   const [head, setHead] = useState<string | null>(null);
+  const [savedTick, setSavedTick] = useState(0);
+  const [hudsonOut, setHudsonOut] = useState(() => { try { return localStorage.getItem("fpn-hudson") === "out"; } catch { return false; } });
+  const toggleHudson = () => setHudsonOut((v) => { try { localStorage.setItem("fpn-hudson", v ? "in" : "out"); } catch { /* fine */ } return !v; });
   const [stats, setStats] = useState({ add: 0, del: 0 });
   const [diffMounted, setDiffMounted] = useState(leftTab === "diff");
   const [problems, setProblems] = useState<Problem[]>([]);
@@ -139,6 +143,7 @@ export default function App() {
       mtime.current = await api.saveFile(path, body, force ? "" : mtime.current);
       setSaved(body); setText(body); setIsNew(false);
       setStatus({ text: "Saved ✓" });
+      setSavedTick((n) => n + 1);
       setTimeout(() => (wasNew ? treeRef.current?.reload() : treeRef.current?.refreshStatus()), 300);
       setTimeout(refreshProblems, 1500);
     } catch (e) {
@@ -375,6 +380,7 @@ export default function App() {
           <span className="codicon codicon-link" /> {links.length}{linksHere ? ` (${linksHere} here)` : ""}
         </button>
         <span className="spacer" />
+        <button className="sb-item sb-btn" title={hudsonOut ? "Let Hudson back in" : "Send Hudson outside"} onClick={toggleHudson}>🐕 {hudsonOut ? "Hudson is outside" : "Hudson"}</button>
         <span className="sb-item">Ln {cursor.line}, Col {cursor.col}</span>
         <span className="sb-item">Spaces: 2</span>
         <span className="sb-item">Markdown</span>
@@ -383,6 +389,7 @@ export default function App() {
       {caption && <CaptionDialog req={caption} />}
       {quick && <QuickOpen onClose={() => setQuick(false)} onOpen={(p) => { setQuick(false); openFile(p); }} />}
       <Toasts items={toasts} />
+      {!hudsonOut && !bedtime && <Hudson path={path} text={text} base={head ?? ""} dirty={dirty} problemsHere={here} savedTick={savedTick} onHide={toggleHudson} />}
       {bedtime && <Bedtime />}
     </div>
   );

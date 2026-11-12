@@ -446,6 +446,7 @@ func (a *editorAPI) mountFiles(mux *http.ServeMux) {
 	mux.HandleFunc("/__api/link-suggestions", a.linkSuggestionsHandler)
 	mux.HandleFunc("/__api/refs", a.refs)
 	mux.HandleFunc("/__api/critique", a.critique)
+	mux.HandleFunc("/__api/hudson", a.hudson)
 }
 
 // ---- problems (all build warnings, for batch fixing) ----

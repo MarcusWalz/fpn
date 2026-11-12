@@ -76,3 +76,13 @@ export async function getCritique(path: string): Promise<CritiqueResult> {
 export const runCritique = async (path: string): Promise<CritiqueResult> => (await post(`/__api/critique?path=${q(path)}`)).json();
 
 export const rawURL = (path: string) => `/__api/raw?path=${q(path)}`;
+
+export class NoClaudeError extends Error {}
+export interface HudsonReq { path: string; title: string; added: string[]; removed: string[]; problems: number; unsavedMinutes: number; event: "change" | "poke" | "save" | "open"; recent: string[] }
+/** One remark from Hudson, written by Claude from the actual changes. */
+export async function hudson(req: HudsonReq): Promise<string> {
+  const r = await fetch("/__api/hudson", { method: "POST", headers: { ...H, "Content-Type": "application/json" }, body: JSON.stringify(req) });
+  if (r.status === 501) throw new NoClaudeError();
+  await check(r);
+  return (await r.json()).text;
+}

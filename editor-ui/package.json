@@ -6,7 +6,8 @@
   "description": "Dev-only editor for `fpn serve`. Built into ../web/editor (committed), so Go-only contributors never need Node.",
   "scripts": {
     "dev": "node scripts/copy-codicons.mjs && vite",
-    "build": "node scripts/copy-codicons.mjs && vite build",
+    "build": "node scripts/copy-codicons.mjs && node scripts/export-sprites.mjs && vite build",
+    "sprites": "node scripts/export-sprites.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -170,6 +170,7 @@ func Build(cfg Config) (*Result, error) {
 	steps := []func() error{
 		b.renderSitemapPage,
 		b.renderProgressPage,
+		b.renderHudsonPage,
 		b.render404,
 		b.writePagesJSON,
 		b.writeSitemapXML,
@@ -234,7 +235,7 @@ func loadTemplates(webFS fs.FS, base string) (map[string]*template.Template, err
 		"chTrail":  chapterTrail,
 	}
 	out := map[string]*template.Template{}
-	for _, kind := range []string{"home", "section", "page", "sitemap", "progress", "404"} {
+	for _, kind := range []string{"home", "section", "page", "sitemap", "progress", "hudson", "404"} {
 		t, err := template.New(kind).Funcs(funcs).ParseFS(webFS,
 			"templates/base.html", "templates/partials.html", "templates/"+kind+".html")
 		if err != nil {
@@ -319,6 +320,16 @@ func (b *builder) renderProgressPage() error {
 		Site:   b.site,
 		Node:   b.tree.Root,
 		Title:  "Progress",
+		Crumbs: []*content.Node{b.tree.Root},
+	})
+}
+
+// /hudson/: the editor's resident critic and his hens.
+func (b *builder) renderHudsonPage() error {
+	return b.write("hudson/index.html", "hudson", &PageData{
+		Site:   b.site,
+		Node:   b.tree.Root,
+		Title:  "Hudson",
 		Crumbs: []*content.Node{b.tree.Root},
 	})
 }
