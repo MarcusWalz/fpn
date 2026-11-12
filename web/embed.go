@@ -4,5 +4,5 @@ package web
 
 import "embed"
 
-//go:embed templates static editor
+//go:embed templates static all:editor
 var FS embed.FS

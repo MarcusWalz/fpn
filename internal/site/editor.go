@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"mime"
 	"net"
 	"net/http"
 	"os"
@@ -320,13 +321,17 @@ func (a *editorAPI) static(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	switch path.Ext(name) {
+	switch ext := path.Ext(name); ext {
 	case ".html":
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	case ".js":
 		w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
 	case ".css":
 		w.Header().Set("Content-Type", "text/css; charset=utf-8")
+	default:
+		if t := mime.TypeByExtension(ext); t != "" {
+			w.Header().Set("Content-Type", t)
+		}
 	}
 	w.Header().Set("Cache-Control", "no-store")
 	w.Write(data)
