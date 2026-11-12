@@ -295,14 +295,15 @@ func (a *editorAPI) files(w http.ResponseWriter, r *http.Request) {
 	type f struct {
 		Path  string `json:"path"`
 		Title string `json:"title"`
+		URL   string `json:"url"` // lets the preview map a clicked link back to its file
 	}
 	var out []f
 	t := p.Tree()
 	for _, s := range t.Sections {
-		out = append(out, f{Path: s.SourceRel(), Title: strings.Join(append(s.Trail(), s.Title), " › ") + " (index)"})
+		out = append(out, f{Path: s.SourceRel(), Title: strings.Join(append(s.Trail(), s.Title), " › ") + " (index)", URL: s.URL})
 	}
 	for _, pg := range t.Pages {
-		out = append(out, f{Path: pg.Rel, Title: strings.Join(append(pg.Trail(), pg.Title), " › ")})
+		out = append(out, f{Path: pg.Rel, Title: strings.Join(append(pg.Trail(), pg.Title), " › "), URL: pg.URL})
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(out)

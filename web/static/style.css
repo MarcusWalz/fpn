@@ -608,3 +608,7 @@ img { max-width: 100%; height: auto; }
 .hen-grid img { grid-row: span 2; width: 44px; height: auto; image-rendering: pixelated; }
 .hen-grid span { color: var(--muted); font-size: .9rem; }
 @media (prefers-reduced-motion: reduce) { .hudson-portrait.bark img { animation: none; } }
+
+/* Editor preview only: links that don't resolve (the site build never emits this class). */
+a.broken-link { color: #c2410c; text-decoration: underline wavy #c2410c; text-underline-offset: 3px; cursor: help; }
+@media (prefers-color-scheme: dark) { a.broken-link { color: #fb923c; text-decoration-color: #fb923c; } }
