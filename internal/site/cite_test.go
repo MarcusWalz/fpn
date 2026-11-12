@@ -40,9 +40,10 @@ func TestCitations(t *testing.T) {
 	html, warns := citeSite(t, "# P\n\nBP targets [@whelton2018]. Again [@harrison, p. 12; @whelton2018]. More [@harrison, p. 40] [@harrison, p. 12].\n"+
 		"Typo [@nobody]. Link [@someone](https://example.com).\n\n```\n[@whelton2018] in code\n```\n\n## References\n\n- Extra note\n\n## After\n")
 	for _, want := range []string{
-		`<sup class="cite"><a href="#ref-1">1</a></sup>`,                                                              // first citation is 1
-		`<sup class="cite"><a href="#ref-2">2</a><span class="cite-loc">(p. 12)</span>; <a href="#ref-1">1</a></sup>`, // locator inline; reuse of 1
-		`<sup class="cite"><a href="#ref-2">2</a><span class="cite-loc">(p. 40)</span></sup>`,                         // each cite keeps its own page
+		`BP targets<sup class="cite"><a href="#ref-1">1</a></sup>.`, // first citation is 1, no space before it
+		`<span class="cite-loc">(p. 40)</span></sup><sup class="cite">,</sup><sup class="cite"><a href="#ref-2">2</a><span class="cite-loc">(p. 12)</span></sup>`, // side by side: joined with a comma
+		`<sup class="cite"><a href="#ref-2">2</a><span class="cite-loc">(p. 12)</span>,<a href="#ref-1">1</a></sup>`,                                              // group: commas; locator inline; reuse of 1
+		`<sup class="cite"><a href="#ref-2">2</a><span class="cite-loc">(p. 40)</span></sup>`,                                                                     // each cite keeps its own page
 		`McGraw Hill; 2022.</li>`, // the reference list has no locators
 		`Whelton PK, Carey RM, Aronow WS, et al. 2017 Guideline for High Blood Pressure in Adults. <em>Hypertension</em>. 2018;71(6):e13–e115.`,
 		`href="https://doi.org/10.1161/HYP.0000000000000065"`,
@@ -100,5 +101,13 @@ func TestImageSourceCheck(t *testing.T) {
 		if _, warns := citeSite(t, ok); len(warns) != 0 {
 			t.Errorf("credited image flagged: %q → %v", ok, warns)
 		}
+	}
+}
+
+func TestCitationsSideBySideNoSpace(t *testing.T) {
+	html, _ := citeSite(t, "# P\n\nSee [@whelton2018][@harrison] here.\n")
+	want := `See<sup class="cite"><a href="#ref-1">1</a></sup><sup class="cite">,</sup><sup class="cite"><a href="#ref-2">2</a></sup> here.`
+	if !strings.Contains(html, want) {
+		t.Errorf("missing %s", want)
 	}
 }

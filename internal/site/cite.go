@@ -245,7 +245,14 @@ func (c *citeState) preprocess(src []byte) []byte {
 			if !ok {
 				continue
 			}
-			out.WriteString(line[last:m[0]])
+			// AMA style: the superscript sits right after the word ("lowered¹"),
+			// so drop spaces before it. Citations side by side ("[@a] [@b]" or
+			// "[@a][@b]") are joined with a comma, like a group: ¹,².
+			before := strings.TrimRight(line[last:m[0]], " \t")
+			if before == "" && last > 0 {
+				before = `<sup class="cite">,</sup>`
+			}
+			out.WriteString(before)
 			out.WriteString(html)
 			last = m[1]
 		}
@@ -294,7 +301,7 @@ func (c *citeState) render(inner string) (string, bool) {
 		}
 		parts = append(parts, label)
 	}
-	return `<sup class="cite">` + strings.Join(parts, "; ") + `</sup>`, true
+	return `<sup class="cite">` + strings.Join(parts, ",") + `</sup>`, true
 }
 
 var refsHeadingRe = regexp.MustCompile(`<h2[^>]*\bid="references"[^>]*>`)
