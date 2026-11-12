@@ -220,7 +220,7 @@ Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction
 - May need to monitor and adjust therapy during dental procedures
 #### Disability
 - Assess for disability and functional decline annually (ADLs and IADLs)
--  **[Diabetic Peripheral Neuropathy](../../neurology/sensory-disorders/diabetetic-peripheral-neuropathy.md)** is a common complication which may lead to functional disability. Glycemic management helps in T1DM but not in T2DM
+-  **[Diabetic Peripheral Neuropathy](../../neurology/sensory-disorders/diabetic-peripheral-neuropathy.md)** is a common complication which may lead to functional disability. Glycemic management helps in T1DM but not in T2DM
 - Assess for  [Frailty](../../geriatric-medicine/frailty.md) annually
 - Behavioral Health -  Anxiety, Depression, [Diabetes Distress Scale](https://www.mdcalc.com/calc/10523/diabetes-distress-scale-dds17$0) (DDS) 
 
