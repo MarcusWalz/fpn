@@ -172,7 +172,7 @@ Note: ABI, ankle brachial index; CAM, Complementary and alternative medicine; FI
   - Hypoglycemia risk (see section 6, “Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises”)
   - Assessment for retinopathy
   - Assessment for neuropathy
-  - Assessment for MASLD and MASH
+  - Assessment for MASLD and [MASH](../../gastroenterology/liver/metabolic-dysfunction-associated-steatohepatitis.md)
 - **Goal setting**
   - Set A1C, blood glucose, and time-in-range goals
   - Set lipid goal
@@ -220,39 +220,24 @@ Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction
 - May need to monitor and adjust therapy during dental procedures
 #### Disability
 - Assess for disability and functional decline annually (ADLs and IADLs)
--  **Diabetic Peripheral Neuropathy** is a common complication which may lead to functional disability. Glycemic management helps in T1DM but not in T2DM
+-  **[Diabetic Peripheral Neuropathy](../../neurology/sensory-disorders/diabetetic-peripheral-neuropathy.md)** is a common complication which may lead to functional disability. Glycemic management helps in T1DM but not in T2DM
 - Assess for  [Frailty](../../geriatric-medicine/frailty.md) annually
-- Behavioral Health -  Anxiety, Depression, Diabetes Distress
-	-  [Diabetes Distress Scale](https://www.mdcalc.com/calc/10523/diabetes-distress-scale-dds17$0) (DDS) 
+- Behavioral Health -  Anxiety, Depression, [Diabetes Distress Scale](https://www.mdcalc.com/calc/10523/diabetes-distress-scale-dds17$0) (DDS) 
 
 #### Sexual Health in Men
 - Screen for erectile dysfunction (52.5%). Treat w/ PDE5i
-- Hypogonadism is common. Test morning total testosterone level. If low or towards lower limit consider  testosterone replacement
-### Sexual Health in Women
+- Hypogonadism is common
+#### Sexual Health in Women
 -  Female sexual dysfunction is very common - consider screening with the [Female Sexual Function Index (FSFI)](https://www.apta.org/contentassets/a10dbafd45234c7a98ae3dd98385cdab/fsfi_test.pdf$0). Score ≤ 26 is (+) 
 - Treatment -> Lifestyle factors, improve glycemic management, hormonal therapies, consider FDA-approved meds for hypoactive sexual desire disorder
-### Metabolic Dysfunction-Associated Steatotic Liver Disease (MASLD) and Metabolic Dysfunction-Associated Steatohepatitis (MASH)
-#### Screening
+#### Metabolic Dysfunction-Associated Steatotic Liver Disease (MASLD) and Metabolic Dysfunction-Associated Steatohepatitis (MASH)
 - *Screen all adults with T2DM for MASH spectrum*  using FIB-4 score even if they have normal liver enzymes
-	- “The goal of screening for MASLD is to identify people with at-risk MASH to prevent future cirrhosis, HCC, liver transplantation, and all-cause mortality (193–196).” pg S76
-	- ~70% of people w/T2DM have MASLD; ~50% of T2DM + MASLD have MASH
-- MASLD - Steatotic Liver disease + sign of insulin resistance
-- MASH - >= 5% hepatic steatosis w/ hepatocyte injury +/- fibrosis
--  FIB-4: estimates risk of hepatic cirrhosis. Uses age, AST, ALT, platelets. 
-	- < 1.3 is low risk
-	- >=1.3 is higher risk of clinically significant fibrosis;  Get a Liver Stiffness Measurement. <8.0kPa has good NPV. Continue to follow in Primary Care w/ repeate testing every 3 years. 
-	- >=2.67 high risk of advanced fibrosis ->  refer to GI w/o additional testing
-#### Management
-- Weight loss: 5-10% loss improves liver histology
-- Pharma:  style="color:rgb(56, 229, 163)">Semaglutide is FDA approved for treatment of MASH.  style="color:rgb(56, 229, 163)">Pioglitazone has also been shown to reverse steatohepatitis. 
-	- Yes to  style="color:rgb(56, 229, 163)">Statin use unless has decompensated cirrhosis. 
-- Metabolic surgery can improve MASH and Cardiometabolic health.
-### Obstructive Sleep Apnea
+#### Obstructive Sleep Apnea
 - Rates are likely very high in DM + Obesity
 - Refer for sleep study if indicated
-### Pancreatitis
+#### Pancreatitis
 - Twice as likely in people w/ diabetes
-### Sensory Impairment
+#### Sensory Impairment
 - Hearing impairment 2x nondiabetic population
 
 ## Section 5: Facilitating Positive Health Behaviors and Well-being to Improve Health Outcomes
