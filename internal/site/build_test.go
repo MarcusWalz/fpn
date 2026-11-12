@@ -3,6 +3,7 @@ package site
 import (
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -119,5 +120,32 @@ func TestLinkGroupsSorted(t *testing.T) {
 			t.Fatalf("%s out of order (books A→Z, then pages A→Z)", s)
 		}
 		last = i
+	}
+}
+
+func TestHeadingLevelsFixed(t *testing.T) {
+	dir := t.TempDir()
+	content := filepath.Join(dir, "content")
+	os.MkdirAll(filepath.Join(content, "book", "chap"), 0o755)
+	page := "# Title\n\n## A\n\n#### Skipped to 4\n\n#### Another 4\n\n###### Deep\n\n## B\n\n### B1\n\n# Stray h1\n"
+	os.WriteFile(filepath.Join(content, "book", "chap", "p.md"), []byte(page), 0o644)
+	out := filepath.Join(dir, "public")
+	if _, err := Build(Config{ContentDir: content, OutDir: out, Base: "/", Web: web.FS}); err != nil {
+		t.Fatal(err)
+	}
+	html, _ := os.ReadFile(filepath.Join(out, "book", "chap", "p", "index.html"))
+	body := string(html)
+	body = body[strings.Index(body, "<article"):strings.Index(body, "</article>")]
+	var got []string
+	for _, m := range regexp.MustCompile(`<h([1-6])[^>]*>([^<]*)`).FindAllStringSubmatch(body, -1) {
+		got = append(got, "h"+m[1]+" "+m[2])
+	}
+	want := []string{"h1 Title", "h2 A", "h3 Skipped to 4", "h3 Another 4", "h4 Deep", "h2 B", "h3 B1", "h2 Stray h1"}
+	if strings.Join(got, "|") != strings.Join(want, "|") {
+		t.Errorf("heading levels:\n got %v\nwant %v", got, want)
+	}
+	src, _ := os.ReadFile(filepath.Join(content, "book", "chap", "p.md"))
+	if string(src) != page {
+		t.Error("the Markdown file must not be changed")
 	}
 }

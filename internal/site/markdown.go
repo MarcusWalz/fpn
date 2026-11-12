@@ -54,6 +54,7 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 			}
 		}
 	}
+	fixHeadingLevels(doc)
 
 	srcDir := n.Rel
 	if !n.IsSection {
@@ -127,6 +128,28 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 		}
 	}
 	return template.HTML(out), toc, warns
+}
+
+// fixHeadingLevels makes heading levels go down one step at a time, as WCAG
+// (1.3.1) and screen-reader navigation expect. The page title is the only h1,
+// so body headings start at h2, and each heading is one level below the
+// heading it sits under, keeping the author's nesting: "## A / #### B /
+// #### C / ###### D" renders as h2, h3, h3, h4. Only the output changes; the
+// Markdown file is left as written.
+func fixHeadingLevels(doc ast.Node) {
+	var open []int // original levels of the headings we're currently inside
+	_ = ast.Walk(doc, func(node ast.Node, entering bool) (ast.WalkStatus, error) {
+		h, ok := node.(*ast.Heading)
+		if !ok || !entering {
+			return ast.WalkContinue, nil
+		}
+		for len(open) > 0 && open[len(open)-1] >= h.Level {
+			open = open[:len(open)-1]
+		}
+		open = append(open, h.Level)
+		h.Level = len(open) + 1 // h2 for top-level body headings
+		return ast.WalkSkipChildren, nil
+	})
 }
 
 // imageHasSource reports whether an image is credited: "Source:" appears in
