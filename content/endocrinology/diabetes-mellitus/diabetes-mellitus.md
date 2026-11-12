@@ -2,7 +2,8 @@
 title: Diabetes Mellitus
 ---
 
-## Screening
+#### Section 2: Diagnosis and Classification of Diabetes
+##### Screening
 
 **Table 2.1—Criteria for the diagnosis of diabetes in nonpregnant individuals** [@ADA_2026]
 
@@ -31,11 +32,11 @@ Any one of the following:
 *Notes on **when A1C may not be reliable**
     - “A1C is an indirect measure of glucose exposure, and factors that affect hemoglobin concentrations or erythrocyte turnover can affect A1C (e.g., thalassemia or folate deficiency) (Table 2.3). **A1C may not be a suitable diagnostic test in people with anemia, people treated with erythropoietin, or people undergoing hemodialysis or HIV treatment.**” [@ADA_2026, p. 529]
 
-## Diagnosis
+##### Diagnosis
 - Confirmatory tests are necessary to establish the diagnosis in the absence of clear clinical signs.  **Either 2 tests @ same time, or same test two different times**
 
-## Classification
-### Type 1 DM = Autoimmune B-cell destruction
+##### Classification
+###### Type 1 DM = Autoimmune B-cell destruction
 - Most useful features: Age <35; BMI <25; Unintentional weight loss; Ketoacidosis; Plasma glucose >360 mg/dL
 - Stage 1: Normoglycemia, non symptomatic; **2+ autoantibodies**. 5yr risk ~44%
     - **Screen all people w/ FHx of T1DM or other known genetic risk w/ IA, GAD, IA-2 and ZnT8**
@@ -47,7 +48,7 @@ Any one of the following:
 - Stage 2: **Dysglycemia**; non symptomatic; Multiple autoantibodies. 5yr risk 75%
 - Stage 3: Overt hyperglycemia; **symptomatic** May lose autoantibodies (b/c B cells are dead). 
 
-### Prediabetes and Type 2 DM - non autoimmune progressive loss of adequate B cell insulin secretion
+###### Prediabetes and Type 2 DM - non autoimmune progressive loss of adequate B cell insulin secretion
 
 **Table 2.5—Criteria for screening for diabetes or prediabetes in asymptomatic adults** [@ADA_2026]
 
@@ -55,7 +56,7 @@ Any one of the following:
     - FHx DM
     - High-risk race, ethnicity, and ancestry (e.g., African American, Latino, Native American, Asian American)
     - Hx CVD
-    - HTN
+    - [Hypertension](../../cardiovascular-medicine/hypertension/hypertension.md)
     - [Dyslipidemia](../../cardiovascular-medicine/hyperlipidemia/dyslipidemia.md)
     - PCOS
     - Physical inactivity
