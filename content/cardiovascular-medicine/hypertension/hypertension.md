@@ -1,5 +1,6 @@
 ---
 title: Hypertension
+aliases: []
 ---
 
 ## Overview
