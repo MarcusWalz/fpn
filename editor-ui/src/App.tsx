@@ -9,6 +9,7 @@ import BottomPanel from "./components/BottomPanel";
 import CaptionDialog, { type CaptionRequest } from "./components/CaptionDialog";
 import QuickOpen from "./components/QuickOpen";
 import Toasts, { type ToastMsg } from "./components/Toast";
+import Bedtime, { useBedtime } from "./components/Bedtime";
 import { IMG, dirOf, mdLink, pageSkeleton, relFrom, slugify } from "./lib/paths";
 import { diffStats } from "./lib/diff";
 
@@ -151,6 +152,8 @@ export default function App() {
   }, [path, text, isNew, toast]);
   const saveRef = useRef(save);
   saveRef.current = save;
+  // Overnight lock: save any unsaved work first, then cover the editor.
+  const bedtime = useBedtime(() => { if (dirtyRef.current) saveRef.current(); });
 
   useEffect(() => {
     if (dirty) setStatus((s) => (s.kind === "busy" ? s : { text: isNew ? "New file, not saved yet" : "Unsaved", kind: "dirty" }));
@@ -344,6 +347,7 @@ export default function App() {
       {caption && <CaptionDialog req={caption} />}
       {quick && <QuickOpen onClose={() => setQuick(false)} onOpen={(p) => { setQuick(false); openFile(p); }} />}
       <Toasts items={toasts} />
+      {bedtime && <Bedtime />}
     </div>
   );
 }
