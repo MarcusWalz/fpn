@@ -144,6 +144,12 @@ func TestHeadingLevelsFixed(t *testing.T) {
 	if strings.Join(got, "|") != strings.Join(want, "|") {
 		t.Errorf("heading levels:\n got %v\nwant %v", got, want)
 	}
+	// Each heading keeps a class for the level the author wrote, for styling.
+	for _, want := range []string{`<h3 id="skipped-to-4" class="md-h4">`, `<h4 id="deep" class="md-h6">`, `<h2 id="stray-h1" class="md-h1">`} {
+		if !strings.Contains(body, want) {
+			t.Errorf("missing %s", want)
+		}
+	}
 	src, _ := os.ReadFile(filepath.Join(content, "book", "chap", "p.md"))
 	if string(src) != page {
 		t.Error("the Markdown file must not be changed")

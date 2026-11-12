@@ -136,6 +136,10 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 // heading it sits under, keeping the author's nesting: "## A / #### B /
 // #### C / ###### D" renders as h2, h3, h3, h4. Only the output changes; the
 // Markdown file is left as written.
+//
+// Each heading also gets a class naming the level the author wrote ("md-h5"
+// for #####), so a level can be styled the same way on every page however
+// it was renumbered.
 func fixHeadingLevels(doc ast.Node) {
 	var open []int // original levels of the headings we're currently inside
 	_ = ast.Walk(doc, func(node ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -147,6 +151,13 @@ func fixHeadingLevels(doc ast.Node) {
 			open = open[:len(open)-1]
 		}
 		open = append(open, h.Level)
+		cls := fmt.Sprintf("md-h%d", h.Level)
+		if v, ok := h.AttributeString("class"); ok { // keep {.class} from the Markdown
+			if b, ok := v.([]byte); ok && len(b) > 0 {
+				cls = string(b) + " " + cls
+			}
+		}
+		h.SetAttributeString("class", []byte(cls))
 		h.Level = len(open) + 1 // h2 for top-level body headings
 		return ast.WalkSkipChildren, nil
 	})

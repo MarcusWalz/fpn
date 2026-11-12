@@ -328,6 +328,15 @@ img { max-width: 100%; height: auto; }
 .prose h3 { margin: 1.75rem 0 .6rem; font: 700 1.15rem/1.3 var(--font-head); color: var(--forest); }
 .prose h3::before { content: ""; display: inline-block; width: .5em; height: .5em; margin-right: .5em; background: var(--leaf); vertical-align: .12em; }
 .prose h4, .prose h5, .prose h6 { margin: 1.5rem 0 .5rem; font-size: 1.02rem; color: var(--forest); }
+/* ##### headings: a highlighted label, whatever level they render at */
+.prose .md-h5 {
+  width: fit-content; max-width: 100%;
+  margin: 1.75rem 0 .6rem; padding: .3rem .75rem .3rem .6rem;
+  font: 700 1.05rem/1.3 var(--font-head); color: var(--lime-ink);
+  background: var(--lime); border-left: 6px solid var(--leaf-ink);
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+.prose .md-h5::before { content: none; }
 .prose p, .prose ul, .prose ol, .prose dl, .prose table, .prose pre, .prose blockquote { margin: 0 0 1rem; }
 .prose ul, .prose ol { padding-left: 1.45rem; }
 .prose li { margin: .2rem 0; }
