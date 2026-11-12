@@ -10,11 +10,12 @@ interface Props {
   links: Problem[];
   current: string;
   onJump(p: Problem): void;
+  onFixLink(p: Problem): void;
   dirty: boolean;
   save(): Promise<void>;
 }
 
-export default function BottomPanel({ tab, onTab, onClose, problems, links, current, onJump, dirty, save }: Props) {
+export default function BottomPanel({ tab, onTab, onClose, problems, links, current, onJump, onFixLink, dirty, save }: Props) {
   return (
     <section className="panel" aria-label="Panel">
       <div className="panel-tabs" role="tablist">
@@ -32,7 +33,7 @@ export default function BottomPanel({ tab, onTab, onClose, problems, links, curr
       </div>
       <div className="panel-body">
         {tab === "problems" ? <Problems problems={problems} current={current} onJump={onJump} />
-          : tab === "links" ? <Problems problems={links} current={current} onJump={onJump} icon="link" empty="No missed links: every page that mentions another page links to it." />
+          : tab === "links" ? <Problems problems={links} current={current} onJump={onFixLink} icon="link" empty="No missed links: every page that mentions another page links to it." />
           : <Critique path={current} dirty={dirty} save={save} />}
       </div>
     </section>

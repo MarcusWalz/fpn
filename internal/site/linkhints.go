@@ -63,10 +63,12 @@ func linkSuggestions(tree *content.Tree) []Problem {
 				continue
 			}
 			if found := firstMention(lines, t.terms); found != "" {
+				link := `[` + found + `](` + relLink(src, t.node) + `)`
 				out = append(out, Problem{
 					Path:    src.Rel,
-					Message: `mentions "` + found + `" — link it to ` + t.node.Title + `: [` + found + `](` + relLink(src, t.node) + `)`,
+					Message: `mentions "` + found + `" — click to link it to ` + t.node.Title + `: ` + link,
 					Find:    found,
+					Replace: link,
 				})
 			}
 		}

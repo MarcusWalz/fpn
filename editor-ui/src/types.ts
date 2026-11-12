@@ -11,6 +11,8 @@ export interface Problem {
   path: string;
   message: string;
   find?: string;
+  /** Backlinks: the link that replaces `find` when the item is clicked. */
+  replace?: string;
 }
 
 export interface PreviewResult {

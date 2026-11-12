@@ -6,6 +6,7 @@ import FileTree, { DRAG_TYPE, type FileTreeHandle } from "./components/FileTree"
 import PreviewPane, { type PreviewHandle } from "./components/PreviewPane";
 import DiffPane from "./components/DiffPane";
 import BottomPanel from "./components/BottomPanel";
+import { findMention } from "./lib/mentions";
 import CaptionDialog, { type CaptionRequest } from "./components/CaptionDialog";
 import QuickOpen from "./components/QuickOpen";
 import Toasts, { type ToastMsg } from "./components/Toast";
@@ -166,6 +167,33 @@ export default function App() {
     try { setLinks(await api.linkSuggestions()); } catch { /* server restarting */ }
   }, []);
   useEffect(() => { refreshProblems(); const t = setInterval(refreshProblems, 3000); return () => clearInterval(t); }, [refreshProblems]);
+  // Backlinks: clicking a suggestion turns the mention into the link.
+  const pendingLink = useRef<Problem | null>(null);
+  function applyLink(p: Problem) {
+    const ed = editor.current;
+    if (!ed || !p.find || !p.replace) return;
+    const target = p.replace.slice(p.replace.indexOf("]("));
+    if (ed.getValue().includes(target)) { toast("Already linked. Save to update the Backlinks list."); return; }
+    const r = findMention(ed.getValue(), p.find);
+    if (!r) { toast(`Couldn't find "${p.find}" as plain text on this page any more.`, true); return; }
+    ed.replace(r.from, r.to, p.replace);
+    ed.select(r.from, r.from + p.replace.length);
+    toast("Link added. Save (⌘S) to keep it.");
+  }
+  useEffect(() => {
+    const p = pendingLink.current;
+    if (!p) return;
+    pendingLink.current = null;
+    if (p.path !== path) return;
+    const t = setTimeout(() => applyLink(p), 150);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadKey]);
+  const fixLink = (p: Problem) => {
+    if (!p.path || !p.replace) return jump(p);
+    if (p.path === path) applyLink(p);
+    else { pendingLink.current = p; openFile(p.path); }
+  };
   const jump = (p: Problem) => {
     if (!p.path) return;
     if (p.path === path) { findOnLoad.current = p.find || ""; selectFind(); } else openFile(p.path, p.find || "");
@@ -332,7 +360,7 @@ export default function App() {
               )}
             </section>
           </div>
-          {panel && <BottomPanel tab={panel} onTab={setPanel} onClose={() => setPanel(null)} problems={problems} links={links} current={path} onJump={jump} dirty={dirty} save={() => save()} />}
+          {panel && <BottomPanel tab={panel} onTab={setPanel} onClose={() => setPanel(null)} problems={problems} links={links} current={path} onJump={jump} onFixLink={fixLink} dirty={dirty} save={() => save()} />}
         </div>
       </div>
 

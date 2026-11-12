@@ -12,6 +12,8 @@ export interface MarkdownEditorHandle {
   /** Insert a block on its own lines after the line containing offset; returns the offset after it. */
   insertBlock(text: string, offset: number): number;
   select(from: number, to: number): void;
+  /** Replace the text between two offsets (one undo step). */
+  replace(from: number, to: number, text: string): void;
   /** First visible line, fractional (1-based). */
   topLine(): number;
   scrollToLine(line: number): void;
@@ -73,6 +75,11 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle, Props>(function Markdown
       ed.current!.revealPositionInCenterIfOutsideViewport(p);
       ed.current!.focus();
       return end;
+    },
+    replace(from, to, text) {
+      const m = model();
+      const a = m.getPositionAt(from), b = m.getPositionAt(to);
+      ed.current!.executeEdits("fpn", [{ range: new monaco.Range(a.lineNumber, a.column, b.lineNumber, b.column), text, forceMoveMarkers: true }]);
     },
     select(from, to) {
       const m = model();

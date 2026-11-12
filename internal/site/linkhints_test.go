@@ -31,12 +31,15 @@ func TestLinkSuggestions(t *testing.T) {
 	}
 	all := strings.Join(lines, "\n")
 	for _, want := range []string{
-		`endo/dm/diabetes.md | PMOS | mentions "PMOS" — link it to Polyendocrine Metabolic Ovarian Syndrome: [PMOS](../meta/pmos.md)`,
-		`endo/dm/diabetes.md | hypertension | mentions "hypertension" — link it to Hypertension: [hypertension](../../cardio/htn/hypertension.md)`,
+		`endo/dm/diabetes.md | PMOS | mentions "PMOS" — click to link it to Polyendocrine Metabolic Ovarian Syndrome: [PMOS](../meta/pmos.md)`,
+		`endo/dm/diabetes.md | hypertension | mentions "hypertension" — click to link it to Hypertension: [hypertension](../../cardio/htn/hypertension.md)`,
 	} {
 		if !strings.Contains(all, want) {
 			t.Errorf("missing %q in\n%s", want, all)
 		}
+	}
+	if got[0].Replace == "" || !strings.HasPrefix(got[0].Replace, "["+got[0].Find+"](") {
+		t.Errorf("replace = %q", got[0].Replace)
 	}
 	if len(got) != 2 { // pmos page already links to diabetes; code is ignored
 		t.Errorf("want 2 suggestions, got:\n%s", all)

@@ -455,6 +455,7 @@ type Problem struct {
 	Path    string `json:"path"` // content-relative source file ("" if unknown)
 	Message string `json:"message"`
 	Find    string `json:"find,omitempty"` // text to highlight in the file, e.g. the broken link target
+	Replace string `json:"replace,omitempty"` // Backlinks: the link that replaces Find when clicked
 }
 
 var quoted = regexp.MustCompile(`"([^"]+)"`)
