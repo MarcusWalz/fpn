@@ -58,7 +58,7 @@ Note: GDM, gestational diabetes mellitus; IFG, impaired fasting glucose; IGT, im
 - **Stage 2**: **Dysglycemia**; non symptomatic; 
 - **Stage 3**: Overt hyperglycemia; **symptomatic** 
 
-#### Prediabetes and Type 2 DM 
+#### Prediabetes and [Type 2 DM](type-2-diabetes-mellitus.md) 
 - non autoimmune progressive loss of adequate B cell insulin secretion
 
 #### Gestational DM
@@ -215,14 +215,13 @@ Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction
 #### Cognitive Impairment/Dementia
 - Significantly increased risk and rate of cognitive decline
 #### Dental Care
-- Periodontal disease is more severe in people w/ DM than those without and w/ higher A1c levels. 
-- Recommend to discuss oral health with all diabetics
-- Be aware of upcoming dental procedures as may need to monitor and adjust therapy during procedure
+- Periodontal disease is more severe in DM 
+- Discuss oral health with all diabetics
+- May need to monitor and adjust therapy during dental procedures
 #### Disability
-- Assess for disability and for decline in function yearly (ADLs and IADLs)
+- Assess for disability and functional decline annually (ADLs and IADLs)
 -  **Diabetic Peripheral Neuropathy** is a common complication which may lead to functional disability. Glycemic management helps in T1DM but not in T2DM
--  Microvascular complications leading to disability. 
-- Assess for  Frailty annually
+- Assess for  [Frailty](../../geriatric-medicine/frailty.md) annually
 - Behavioral Health -  Anxiety, Depression, Diabetes Distress
 	-  [Diabetes Distress Scale](https://www.mdcalc.com/calc/10523/diabetes-distress-scale-dds17$0) (DDS) 
 

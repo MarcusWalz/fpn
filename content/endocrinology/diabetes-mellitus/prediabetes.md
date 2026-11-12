@@ -34,7 +34,7 @@ Any one of the following:
 
 Note: GDM, [gestational diabetes mellitus](gestational-diabetes.md); IFG, impaired fasting glucose; IGT, impaired glucose tolerance.
 
-### Prevention of progression to T2DM
+### Prevention of progression to [T2DM](type-2-diabetes-mellitus.md)
 #### Lifestyle Behavior Change
 - Refer all prediabetic adults w/overweight/obesity to diabetes prevention program. Goal: Weight reduction of 5-7% + >150 min/week of physical activity
 - Recommend Mediterranean-style, plant-based, DASH, or low-carb diets to all w/ prediabetes
