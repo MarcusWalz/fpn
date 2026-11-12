@@ -98,6 +98,10 @@ func (b *builder) renderMarkdown(n *content.Node) (template.HTML, []Heading, []s
 				v.Destination = []byte(u)
 			} else {
 				warns = append(warns, fmt.Sprintf("%s: broken link %q", where, v.Destination))
+				if b.srcLines { // editor preview: show it, and let a click explain it
+					addClass(v, "broken-link")
+					v.SetAttributeString("title", []byte("Broken link: "+string(v.Destination)))
+				}
 			}
 		case *ast.Image:
 			if !imageHasSource(v, src) {

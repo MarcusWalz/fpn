@@ -84,6 +84,12 @@ func TestEditorAPIGuardsAndFiles(t *testing.T) {
 		!strings.Contains(w.Body.String(), "Live") || !strings.Contains(w.Body.String(), "broken link") {
 		t.Errorf("preview = %d %s", w.Code, w.Body)
 	}
+	if w := do("POST", "/__api/preview?path=book/chap/new.md", "---\ntitle: Live\n---\n\n[x](missing.md)\n", ed); !strings.Contains(w.Body.String(), `class=\"broken-link\"`) {
+		t.Errorf("preview should mark the broken link: %s", w.Body)
+	}
+	if w := do("GET", "/__api/files", "", ed); !strings.Contains(w.Body.String(), `"url":"/book/chap/new/"`) {
+		t.Errorf("files should carry page URLs: %s", w.Body)
+	}
 }
 
 func TestParseProblems(t *testing.T) {

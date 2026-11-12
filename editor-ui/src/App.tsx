@@ -283,6 +283,20 @@ export default function App() {
     editor.current?.scrollToLine(line);
   };
 
+  // A link clicked in the preview: notebook pages open here in the editor;
+  // anything else (external sites, the home page's extras) in a browser tab.
+  const onPreviewLink = async (url: URL, broken: boolean) => {
+    if (broken) { toast(`That link doesn't go anywhere yet: ${url.pathname.split("/").pop()}`, true); return; }
+    if (url.origin === location.origin) {
+      try {
+        const want = decodeURIComponent(url.pathname).replace(/\/?$/, "/");
+        const hit = (await api.files()).find((f) => decodeURIComponent(f.url).replace(/\/?$/, "/") === want);
+        if (hit) { openFile(hit.path); return; }
+      } catch { /* fall through to a browser tab */ }
+    }
+    window.open(url.href, "_blank", "noopener");
+  };
+
   // ---------- layout ----------
   const splitRef = useRef<HTMLDivElement>(null);
   const startDrag = (e: React.PointerEvent) => {
@@ -336,7 +350,7 @@ export default function App() {
               </div>
               <div className="tabcontent">
                 <div className="tabpane" hidden={leftTab !== "preview"}>
-                  <PreviewPane ref={previewRef} html={html} onScrollLine={onPreviewScrollLine}
+                  <PreviewPane ref={previewRef} html={html} pageKey={viewURL} onLink={onPreviewLink} onScrollLine={onPreviewScrollLine}
                     onLoad={() => editor.current && previewRef.current?.syncToLine(editor.current.topLine(), editor.current.lineCount(), true)} />
                 </div>
                 {diffMounted && (

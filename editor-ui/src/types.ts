@@ -24,6 +24,8 @@ export interface PreviewResult {
 export interface FileEntry {
   path: string;
   title: string;
+  /** The page's site URL, e.g. "/endocrinology/diabetes-mellitus/". */
+  url: string;
 }
 
 export interface CritiqueResult {
