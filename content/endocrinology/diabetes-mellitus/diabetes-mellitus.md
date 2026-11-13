@@ -334,85 +334,13 @@ Note: DPP-4, dipeptidyl peptidase 4; GLP-1, glucagon-like peptide 1; SGLT2, sodi
 - In T2DM - patch like insulin delivery works well. 
 - Continue CGMs and insulin pump when hospitalized as appropriate
 
-
-## Section 9: Pharmacologic Approaches to Glycemic Treatment
-### Approaches for T1DM
-
-![Flowchart: starting insulin in type 1 diabetes at 0.4 to 0.5 units/kg/day split between basal and prandial, reassessing with CGM or SMBG, then adjusting for hypoglycemia, fasting hyperglycemia or postprandial hyperglycemia](images/t1dm-insulin-initiation-and-adjustment.png)
-*Initiation and adjustment of insulin using multiple daily dosing in individuals with type 1 diabetes. Source: [@ADA_2026]*
-
-- Better glycemic control = less microvascular events
-- ==Insulin Replacement Plans== = ==Basal insulin== (30-50%) + ==mealtime insulin== (remainder)+ ==correction insulin==
-	- Total daily Insulin = 0.5units/kg/day is starting dose
-	- Basal insulin = Long Acting Analogue (LAA)
-
-**Table 9.1—Examples of subcutaneous insulin treatment plans** [@ADA_2026]
-
-| Plans | Timing and distribution | Advantages | Disadvantages | Adjusting doses |
-|---|---|---|---|---|
-| ***Plans that more closely mimic normal insulin secretion*** | | | | |
-| ==Insulin pump therapy==, including conventional CSII, sensor-augmented pump, low-glucose suspend; AID systems such as hybrid closed loop | Basal delivery of ==URAA or RAA; generally 30–50% of TDD.==<br>Mealtime and correction: ==URAA or RAA by bolus== based on ICR and/or ISF and target glucose, with premeal insulin ∼15 min before eating. | Can adjust basal rates for varying insulin sensitivity by time of day, for exercise, and for sick days.<br>Flexibility in meal timing and content.<br>Pump can deliver insulin in increments of fractions of units.<br>Potential for integration with CGM for AID systems.<br>TIR % highest and TBR % lowest with: hybrid closed-loop > low-glucose suspend > sensor-augmented open-loop > conventional CSII. | Most expensive plan.<br>Must continuously wear one or more devices.<br>Risk of rapid development of ketosis or DKA with interruption of insulin delivery.<br>Potential reactions to adhesives and site infections.<br>Most technically complex approach (harder for people with lower numeracy or literacy skills). | ==Mealtime insulin==: if carbohydrate counting is accurate, change ICR if glucose after meal consistently out of target.<br>==Correction insulin==: adjust ISF and/or target glucose if correction does not consistently bring glucose into range.<br>==Basal rates==: adjust based on overnight, fasting or daytime glucose outside of activity of URAA/RAA bolus.<br>==AID systems==: carbohydrate ratio, insulin on board, targets, and/or ISF may be adjusted, depending on the system; make sure to review and adjust manual mode settings, if available. |
-| ==MDI==: LAA + flexible doses of URAA or RAA at meals | ==LAA once daily== (insulin detemir or insulin glargine may require twice-daily dosing); generally 30–50% of TDD.<br>==Mealtime and correction:== URAA or RAA based on ICR and/or ISF and target glucose. | Can use pens for all components.<br>Flexibility in meal timing and content.<br>Insulin analogs cause less hypoglycemia than human insulins. | At least four daily injections.<br>Most costly insulins.<br>Smallest increment of insulin is 1 unit (0.5 unit with some pens).<br>LAAs may not cover strong dawn phenomenon (rise in glucose in early morning hours) as well as pump therapy. | Mealtime insulin: if carbohydrate counting is accurate, change ICR if glucose after meal consistently out of target.<br>Correction insulin: adjust ISF and/or target glucose if correction does not consistently bring glucose into range.<br>LAA: based on overnight or fasting glucose or daytime glucose outside of activity time course, or URAA or RAA injections. |
-| ***MDI plans with less flexibility*** | | | | |
-| ==Four injections daily with fixed doses of N and RAA== | ==Pre-breakfast: RAA ∼20%== of TDD. ==Pre-lunch: RAA ∼10%== of TDD.<br>==Pre-dinner: RAA ∼10%== of TDD.<br>==Bedtime: N ∼50%== of TDD. | May be feasible if ==unable to carbohydrate count==.<br>All meals have RAA coverage.<br>N is less expensive than LAAs. | Shorter duration RAA may lead to basal deficit during day; may need twice-daily N.<br>Greater risk of nocturnal hypoglycemia with N.<br>Requires relatively consistent mealtimes and carbohydrate intake. | Pre-breakfast RAA: based on BGM after breakfast or before lunch.<br>Pre-lunch RAA: based on BGM after lunch or before dinner.<br>Pre-dinner RAA: based on BGM after dinner or at bedtime.<br>Evening N: based on fasting or overnight BGM. |
-| ==Four injections daily with fixed doses of N and R== | Pre-breakfast: R ==∼20%== of TDD.<br>Pre-lunch: R ==∼10%== of TDD.<br>Pre-dinner: R ==∼10%== of TDD.<br>Bedtime: ==N ∼50%== of TDD. | May be feasible if ==unable to carbohydrate count==.<br>R can be dosed based on ICR and correction.<br>All meals have R coverage.<br>Least expensive insulins. | Greater risk of nocturnal hypoglycemia with N.<br>Greater risk of delayed post-meal hypoglycemia with R.<br>Requires relatively consistent mealtimes and carbohydrate intake.<br>R must be injected at least 30 min before meal for better effect. | Pre-breakfast R: based on BGM after breakfast or before lunch.<br>Pre-lunch R: based on BGM after lunch or before dinner.<br>Pre-dinner R: based on BGM after dinner or at bedtime.<br>Evening N: based on fasting or overnight BGM. |
-| ***==Plans with fewer daily injections==*** | | | | |
-| ==Three injections daily: N + R or N + RAA== | Pre-breakfast: ==N ∼40% TDD== + R or ==RAA ∼15%== TDD.<br>Pre-dinner: ==R or RAA ∼15%== TDD.<br>Bedtime: ==N ∼30%== TDD. | Morning insulins can be mixed in one syringe.<br>May be appropriate for those ==who cannot take injection in middle of day.==<br>Morning N covers lunch to some extent.<br>Same advantages of RAAs over R.<br>Least (N + R) or less expensive insulins than MDI with analogs. | ==Greater risk of nocturnal hypoglycemia with N than LAAs==.<br>Greater risk of delayed post-meal hypoglycemia with R than RAAs.<br>==Requires relatively consistent mealtimes and carbohydrate intake==.<br>Coverage of post-lunch glucose often suboptimal.<br>==R must be injected at least 30 min before meal for better effect.== | Morning N: based on pre-dinner BGM.<br>Morning R: based on pre-lunch BGM.<br>Morning RAA: based on post-breakfast or pre-lunch BGM.<br>Pre-dinner R: based on bedtime BGM.<br>Pre-dinner RAA: based on post-dinner or bedtime BGM.<br>Evening N: based on fasting BGM. |
-| ==Twice-daily “split-mixed”: N + R or N + RAA== | Pre-breakfast: N ==∼40%== TDD + ==R or RAA ∼15% TDD.==<br>Pre-dinner: ==N ∼30%== TDD + ==R or RAA ∼15% TDD.== | Least number of injections for people with strong preference for this.<br>Insulins can be mixed in one syringe.<br>Least (N + R) or less (N + RAA) expensive insulins vs. analogs.<br>Eliminates need for doses during the day. | ==Risk of hypoglycemia in afternoon or middle of night from N.==<br>Fixed mealtimes and meal content.<br>Coverage of post-lunch glucose often suboptimal.<br>==Difficult to reach targets for blood glucose without hypoglycemia.== | Morning N: based on pre-dinner BGM.<br>Morning R: based on pre-lunch BGM.<br>Morning RAA: based on post-breakfast or pre-lunch BGM.<br>Evening R: based on bedtime BGM.<br>Evening RAA: based on post-dinner or bedtime BGM.<br>Evening N: based on fasting BGM. |
-
-Note: AID, automated insulin delivery; BGM, blood glucose monitoring; CGM, continuous glucose monitoring; CSII, continuous subcutaneous insulin infusion; ICR, insulin-to-carbohydrate ratio; ISF, insulin sensitivity factor; LAA, long-acting analog; MDI, multiple daily injections; ==N, NPH insulin==; R, short-acting (regular) insulin; RAA, rapid-acting analog; TBR, time below range; TDD, total daily insulin dose; TIR, time in range; URAA, ultra-rapid-acting analog (inhaled insulin may be considered if appropriate). Adapted from Holt et al. (4).
-
-Non-insulin treatments
-- Pramlintide - amylin analogue
-- Liraglutide
-- SGLT2i 
-- Pancreas/Islet Transplantation
-### Approaches in T2DM
-
-![Flowchart: choosing glucose-lowering medications in type 2 diabetes. One path for cardiovascular and kidney risk reduction (ASCVD, high CVD risk, heart failure, CKD) using GLP-1 RA and SGLT2i; one for weight and glycemic goals, with medications ranked by efficacy; then agents for MASLD or MASH](images/t2dm-glucose-lowering-medications.png)
-*Use of glucose-lowering medications in the management of type 2 diabetes. Source: [@ADA_2026]*
-
-- Most common practice is to start with Metformin (although no CVD/CKD benefit) - pill, few side effects (GI), cheap
-- ==All T2DM adults w/ risk of ASCVD, HF +/- CKD therapy should  include SGLT2i or GLP1 regardless of A1c==
-- When A1c is >= 1.5% above goal use dual-combo therapy.
-- Start insulin when BG >=300mg/dL or A1c>10%
-- GLP1s are the best medication for CVD, CKD, and HF. SGLT2i (canagliflozin and empagliflozin) are next best.
-- MASLD or MASH: USe Pioglitazone + GLP1 (semaglutide)
-- Adding Insulin: 
-	- Start w/ basal insulin (0.1-0.2 u/kg/day)
-		- Purpose of Basal = restrain hepatic glucose production to limit hyperglycemia overnight/between meals
-		- Need to understand how to convert between two different basals, consider 10-20% dose reduction to prevent night time hypoglycemia
-		- Be aware of ==overbasalization== (masks insufficient prandial glucose). Signs  = high daily glucose variability (>50mg/dL), hypoglycemic events. 
-	- Basal + Prandial
-		- Start when fasting BG achieved but A1c still too high or w/ overbasalization
-		- Make sure are on GLP or GIP/GLP first before starting prandial!
-		- Start w/ single dose @ largest meal of the day. 4 units or 10% of basal insulin. 
-	- T2DMs typically require higher daily doses (~1u/kg) due to resistance and are not sensitive to human regular insulin like T1DMs.
-	- Delivery mechanisms: All insulins are available in more concentrated dosing. Pumps, patches, and inhaled options available.  
-#### Features of Medications for lowering glucose in T2DM
-
-| Medication                 | Glucose | Hypoglycemia | Weight | MACE | HF  | CKD | MASH | Considerations                                                                                                                                                                                                                                              |
-| -------------------------- | ------- | ------------ | ------ | ---- | --- | --- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Metformin (oral)           | ↓↓↓     | No           | ~<br>  | ↓    | ~   | ~   | ~    | GI side effects; B12 deficiency; cleared by kidneys                                                                                                                                                                                                         |
-| SGLT2i (oral)              | ↓↓↓     | No           | ↓↓     | ↓↓   | ↓↓  | ↓↓  | ?    | ==Canagliflozin== and ==empagliflozin== are best. Do not use w/ insulin deficiency. Pyelonephritis more common. Genital mycotic infections. Monitor for volume depletion. |
-| GLP1-RA (oral, sq)         | ↓↓↓     | No           | ↓↓↓    | ↓↓   | ↓↓  | ↓↓  | ↓    | ==Semaglutide== (sq) is best. Dulaglutide and Liraglutide are also good. Can use in CKD.                                                                                                                           |
-| Dual GIP and GLP-1 RA (sq) | ↓↓↓     | No           | ↓↓↓    | ?    | ↓↓  | ↓   | ↓    | ==Tirzepatide== appears best                                                                                                                                                                                       |
-| DPP4i (oral)               | ↓↓      | No           | ~      | ~    | ~   | ~   | ?    | Saxagliptin may worsen HF. Dose adjust for CKD                                                                                                                                                                                                              |
-| PIoglitazone (oral)        | ↓↓↓     | No           | ↑      | ↓    | ↑   | ~   | ↓    | ==Do not use in HF or hx bladder cancer.== Risk of fracture. ==Do not use w/GLPs==                                                                                         |
-| Sulfonylureas              | ↓↓↓     | Yes          | ↑      | ~    | ~   | ~   | ?    | Use w/ caution                                                                                                                                                                                                                                              |
-| Insulin                    | ↓↓↓     | Yes          | ↑      | ~    | ~   | ~   | ?    |                                                                                                                                                                                                                                                             |
-### Diabetes Technology
-- All DMs should be offered CGM if on therapy w/ risk of hypoglycemia.
-- Automated Insulin Delivery should be offered to all adults injecting insulin
-- Glucagon: all individuals on insulin should be prescribed premixed glucagon for an emergency. 
 ## Section 10: CVD risk managment
 - ASCVD-HF-CKD-DM are now called "Cardiorenal metabolic disease"
 - ==Treatment including SGLTi and GLP1 is considered a fundamental element of the CVD/CKD risk reduction strategy in DM==
 ### HTN and BP management 
 - Systolic >=130, Diastolic >=80
 - May want to consider intensive treatment down to <120/80 for people @ high risk. Data is pretty good that lower BP = lower CVD risk in DM. 
-- Lifestyle management
-	- Reduce body weight, increase activity, restrict Na+ to <2,300 mg/day, reduce or eliminate EtOH, follow DASH (ehh its fine)
+- **Lifestyle management**: Reduce body weight, increase activity, restrict Na+ to <2,300 mg/day, reduce or eliminate EtOH, follow DASH (ehh its fine)
 - Pharmacology
 	- Initial Treatment: ACE or ARB +/- Thiazide-diuretic +/- CCB.
 	- Resistant: Add Spironolactone or eplerenone
@@ -425,19 +353,15 @@ Non-insulin treatments
 - Lifestyle management 
 - Primary Prevention:
 	- Monitoring: Lipid panel q5 yrs if not on statin, annual if on statin
-	- Initiating Statin Therapy: <40 yrs w/o risk use Moderate. >40 yrs or w/ risk use High intensity.
-		- Intensification: Add Ezetimide or PCSK9i if needed. 
-- Secondary Prevention (established ASCVD)
-	- High intensity statins recommended w/Goal LDL<55mg/dL
+	- Initiating Statin Therapy: <40 yrs w/o risk use Moderate. >40 yrs or w/ risk use High intensity. Intensification = Add Ezetimide or PCSK9i if needed. 
+- Secondary Prevention (established ASCVD): High intensity statins recommended w/Goal LDL <55mg/dL
 ### Antiplatelet Agents
-- ==Asprin== - 81 mg seems fine
+- Asprin - 81 mg seems fine
 	- 1ª prevention: DM + age >50 + one other risk factor and NOT at risk of bleeding. Stop use when >70 yrs
-	- 2ª prevention: USE IT!
-- Aspirin + Clopidogrel (or Ticagrelor)
-	- After ACS w/ revascularization or Stroke
-- Aspirin + Rivaroxaban 2.5 mg
-	- Stable Coronary/PA disease
-### Cardiovascular Disease
+	- 2ª prevention: USE IT
+      - **Aspirin + Clopidogrel (or Ticagrelor)**: After ACS w/ revascularization or Stroke
+      - **Aspirin + Rivaroxaban** 2.5 mg: Stable Coronary/PA disease
+## Cardiovascular Disease
 - ASCVD
 	- If symptoms + abnormal EKG -> Stress EKG +/-ECHO
 		- CAC to guide risk assessment
@@ -466,18 +390,8 @@ Non-insulin treatments
 ## Section 11: CKD risk management
 ### Assess Albuminuria and eGFR
 
-**CKD classification by GFR and albuminuria categories** [@ADA_2026]
-
-| GFR category (mL/min/1.73 m²) | | A1: Normal to mildly increased (<30 mg/g; <3 mg/mmol) | A2: Moderately increased (30–299 mg/g; 3–29 mg/mmol) | A3: Severely increased (≥300 mg/g; ≥30 mg/mmol) |
-|---|---|---|---|---|
-| **G1** Normal or high | ≥90 | Screen, 1 (low risk) | Treat, 1 (moderate risk) | Treat and refer, 2 (high risk) |
-| **G2** Mildly decreased | 60–89 | Screen, 1 (low risk) | Treat, 1 (moderate risk) | Treat and refer, 2 (high risk) |
-| **G3a** Mildly to moderately decreased | 45–59 | Treat, 1 (moderate risk) | Treat, 2 (high risk) | Treat and refer, 3 (very high risk) |
-| **G3b** Moderately to severely decreased | 30–44 | Treat, 2 (high risk) | Treat and refer, 3 (very high risk) | Treat and refer, 3 (very high risk) |
-| **G4** Severely decreased | 15–29 | Treat and refer, 3 (very high risk) | Treat and refer, 3 (very high risk) | Treat and refer, 4+ (very high risk) |
-| **G5** Kidney failure | <15 | Treat and refer, 4+ (very high risk) | Treat and refer, 4+ (very high risk) | Treat and refer, 4+ (very high risk) |
-
-Note: CKD is classified based on GFR (G) and albuminuria (A). Risk is shown in words in place of the original colours: low risk (if no other markers of kidney disease, no CKD), moderately increased, high, and very high.
+![Grid of CKD risk by GFR category G1 to G5 (rows) and albuminuria category A1 to A3 (columns); each cell says screen, treat, or treat and refer with a number, colored green for low risk through yellow, orange and red for very high risk](images/ckd-classification-gfr-albuminuria.png)
+*CKD classification by GFR and albuminuria categories. Source: [@ADA_2026]*
 
 - Check Ur Albumin/Cr and eGFR annually. If abnormal check again in 3 mo, if still abnormal then consider person to have moderate/severely elevated albuminuria. 
 	- eGFR <60 +/- Ur Albumin/Cr >30 = abnormal

@@ -87,6 +87,8 @@ aliases: [T1DM, T1-DM, Type 1 DM]
 - ==Insulin Replacement Plans== = ==Basal insulin== (30-50%) + ==mealtime insulin== (remainder)+ ==correction insulin==
 	- Total daily Insulin = 0.5units/kg/day is starting dose
 	- Basal insulin = Long Acting Analogue (LAA)
+- All T1DMs should be offered CGM and AID
+- Glucagon: all individuals on insulin should be prescribed premixed glucagon for an emergency. 
 - Non-insulin treatments
   - Pramlintide - amylin analogue
   - Liraglutide

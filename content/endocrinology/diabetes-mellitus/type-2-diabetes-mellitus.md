@@ -148,4 +148,40 @@ aliases: [T2DM, Type 2 DM, T2 DM]
 
 Note: \*Time frames used in clinical trials. Medications approved for long-term use should be continued as indicated beyond reaching weight loss goals. †Phentermine was evaluated in a general adult population with obesity. As monotherapy, phentermine is only approved for short-term use. 
 
+## Pharmacology for Glycemic Control in T2DM
+
+![Flowchart: choosing glucose-lowering medications in type 2 diabetes. One path for cardiovascular and kidney risk reduction (ASCVD, high CVD risk, heart failure, CKD) using GLP-1 RA and SGLT2i; one for weight and glycemic goals, with medications ranked by efficacy; then agents for MASLD or MASH](images/t2dm-glucose-lowering-medications.png)
+*Use of glucose-lowering medications in the management of type 2 diabetes. Source: [@ADA_2026]*
+
+- Most common practice is to start with Metformin (although no CVD/CKD benefit) - pill, few side effects (GI), cheap
+- ==All T2DM adults w/ risk of ASCVD, HF +/- CKD therapy should  include SGLT2i or GLP1 regardless of A1c==
+- When A1c is >= 1.5% above goal use SGLT2i adn GLP1 therapy.
+- CVD, CKD, HF: GLP/GIPs > GLP1s > SGLT2i (canagliflozin and empagliflozin).
+- MASLD or MASH: Use Pioglitazone + GLP1 (semaglutide)
+- Start **insulin** when BG >=300mg/dL or A1c>10%
+	- Start w/ basal insulin (0.1-0.2 u/kg/day)
+		- Purpose of Basal = restrain hepatic glucose production to limit hyperglycemia overnight/between meals
+		- Need to understand how to convert between two different basals, consider 10-20% dose reduction to prevent night time hypoglycemia
+		- Be aware of ==overbasalization== (masks insufficient prandial glucose). Signs  = high daily glucose variability (>50mg/dL), hypoglycemic events. 
+  - Basal + Prandial
+    - Start when fasting BG achieved but A1c still too high or w/ overbasalization
+    - Make sure are on GLP or GIP/GLP first before starting prandial!
+    - Start w/ single dose @ largest meal of the day. 4 units or 10% of basal insulin. 
+  - T2DMs typically require higher daily doses (~1u/kg) due to resistance and are not sensitive to human regular insulin like T1DMs.
+  - Delivery mechanisms: All insulins are available in more concentrated dosing. Pumps, patches, and inhaled options available. 
+  - All T2DMs using insulin should be offered CGM and AID if injecting insulin
+  - Glucagon: all individuals on insulin should be prescribed premixed glucagon for an emergency. 
+#### Features of Medications for lowering glucose in T2DM
+
+| Medication                 | Glucose | Hypoglycemia | Weight | MACE | HF  | CKD | MASH | Considerations                                                                                                                                                                                                                                              |
+| -------------------------- | ------- | ------------ | ------ | ---- | --- | --- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Metformin (oral)           | ↓↓↓     | No           | ~<br>  | ↓    | ~   | ~   | ~    | GI side effects; B12 deficiency; cleared by kidneys                                                                                                                                                                                                         |
+| SGLT2i (oral)              | ↓↓↓     | No           | ↓↓     | ↓↓   | ↓↓  | ↓↓  | ?    | ==Canagliflozin== and ==empagliflozin== are best. Do not use w/ insulin deficiency. Pyelonephritis more common. Genital mycotic infections. Monitor for volume depletion. |
+| GLP1-RA (oral, sq)         | ↓↓↓     | No           | ↓↓↓    | ↓↓   | ↓↓  | ↓↓  | ↓    | ==Semaglutide== (sq) is best. Dulaglutide and Liraglutide are also good. Can use in CKD.                                                                                                                           |
+| Dual GIP and GLP-1 RA (sq) | ↓↓↓     | No           | ↓↓↓    | ?    | ↓↓  | ↓   | ↓    | ==Tirzepatide== appears best                                                                                                                                                                                       |
+| DPP4i (oral)               | ↓↓      | No           | ~      | ~    | ~   | ~   | ?    | Saxagliptin may worsen HF. Dose adjust for CKD                                                                                                                                                                                                              |
+| PIoglitazone (oral)        | ↓↓↓     | No           | ↑      | ↓    | ↑   | ~   | ↓    | ==Do not use in HF or hx bladder cancer.== Risk of fracture. ==Do not use w/GLPs==                                                                                         |
+| Sulfonylureas              | ↓↓↓     | Yes          | ↑      | ~    | ~   | ~   | ?    | Use w/ caution                                                                                                                                                                                                                                              |
+| Insulin                    | ↓↓↓     | Yes          | ↑      | ~    | ~   | ~   | ?    |                                                                                                                                                                                                                                                             |
+
 
