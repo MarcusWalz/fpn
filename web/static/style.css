@@ -480,6 +480,8 @@ img { max-width: 100%; height: auto; }
 .prose blockquote > :last-child { margin-bottom: 0; }
 .prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .95rem; line-height: var(--lh); }
 /* ==highlight== in Markdown renders as <mark> */
+/* <span class="nowrap">: keep each line of a table cell on one line (widens that column) */
+.prose .nowrap { white-space: nowrap; }
 .prose mark { background: var(--lime); color: var(--lime-ink); padding: 0 .15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
 /* a "Note:" paragraph right after a table: smaller, tucked under it */
