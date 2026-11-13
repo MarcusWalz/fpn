@@ -15,15 +15,20 @@ export interface FileTreeHandle {
 
 interface Props {
   current: string;
-  isDirty(): boolean;
-  onOpen(path: string): void;
+  /** Unsaved changes in any open file at or under this path? */
+  isDirty(path: string): boolean;
+  /** Open a file; pin = keep its tab (double-click) instead of a temporary one. */
+  onOpen(path: string, pin?: boolean): void;
+  /** A file or folder was moved/renamed or deleted: open tabs follow it. */
+  onMoved(from: string, to: string): void;
+  onDeleted(path: string): void;
   toast(msg: string, error?: boolean): void;
 }
 
 const load = <T,>(k: string, d: T): T => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
 const store = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } };
 
-const FileTree = forwardRef<FileTreeHandle, Props>(function FileTree({ current, isDirty, onOpen, toast }, ref) {
+const FileTree = forwardRef<FileTreeHandle, Props>(function FileTree({ current, isDirty, onOpen, onMoved, onDeleted, toast }, ref) {
   const [data, setData] = useState<TreeEntry | null>(null);
   const [status, setStatus] = useState<Record<string, string>>({});
   const [open, setOpen] = useState<Set<string>>(() => new Set(load<string[]>("fpn-tree-open", [])));
@@ -96,12 +101,11 @@ const FileTree = forwardRef<FileTreeHandle, Props>(function FileTree({ current, 
 
   // ---- actions ----
   async function move(from: string, to: string) {
-    if ((current === from || current.startsWith(from + "/")) && isDirty()) { toast("Save your changes before moving the open file.", true); return; }
+    if (isDirty(from)) { toast("Save your changes before moving an open file.", true); return; }
     try {
       await api.move(from, to);
       toast(`Moved to ${to}. Links to the old path will break; the Problems panel will list them.`);
-      if (current === from) return onOpen(to);
-      if (current.startsWith(from + "/")) return onOpen(to + current.slice(from.length));
+      onMoved(from, to);
       withOpen((s) => s.add(dirOf(to)));
       reload();
     } catch (e) { toast("Move failed: " + (e as Error).message, true); }
@@ -150,7 +154,7 @@ const FileTree = forwardRef<FileTreeHandle, Props>(function FileTree({ current, 
     try {
       await api.remove(e.path);
       toast(`Deleted ${e.path}`);
-      if (current === e.path || current.startsWith(e.path + "/")) return onOpen(join(dirOf(e.path), "_index.md"));
+      onDeleted(e.path);
       reload();
     } catch (err) { toast("Delete failed: " + (err as Error).message, true); }
   }
@@ -221,6 +225,7 @@ const FileTree = forwardRef<FileTreeHandle, Props>(function FileTree({ current, 
           title={e.path}
           draggable
           onClick={() => clickRow(e)}
+          onDoubleClick={() => { if (!e.dir && e.name.endsWith(".md")) onOpen(e.path, true); }}
           onDragStart={(ev) => {
             ev.dataTransfer.setData(DRAG_TYPE, JSON.stringify({ path: e.path, dir: !!e.dir, title: e.title || "" }));
             ev.dataTransfer.setData("text/plain", e.path);

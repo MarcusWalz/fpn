@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as api from "./api";
 import type { Problem } from "./types";
-import MarkdownEditor, { type MarkdownEditorHandle } from "./components/MarkdownEditor";
+import MarkdownEditor, { disposeModel, type MarkdownEditorHandle } from "./components/MarkdownEditor";
+import EditorTabs, { tabLabel } from "./components/EditorTabs";
 import FileTree, { DRAG_TYPE, type FileTreeHandle } from "./components/FileTree";
 import PreviewPane, { type PreviewHandle } from "./components/PreviewPane";
 import DiffPane from "./components/DiffPane";
@@ -12,20 +13,33 @@ import QuickOpen from "./components/QuickOpen";
 import Toasts, { type ToastMsg } from "./components/Toast";
 import Bedtime, { useBedtime } from "./components/Bedtime";
 import Hudson from "./components/Hudson";
-import { IMG, dirOf, mdLink, pageSkeleton, relFrom, slugify } from "./lib/paths";
+import { IMG, dirOf, join, mdLink, pageSkeleton, relFrom, slugify } from "./lib/paths";
 import { diffStats } from "./lib/diff";
 
 const pathFromURL = () => (new URLSearchParams(location.search).get("path") || "_index.md").replace(/^\/+|^content\//g, "");
 const ls = { get: (k: string) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k: string, v: string) => { try { localStorage.setItem(k, v); } catch { /* ignore */ } } };
 
+// One open file. `text` follows the editor's model; `saved` is what's on disk.
+interface Doc { text: string; saved: string; head: string | null; isNew: boolean; mtime: string }
+const isDirtyDoc = (d?: Doc) => !!d && (d.text !== d.saved || d.isNew);
+const loadTabs = (): string[] => { try { const v = JSON.parse(ls.get("fpn-tabs") || "[]"); return Array.isArray(v) ? v.filter((x) => typeof x === "string") : []; } catch { return []; } };
+
 export default function App() {
-  const [path, setPath] = useState(pathFromURL);
-  const [loadKey, setLoadKey] = useState(0);
-  const [initial, setInitial] = useState<string | null>(null);
-  const [text, setText] = useState("");
-  const [saved, setSaved] = useState("");
-  const [isNew, setIsNew] = useState(false);
-  const mtime = useRef("");
+  // ---------- open files (tabs) ----------
+  const [path, setPath] = useState(pathFromURL); // the active tab
+  const [tabs, setTabs] = useState<string[]>(() => { const t = loadTabs(), p = pathFromURL(); return t.includes(p) ? t : [...t, p]; });
+  const [transient, setTransient] = useState<string | null>(null); // replaced by the next file opened
+  const [docs, setDocs] = useState<Record<string, Doc>>({});
+  const [loadKey, setLoadKey] = useState(0); // bumps when a file is shown (find-on-load, pending link)
+  const doc = docs[path] as Doc | undefined;
+  const text = doc?.text ?? "", saved = doc?.saved ?? "", head = doc?.head ?? null, isNew = doc?.isNew ?? false;
+  // The file in the editor: the active one once it has loaded, else the last one shown.
+  const shownRef = useRef<string | null>(null);
+  if (doc) shownRef.current = path;
+  const shown = shownRef.current;
+  const pathRef = useRef(path), tabsRef = useRef(tabs), docsRef = useRef(docs), transientRef = useRef(transient);
+  pathRef.current = path; tabsRef.current = tabs; docsRef.current = docs; transientRef.current = transient;
+
   const [status, setStatus] = useState<{ text: string; kind?: "dirty" | "error" | "busy" }>({ text: "Loading…" });
   const [html, setHtml] = useState("");
   const [viewURL, setViewURL] = useState("/");
@@ -33,7 +47,6 @@ export default function App() {
   const [leftTab, setLeftTab] = useState<"preview" | "diff">((ls.get("fpn-left-tab") as "preview" | "diff") || "preview");
   const [diffBase, setDiffBase] = useState<"head" | "saved">((ls.get("fpn-diff-base") as "head" | "saved") || "head");
   const [sideBySide, setSideBySide] = useState(ls.get("fpn-diff-sbs") === "1");
-  const [head, setHead] = useState<string | null>(null);
   const [savedTick, setSavedTick] = useState(0);
   const [hudsonOut, setHudsonOut] = useState(() => { try { return localStorage.getItem("fpn-hudson") === "out"; } catch { return false; } });
   const toggleHudson = () => setHudsonOut((v) => { try { localStorage.setItem("fpn-hudson", v ? "in" : "out"); } catch { /* fine */ } return !v; });
@@ -57,9 +70,11 @@ export default function App() {
   const treeRef = useRef<FileTreeHandle>(null);
   const editorQuietUntil = useRef(0);
   const findOnLoad = useRef(new URLSearchParams(location.search).get("find") || "");
-  const dirty = text !== saved || (isNew && initial !== null);
+  const dirty = isDirtyDoc(doc);
   const dirtyRef = useRef(dirty);
   dirtyRef.current = dirty;
+  const isDirtyPath = useCallback((p: string) => isDirtyDoc(docsRef.current[p]), []);
+  const anyDirtyUnder = (prefix: string) => tabsRef.current.some((t) => (t === prefix || t.startsWith(prefix + "/")) && isDirtyPath(t));
   const pageDir = dirOf(path);
 
   const toast = useCallback((t: string, error = false) => {
@@ -68,45 +83,118 @@ export default function App() {
     setTimeout(() => setToasts((xs) => xs.filter((x) => x.id !== id)), error ? 6000 : 3500);
   }, []);
 
-  // ---------- navigation & loading ----------
-  const openFile = useCallback((p: string, find = "") => {
-    if (p === path && !find) return;
-    if (dirtyRef.current && !confirm("You have unsaved changes in this page. Leave without saving?")) return;
-    const url = `?path=${encodeURIComponent(p)}${find ? "&find=" + encodeURIComponent(find) : ""}`;
-    history.pushState(null, "", url);
-    findOnLoad.current = find;
-    if (p === path) { selectFind(); return; }
-    setPath(p);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
+  useEffect(() => { ls.set("fpn-tabs", JSON.stringify(tabs.slice(-30))); }, [tabs]);
+  // Editing a temporary tab keeps it.
+  useEffect(() => { if (dirty && transient === path) setTransient(null); }, [dirty, transient, path]);
 
-  useEffect(() => {
-    const onPop = () => { findOnLoad.current = new URLSearchParams(location.search).get("find") || ""; setPath(pathFromURL()); };
-    addEventListener("popstate", onPop);
-    return () => removeEventListener("popstate", onPop);
+  const patchDoc = useCallback((p: string, patch: Partial<Doc>) =>
+    setDocs((ds) => (ds[p] ? { ...ds, [p]: { ...ds[p], ...patch } } : ds)), []);
+  /** Forget a closed file: its text and its editor model (once it's off screen). */
+  const forget = useCallback((p: string) => {
+    setDocs((ds) => { if (!(p in ds)) return ds; const r = { ...ds }; delete r[p]; return r; });
+    setTimeout(() => { if (!tabsRef.current.includes(p) && shownRef.current !== p) disposeModel(p); }, 500);
   }, []);
 
+  // ---------- navigation & loading ----------
+  /** Show p, adding a tab for it if needed. A new tab goes after the active one,
+   *  or replaces the temporary tab if that one is untouched. */
+  const activate = useCallback((p: string, opts: { pin?: boolean; history?: "push" | "replace" | "none"; find?: string } = {}) => {
+    findOnLoad.current = opts.find || "";
+    const ts = tabsRef.current, cur = pathRef.current, tr = transientRef.current;
+    if (!ts.includes(p)) {
+      let next: string[];
+      if (tr && tr !== p && ts.includes(tr) && !isDirtyPath(tr)) { next = ts.map((x) => (x === tr ? p : x)); forget(tr); }
+      else { next = [...ts]; next.splice(ts.indexOf(cur) + 1, 0, p); }
+      setTabs(next);
+      setTransient(opts.pin ? null : p);
+    } else if (opts.pin && tr === p) setTransient(null);
+    if (opts.history !== "none") {
+      const url = `?path=${encodeURIComponent(p)}${opts.find ? "&find=" + encodeURIComponent(opts.find) : ""}`;
+      if (opts.history === "replace") history.replaceState(null, "", url); else if (p !== cur || opts.find) history.pushState(null, "", url);
+    }
+    if (p === cur) { if (opts.find) selectFind(); return; }
+    setPath(p);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forget, isDirtyPath]);
+  const openFile = useCallback((p: string, find = "", pin = false) => activate(p, { find, pin }), [activate]);
+  const activateRef = useRef(activate);
+  activateRef.current = activate;
+
+  const closeTab = useCallback((p: string) => {
+    const ts = tabsRef.current;
+    if (ts.length <= 1 || !ts.includes(p)) return;
+    if (isDirtyPath(p) && !confirm(`${tabLabel(p)} has unsaved changes.\n\nClose it and lose them?`)) return;
+    const i = ts.indexOf(p), rest = ts.filter((x) => x !== p);
+    setTabs(rest);
+    if (transientRef.current === p) setTransient(null);
+    if (p === pathRef.current) activate(rest[Math.min(i, rest.length - 1)], { history: "replace" });
+    forget(p);
+  }, [activate, forget, isDirtyPath]);
+
+  // The file tree moved or deleted something: tabs follow (they're never dirty here).
+  const onMoved = useCallback((from: string, to: string) => {
+    const map = (t: string) => (t === from ? to : t.startsWith(from + "/") ? to + t.slice(from.length) : t);
+    const ts = tabsRef.current;
+    if (!ts.some((t) => map(t) !== t)) return;
+    ts.forEach((t) => { if (map(t) !== t) forget(t); });
+    const next = ts.map(map).filter((t, i, a) => a.indexOf(t) === i);
+    setTabs(next);
+    if (transientRef.current) setTransient(map(transientRef.current));
+    const cur = pathRef.current;
+    if (map(cur) !== cur) { tabsRef.current = next; activate(map(cur), { history: "replace" }); }
+  }, [activate, forget]);
+  const onDeleted = useCallback((p: string) => {
+    const gone = (t: string) => t === p || t.startsWith(p + "/");
+    const ts = tabsRef.current;
+    if (!ts.some(gone)) return;
+    ts.filter(gone).forEach(forget);
+    let rest = ts.filter((t) => !gone(t));
+    const cur = pathRef.current;
+    if (gone(cur)) {
+      const i = ts.indexOf(cur);
+      const next = rest.length ? rest[Math.min(i, rest.length - 1)] : join(dirOf(p), "_index.md");
+      if (!rest.length) rest = [next];
+      setTabs(rest); tabsRef.current = rest;
+      activate(next, { history: "replace" });
+    } else setTabs(rest);
+  }, [activate, forget]);
+
   useEffect(() => {
-    let cancelled = false;
+    const onPop = () => activate(pathFromURL(), { history: "none", find: new URLSearchParams(location.search).get("find") || "" });
+    addEventListener("popstate", onPop);
+    return () => removeEventListener("popstate", onPop);
+  }, [activate]);
+
+  // Load the active file the first time it's shown.
+  const loading = useRef(new Set<string>());
+  useEffect(() => {
+    const p = path;
+    document.title = `${p} · fpn editor`;
+    if (docsRef.current[p] || loading.current.has(p)) return;
+    loading.current.add(p);
     setStatus({ text: "Loading…" });
     (async () => {
       try {
-        const f = await api.loadFile(path);
-        if (cancelled) return;
-        const t = f.isNew ? pageSkeleton(new URLSearchParams(location.search).get("title") || path.split("/").pop()!.replace(/\.md$/i, "").replace(/[-_]+/g, " ").replace(/^./, (c) => c.toUpperCase()), path.endsWith("_index.md")) : f.text;
-        mtime.current = f.mtime;
-        setIsNew(f.isNew);
-        setInitial(t);
-        setText(t);
-        setSaved(f.isNew ? "" : t);
-        setLoadKey((k) => k + 1);
-        setStatus(f.isNew ? { text: "New file, not saved yet", kind: "dirty" } : { text: "Saved" });
-        setHead(await api.gitShow(path));
-        document.title = `${path} · fpn editor`;
-      } catch (e) { setStatus({ text: "Couldn't open file", kind: "error" }); toast((e as Error).message, true); }
+        const f = await api.loadFile(p);
+        const t = f.isNew ? pageSkeleton(new URLSearchParams(location.search).get("title") || p.split("/").pop()!.replace(/\.md$/i, "").replace(/[-_]+/g, " ").replace(/^./, (c) => c.toUpperCase()), p.endsWith("_index.md")) : f.text;
+        const h = f.isNew ? null : await api.gitShow(p).catch(() => null);
+        if (!tabsRef.current.includes(p)) return; // closed while loading
+        setDocs((ds) => (ds[p] ? ds : { ...ds, [p]: { text: t, saved: f.isNew ? "" : t, head: h, isNew: f.isNew, mtime: f.mtime } }));
+      } catch (e) {
+        if (p === pathRef.current) setStatus({ text: "Couldn't open file", kind: "error" });
+        toast(`${p}: ${(e as Error).message}`, true);
+      } finally { loading.current.delete(p); }
     })();
-    return () => { cancelled = true; };
   }, [path, toast]);
+
+  // Each time a file comes on screen: its status, and any pending find.
+  const ready = !!doc;
+  useEffect(() => {
+    if (!ready) return;
+    const d = docsRef.current[path];
+    setStatus(isDirtyDoc(d) ? { text: d.isNew ? "New file, not saved yet" : "Unsaved", kind: "dirty" } : { text: "Saved" });
+    setLoadKey((k) => k + 1);
+  }, [path, ready]);
 
   function selectFind() {
     const f = findOnLoad.current;
@@ -120,7 +208,7 @@ export default function App() {
   // ---------- preview, diff stats ----------
   const previewSeq = useRef(0);
   useEffect(() => {
-    if (initial === null) return;
+    if (!ready) return;
     const seq = ++previewSeq.current;
     const t = setTimeout(async () => {
       try {
@@ -131,36 +219,40 @@ export default function App() {
       setStats(diffStats(diffBase === "head" ? head ?? "" : saved, text));
     }, 200);
     return () => clearTimeout(t);
-  }, [text, path, initial, head, diffBase, saved, previewTick]);
+  }, [text, path, ready, head, diffBase, saved, previewTick]);
 
   // ---------- save ----------
-  const save = useCallback(async (force = false) => {
-    if (!dirtyRef.current && !force) return;
-    const body = editor.current?.getValue() ?? text;
-    setStatus({ text: "Saving…", kind: "busy" });
+  const save = useCallback(async (p: string = pathRef.current, force = false): Promise<void> => {
+    const d = docsRef.current[p];
+    if (!d || (!isDirtyDoc(d) && !force)) return;
+    const active = p === pathRef.current;
+    const body = p === shownRef.current && editor.current ? editor.current.getValue() : d.text;
+    if (active) setStatus({ text: "Saving…", kind: "busy" });
     try {
-      const wasNew = isNew;
-      mtime.current = await api.saveFile(path, body, force ? "" : mtime.current);
-      setSaved(body); setText(body); setIsNew(false);
-      setStatus({ text: "Saved ✓" });
-      setSavedTick((n) => n + 1);
-      setTimeout(() => (wasNew ? treeRef.current?.reload() : treeRef.current?.refreshStatus()), 300);
+      const m = await api.saveFile(p, body, force ? "" : d.mtime);
+      // Only `saved` moves: anything typed while saving stays unsaved.
+      patchDoc(p, { saved: body, isNew: false, mtime: m });
+      if (p === pathRef.current) { setStatus({ text: "Saved ✓" }); setSavedTick((n) => n + 1); }
+      setTimeout(() => (d.isNew ? treeRef.current?.reload() : treeRef.current?.refreshStatus()), 300);
       setTimeout(refreshProblems, 1500);
     } catch (e) {
       if (e instanceof api.ConflictError) {
-        setStatus({ text: "Conflict", kind: "error" });
-        if (confirm("This file changed on disk since you opened it (another editor, or git).\n\nOverwrite it with your version?")) return save(true);
+        if (active) setStatus({ text: "Conflict", kind: "error" });
+        if (confirm(`${p} changed on disk since you opened it (another editor, or git).\n\nOverwrite it with your version?`)) return save(p, true);
         return;
       }
-      setStatus({ text: "Save failed", kind: "error" });
-      toast("Save failed: " + (e as Error).message, true);
+      if (active) setStatus({ text: "Save failed", kind: "error" });
+      toast(`Save failed (${tabLabel(p)}): ${(e as Error).message}`, true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path, text, isNew, toast]);
-  const saveRef = useRef(save);
-  saveRef.current = save;
-  // Overnight lock: save any unsaved work first, then cover the editor.
-  const bedtime = useBedtime(() => { if (dirtyRef.current) saveRef.current(); });
+  }, [patchDoc, toast]);
+  const saveAll = useCallback(async () => {
+    for (const t of tabsRef.current) if (isDirtyPath(t)) await save(t);
+  }, [save, isDirtyPath]);
+  const saveRef = useRef(save), saveAllRef = useRef(saveAll), closeRef = useRef(closeTab);
+  saveRef.current = save; saveAllRef.current = saveAll; closeRef.current = closeTab;
+  // Overnight lock: save every unsaved file first, then cover the editor.
+  const bedtime = useBedtime(() => { saveAllRef.current(); });
 
   useEffect(() => {
     if (dirty) setStatus((s) => (s.kind === "busy" ? s : { text: isNew ? "New file, not saved yet" : "Unsaved", kind: "dirty" }));
@@ -208,11 +300,20 @@ export default function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const mod = e.metaKey || e.ctrlKey;
-      if (mod && e.key.toLowerCase() === "s") { e.preventDefault(); saveRef.current(); }
+      const alt = e.altKey && !e.ctrlKey;
+      // ⌥ shortcuts use e.code: on a Mac, ⌥ changes the character (⌥W is ∑).
+      if (mod && alt && e.code === "KeyS") { e.preventDefault(); e.stopPropagation(); saveAllRef.current(); }
+      else if (mod && e.key.toLowerCase() === "s") { e.preventDefault(); saveRef.current(); }
+      else if (alt && !e.metaKey && e.code === "KeyW") { e.preventDefault(); e.stopPropagation(); closeRef.current(pathRef.current); }
+      else if (alt && !e.metaKey && (e.code === "BracketLeft" || e.code === "BracketRight")) {
+        e.preventDefault(); e.stopPropagation();
+        const ts = tabsRef.current, i = ts.indexOf(pathRef.current);
+        activateRef.current(ts[(i + (e.code === "BracketRight" ? 1 : ts.length - 1)) % ts.length]);
+      }
       else if (mod && e.key.toLowerCase() === "p" && !e.shiftKey) { e.preventDefault(); setQuick(true); }
       else if (mod && e.key === "j") { e.preventDefault(); setPanel((p) => (p ? null : "problems")); }
     };
-    const onUnload = (e: BeforeUnloadEvent) => { if (dirtyRef.current) { e.preventDefault(); e.returnValue = ""; } };
+    const onUnload = (e: BeforeUnloadEvent) => { if (tabsRef.current.some((t) => isDirtyDoc(docsRef.current[t]))) { e.preventDefault(); e.returnValue = ""; } };
     addEventListener("keydown", onKey, true);
     addEventListener("beforeunload", onUnload);
     return () => { removeEventListener("keydown", onKey, true); removeEventListener("beforeunload", onUnload); };
@@ -336,7 +437,7 @@ export default function App() {
       </header>
 
       <div className="main">
-        {!treeHidden && <FileTree ref={treeRef} current={path} isDirty={() => dirtyRef.current} onOpen={(p) => openFile(p)} toast={toast} />}
+        {!treeHidden && <FileTree ref={treeRef} current={path} isDirty={anyDirtyUnder} onOpen={(p, pin) => openFile(p, "", pin)} onMoved={onMoved} onDeleted={onDeleted} toast={toast} />}
         <div className="editor-area">
           <div className={"split" + (narrowPreview ? " narrow-preview" : "")} ref={splitRef} style={{ gridTemplateColumns: `${split} 6px 1fr` }}>
             <section className="left" aria-label="Preview and diff">
@@ -366,11 +467,12 @@ export default function App() {
             <section className="right" aria-label="Markdown editor"
               onDragOverCapture={onEditorDragOver} onDropCapture={onEditorDrop} onPasteCapture={onEditorPaste}
               onDragLeave={(e) => { if (!(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) setDropHint(""); }}>
-              <div className="tabbar"><div className="tab active file-tab"><span className="codicon codicon-markdown" /> {path.split("/").pop()}{dirty && <span className="dot">●</span>}</div></div>
+              <EditorTabs tabs={tabs} active={path} transient={transient} isDirty={isDirtyPath}
+                onSelect={(p) => activate(p)} onClose={closeTab} onPin={(p) => { if (transient === p) setTransient(null); }} onReorder={setTabs} />
               <div className="monaco-host">
-                {initial !== null && (
-                  <MarkdownEditor key={loadKey} ref={editor} initialValue={initial} onChange={setText} onSave={() => saveRef.current()}
-                    onScroll={onEditorScroll} onCursor={(line, col) => setCursor({ line, col })} />
+                {shown && (
+                  <MarkdownEditor ref={editor} file={shown} initialValue={docs[shown]?.text ?? ""} onChange={(t, f) => patchDoc(f, { text: t })}
+                    onSave={() => saveRef.current()} onScroll={onEditorScroll} onCursor={(line, col) => setCursor({ line, col })} />
                 )}
                 {dropHint && <div className="dropzone">{dropHint}</div>}
               </div>

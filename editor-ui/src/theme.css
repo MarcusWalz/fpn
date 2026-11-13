@@ -163,8 +163,23 @@ button { font: inherit; color: inherit; }
 .tab.active { background: var(--surface); color: var(--ink); border-top-color: var(--accent); }
 .tab-stat { font: 11px var(--mono); }
 .add { color: #73c991; } .del { color: #f88070; }
-.file-tab { cursor: default; font-family: var(--mono); font-size: 12px; }
-.file-tab .dot { margin-left: 4px; color: var(--ink); }
+.file-tabs { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+.file-tabs::-webkit-scrollbar { display: none; }
+.file-tab { flex: none; gap: 5px; padding: 0 6px 0 12px; font-family: var(--mono); font-size: 12px; white-space: nowrap; user-select: none; }
+.file-tab:focus-visible { outline: 1px solid var(--accent); outline-offset: -1px; }
+.file-tab.transient .tab-name { font-style: italic; }
+.file-tab.drop-before { box-shadow: inset 2px 0 0 var(--accent); }
+.tab-dir { color: var(--muted); }
+.file-tab .dot { color: var(--ink); }
+.tab-close { display: grid; place-items: center; width: 20px; height: 20px; padding: 0; border: 0; border-radius: 4px; background: none; color: inherit; cursor: pointer; }
+.tab-close > * { grid-area: 1 / 1; }
+.tab-close:hover { background: var(--line); }
+.tab-close .codicon, .tab-close .dot { visibility: hidden; }
+/* clean: × on hover or when active; unsaved: ● until hovered, then × */
+.file-tab:not(.dirty):is(:hover, .active) .tab-close .codicon, .tab-close:focus-visible .codicon { visibility: visible; }
+.file-tab.dirty .tab-close .dot { visibility: visible; }
+.file-tab.dirty:hover .tab-close .dot { visibility: hidden; }
+.file-tab.dirty:hover .tab-close .codicon { visibility: visible; }
 .tabcontent { flex: 1; min-height: 0; background: var(--surface); }
 .tabpane { height: 100%; }
 .tabpane[hidden] { display: none; }
