@@ -20,10 +20,23 @@ export interface MarkdownEditorHandle {
   lineCount(): number;
 }
 
+/** Each open file has its own Monaco model (its own undo history), keyed by this URI. */
+export const modelUri = (file: string) => monaco.Uri.file("/" + file);
+const fileOf = (uri: monaco.Uri) => uri.path.replace(/^\//, "");
+
+/** Drop the model of a closed tab (never the one on screen). */
+export function disposeModel(file: string) {
+  monaco.editor.getModel(modelUri(file))?.dispose();
+}
+
 interface Props {
-  /** Initial text. The editor is uncontrolled; remount (key) to load another file. */
+  /** The file on screen. Switching files swaps models; the editor stays mounted
+   *  and Monaco keeps each file's cursor, scroll and undo history. */
+  file: string;
+  /** Text for the file's model when it is first shown. The editor is uncontrolled after that. */
   initialValue: string;
-  onChange(text: string): void;
+  /** The text of `file` changed. */
+  onChange(text: string, file: string): void;
   onSave(): void;
   onScroll(): void;
   onCursor(line: number, col: number): void;
@@ -124,8 +137,9 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle, Props>(function Markdown
     <Editor
       language="markdown"
       theme={fpnTheme()}
+      path={modelUri(props.file).toString()}
       defaultValue={props.initialValue}
-      onChange={(v) => props.onChange(v ?? "")}
+      onChange={(v) => { const m = ed.current?.getModel(); if (m) props.onChange(v ?? "", fileOf(m.uri)); }}
       onMount={onMount}
       options={{
         wordWrap: "on",
