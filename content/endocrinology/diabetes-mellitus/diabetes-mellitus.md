@@ -166,38 +166,37 @@ Note: ABI, ankle brachial index; CAM, Complementary and alternative medicine; FI
 **Table 4.2—Essential components for assessment, planning, and referral** [@ADA_2026]
 
 - **Assessing risk of diabetes complications**
-  - ASCVD and heart failure history
-  - ASCVD risk factors and 10-year ASCVD risk assessment
-  - Staging of chronic kidney disease (see Table 11.2)
-  - Hypoglycemia risk (see section 6, “Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises”)
+  - ASCVD and HF history, risk factors and 10-year ASCVD risk score
+  - Stage CKD
+  - Assess hypoglycemia risk
   - Assessment for retinopathy
   - Assessment for neuropathy
   - Assessment for MASLD and [MASH](../../gastroenterology/liver/metabolic-dysfunction-associated-steatohepatitis.md)
 - **Goal setting**
   - Set A1C, blood glucose, and time-in-range goals
   - Set lipid goal
-  - If hypertension is present, establish blood pressure goal
+  - Set blood pressure goal
   - Weight management and physical activity goals
   - Diabetes self-management goals
 - **Therapeutic treatment plans**
-  - Lifestyle management (e.g., registered dietitian nutritionist)
-  - Pharmacologic therapy: glucose lowering
-  - Pharmacologic therapy: cardiovascular and kidney disease risk factors
-  - Weight management with pharmacotherapy or metabolic surgery, as appropriate
-  - Use of glucose monitoring and insulin delivery devices
-  - Referral to diabetes education and medical specialists (as needed)
+  - Lifestyle management
+  - Pharmacology:
+    - Glucose lowering
+    - CVD and CKD risk reduction
+    - Weight management
+  - Use of technology (CGM, AIM)
+  - Referral to diabetes education and medical specialists
 - **Referrals for initial care management**
-  - Eye care professional for annual dilated eye exam
-  - Family planning for individuals of childbearing potential
-  - Registered dietitian nutritionist for medical nutrition therapy
+  - Eye care
+  - Family planning
+  - RDN
   - Diabetes self-management education and support
-  - Dentist for comprehensive dental and periodontal examination
-  - Behavioral health professional, if indicated
-  - Audiology, if indicated
-  - Social worker and community resources, if indicated
-  - Rehabilitation medicine or another relevant health care professional for physical and cognitive disability evaluation, if indicated
-  - Other appropriate health care professionals
-
+  - Dentistn
+  - Behavioral health
+  - Audiology
+  - Social work
+  - Rehabilitation medicine (physical/cognitive disability evaluation)
+  
 Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction-associated steatohepatitis; MASLD, metabolic dysfunction-associated steatotic liver disease.
 
 #### Considerations for Bone Health
@@ -209,36 +208,6 @@ Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction
 	- Sulfonylureas - RR 1.30
 	- SGLT2i - questionable
 	- Insulin - likely due to higher risk of hypoglycemia
-#### Cancer
-- Increased risk of cancers of liver, pancreas, endometrium, colon, rectum, breast, and bladder
-- Undergo age appropriate screenings
-#### Cognitive Impairment/Dementia
-- Significantly increased risk and rate of cognitive decline
-#### Dental Care
-- Periodontal disease is more severe in DM 
-- Discuss oral health with all diabetics
-- May need to monitor and adjust therapy during dental procedures
-#### Disability
-- Assess for disability and functional decline annually (ADLs and IADLs)
--  **[Diabetic Peripheral Neuropathy](../../neurology/sensory-disorders/diabetic-peripheral-neuropathy.md)** is a common complication which may lead to functional disability. Glycemic management helps in T1DM but not in T2DM
-- Assess for  [Frailty](../../geriatric-medicine/frailty.md) annually
-- Behavioral Health -  Anxiety, Depression, [Diabetes Distress Scale](https://www.mdcalc.com/calc/10523/diabetes-distress-scale-dds17$0) (DDS) 
-
-#### Sexual Health in Men
-- Screen for erectile dysfunction (52.5%). Treat w/ PDE5i
-- Hypogonadism is common
-#### Sexual Health in Women
--  Female sexual dysfunction is very common - consider screening with the [Female Sexual Function Index (FSFI)](https://www.apta.org/contentassets/a10dbafd45234c7a98ae3dd98385cdab/fsfi_test.pdf$0). Score ≤ 26 is (+) 
-- Treatment -> Lifestyle factors, improve glycemic management, hormonal therapies, consider FDA-approved meds for hypoactive sexual desire disorder
-#### Metabolic Dysfunction-Associated Steatotic Liver Disease (MASLD) and Metabolic Dysfunction-Associated Steatohepatitis (MASH)
-- *Screen all adults with T2DM for MASH spectrum*  using FIB-4 score even if they have normal liver enzymes
-#### Obstructive Sleep Apnea
-- Rates are likely very high in DM + Obesity
-- Refer for sleep study if indicated
-#### Pancreatitis
-- Twice as likely in people w/ diabetes
-#### Sensory Impairment
-- Hearing impairment 2x nondiabetic population
 
 ## Section 5: Facilitating Positive Health Behaviors and Well-being to Improve Health Outcomes
 ### Diabetes self-management education and support

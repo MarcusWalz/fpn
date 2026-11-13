@@ -45,7 +45,7 @@ aliases: [T1DM, T1-DM, Type 1 DM]
 #### Sexual Health in Men
 - Screen for erectile dysfunction (52.5%). Treat w/ PDE5i
 - Hypogonadism is common
-### Sexual Health in Women
+#### Sexual Health in Women
 -  Female sexual dysfunction is very common - consider screening with the [Female Sexual Function Index (FSFI)](https://www.apta.org/contentassets/a10dbafd45234c7a98ae3dd98385cdab/fsfi_test.pdf$0). Score ≤ 26 is (+) 
 - Treatment -> Lifestyle factors, improve glycemic management, hormonal therapies, consider FDA-approved meds for hypoactive sexual desire disorder
 #### Obstructive Sleep Apnea

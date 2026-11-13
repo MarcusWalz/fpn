@@ -59,7 +59,8 @@ aliases: [T2DM, Type 2 DM, T2 DM]
 - “The goal of screening for MASLD is to identify people with at-risk MASH to prevent future cirrhosis, HCC, liver transplantation, and all-cause mortality (193–196).” pg S76
 - ~70% of people w/T2DM have MASLD
 - ~50% of T2DM + MASLD have MASH
-##### Management
+
+**Management**
 - Weight loss: 5-10% loss improves liver histology. Metabolic surgery can improve MASH and cardiometabolic health.
 - Semaglutide is FDA approved for treatment of MASH.
 - Pioglitazone has also been shown to reverse steatohepatitis. 
