@@ -210,27 +210,12 @@ Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction
 	- Insulin - likely due to higher risk of hypoglycemia
 
 ## Section 5: Facilitating Positive Health Behaviors and Well-being to Improve Health Outcomes
-### Diabetes self-management education and support
-- All diabetics should get Diabetes self-management education (DSME) annually. Medicare reimburses.
-### Diabetes Technology
-- Pair w/ DSME. 
-- CGMs increase time in range and have greater reduction in A1c compared w/ education alone
-### Medical Nutrition Therapy
-- Annual Medical Nutrition Therapy is important b/c diabetes is progressive. Covered by medicare
-- May reduce A1c up to 2%
-### Religious Fasting
-- Use the Diabetes and Ramadan International Alliance risk calculator. 
-- Prefasting education -> increase frequency of glucose monitoring, timing of monitoring(last few hours >50% of hypoglycemic events)
-
-(missing image: Pasted image 20261101142722.png)
-
-### Physical Activity
-
-(missing image: Pasted image 20261101143349.png)
-
-### Smoking Cessation
-- Ask about all types of tobacco use
-- Educate about the possibility of DKA w/ Cannabis Hyperemesis
+- **Diabetes self-management education and support**: All diabetics should get Diabetes self-management education (DSME) annually. Medicare reimburses.
+- **Diabetes Technology**: Pair w/ DSME. CGMs increase time in range and have greater reduction in A1c compared w/ education alone
+- **Medical Nutrition Therapy (MNT)**: Annual MNT is important b/c diabetes is progressive. Covered by Medicare. May reduce A1c up to 2%
+- **Religious Fasting**: Use the Diabetes and Ramadan International Alliance risk calculator. Prefasting education -> increase frequency of glucose monitoring, timing of monitoring(last few hours >50% of hypoglycemic events) *See Table 5.4*
+- **Physical Activity**
+- **Smoking Cessation**: Ask about all types of tobacco use. Educate about the possibility of DKA w/ Cannabis Hyperemesis
 ### Psychosocial Care
 - Problem Areas in Diabetes (PAID) scale
 - Diabetes Distress Scale (DDS-17)
@@ -238,6 +223,20 @@ Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction
 - Hypoglycemia Fear Survey-II (HFS-II W)
 - Insulin Treatment Appraisal Scale (ITAS)
 - PHQ-9 + GAD-7
+
+**Table 5.4—Changes in medications during fasting** [@ADA_2026]
+
+| Medication name | Risk of hypoglycemia | Timing | Total daily dose |
+|---|---|---|---|
+| Metformin, SGLT2 inhibitor, DPP-4 inhibitor, GLP-1 receptor agonist, acarbose, or pioglitazone | Low | • Daily, main mealtime.<br>• 2x/day,  split dose.<br>• Weekly, no change. | • No change |
+| New generation of sulfonylurea (glimepiride and gliclazide) | Low to moderate | • Daily, main mealtime.<br>• 2x/day, split dose. | • Reduce dose if glucose goal range and no hypo or hyperglycemia. |
+| Older generation of sulfonylurea (glyburide) | Moderate to high | • main meal | • Replace with newer-generation sulfonylurea or reduce dose by 50%. |
+| Basal insulin | Moderate to high | • For LAA (glargine 300 or degludec), no change.<br>• For others, take at break fast. | • Choose insulin with lower risk of hypoglycemia among the class.<br>• Reduce dose by 25–35% if not well managed. |
+| Prandial insulin | High | • At mealtime | • Reduce dose for meal followed by fasting (35–50%).<br>• For other meals, carb cover. |
+| Mixed insulin and insulin coformulations | High | • Daily,main mealtime.<br>• 2x/day, split dose  | • Reduce for meal followed by fasting (35–50%).<br>• Other meals, no change. |
+
+Note: DPP-4, dipeptidyl peptidase 4; GLP-1, glucagon-like peptide 1; SGLT2, sodium–glucose cotransporter 2.
+
 ## Section 6: Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises
 ### Assessment of Glycemic Status 
 - ==A1c== reflects average glycemia over approximately 2-3 months. Test at least every 6 months. 
