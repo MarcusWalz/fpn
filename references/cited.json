@@ -38,5 +38,304 @@
     "type": "article-journal",
     "URL": "https://diabetesjournals.org/docm-care/article/1/3/488/164619/Section-1-Improving-Care-and-Promoting-Health-in",
     "volume": "1"
+  },
+  {
+    "id": "americanacademyoffamilyphysicians_2023",
+    "author": [
+      {
+        "family": "American Academy of Family Physicians",
+        "given": ""
+      }
+    ],
+    "citation-key": "americanacademyoffamilyphysicians_2023",
+    "issued": {
+      "date-parts": [
+        [
+          "2023"
+        ]
+      ]
+    },
+    "publisher": "American Academy of Family Physicians",
+    "title": "Choosing Wisely Recommendations",
+    "type": "report"
+  },
+  {
+    "id": "blumenthal.etal_2026",
+    "accessed": {
+      "date-parts": [
+        [
+          "2026",
+          10,
+          28
+        ]
+      ]
+    },
+    "author": [
+      {
+        "family": "Blumenthal",
+        "given": "Roger S."
+      },
+      {
+        "family": "Morris",
+        "given": "Pamela B."
+      },
+      {
+        "family": "Gaudino",
+        "given": "Mario"
+      },
+      {
+        "family": "Johnson",
+        "given": "Heather M."
+      },
+      {
+        "family": "Anderson",
+        "given": "Timothy S."
+      },
+      {
+        "family": "Bittner",
+        "given": "Vera A."
+      },
+      {
+        "family": "Blankstein",
+        "given": "Ron"
+      },
+      {
+        "family": "Brewer",
+        "given": "LaPrincess C."
+      },
+      {
+        "family": "Cho",
+        "given": "Leslie"
+      },
+      {
+        "family": "De Ferranti",
+        "given": "Sarah D."
+      },
+      {
+        "family": "Gianos",
+        "given": "Eugenia"
+      },
+      {
+        "family": "Gluckman",
+        "given": "Ty J."
+      },
+      {
+        "family": "Gradney",
+        "given": "Kristen F."
+      },
+      {
+        "family": "Isiadinso",
+        "given": "Ijeoma"
+      },
+      {
+        "family": "Lloyd-Jones",
+        "given": "Donald M."
+      },
+      {
+        "family": "Marrs",
+        "given": "Joel C."
+      },
+      {
+        "family": "Martin",
+        "given": "Seth S."
+      },
+      {
+        "family": "McLain",
+        "given": "Kellie H."
+      },
+      {
+        "family": "Mehta",
+        "given": "Laxmi S."
+      },
+      {
+        "family": "Mora",
+        "given": "Samia"
+      },
+      {
+        "family": "Mulugeta",
+        "given": "Wudeneh M."
+      },
+      {
+        "family": "Natarajan",
+        "given": "Pradeep"
+      },
+      {
+        "family": "Navar",
+        "given": "Ann Marie"
+      },
+      {
+        "family": "Orringer",
+        "given": "Carl E."
+      },
+      {
+        "family": "Polonsky",
+        "given": "Tamar S."
+      },
+      {
+        "family": "Reynolds",
+        "given": "Harmony R."
+      },
+      {
+        "family": "Saseen",
+        "given": "Joseph J."
+      },
+      {
+        "family": "Shapiro",
+        "given": "Michael D."
+      },
+      {
+        "family": "Soffer",
+        "given": "Daniel E."
+      },
+      {
+        "family": "Tynes",
+        "given": "Sheila A."
+      },
+      {
+        "family": "Villavaso",
+        "given": "Chloé D."
+      },
+      {
+        "family": "Virani",
+        "given": "Salim S."
+      },
+      {
+        "family": "Wilkins",
+        "given": "John T."
+      }
+    ],
+    "citation-key": "blumenthal.etal_2026",
+    "container-title": "JACC",
+    "container-title-short": "JACC",
+    "DOI": "10.1016/j.jacc.2025.11.016",
+    "ISSN": "07351097",
+    "issue": "19",
+    "issued": {
+      "date-parts": [
+        [
+          "2026",
+          5
+        ]
+      ]
+    },
+    "language": "en",
+    "page": "2624–2757",
+    "source": "DOI.org (Crossref)",
+    "title": "2026 ACC/AHA/AACVPR/ABC/ACPM/ADA/AGS/APhA/ASPC/NLA/PCNA Guideline on the Management of Dyslipidemia",
+    "type": "article-journal",
+    "URL": "https://linkinghub.elsevier.com/retrieve/pii/S0735109725102544",
+    "volume": "87"
+  },
+  {
+    "id": "harris.etal_2023",
+    "abstract": "Osteoporosis affects 10.2% of adults older than 50 years and is expected to increase to 13.6% by 2030. Osteoporotic fractures, specifically hip fractures, significantly affect morbidity, mortality, and quality of life. Screening for osteoporosis with dual energy x-ray absorptiometry should be considered for all women 65 years and older or women who are postmenopausal with clinical risk factors. The Bone Health and Osteoporosis Foundation recommends screening men 70 years and older and men with clinical risk factors; however, the U.S. Preventive Services Task Force did not find sufficient evidence to support routine screening in men. Osteoporosis can be diagnosed by a T-score of −2.5 or less or the presence of a fragility fracture. All patients with osteoporosis should be counseled on weight-bearing exercise, smoking cessation, moderation of alcohol intake, and calcium and vitamin D supplementation. Treatment of osteoporosis is influenced by the patient’s fracture risk, the effectiveness of fracture risk reduction, and medication safety. Patients at high risk of fracture should consider treatment with antiresorptive therapy, including bisphosphonates and denosumab. Anabolic agents such as teriparatide, abaloparatide, and romosozumab should be considered for patients at very high risk or with previous vertebral fractures.",
+    "accessed": {
+      "date-parts": [
+        [
+          "2026",
+          11,
+          13
+        ]
+      ]
+    },
+    "author": [
+      {
+        "family": "Harris",
+        "given": "Kira"
+      },
+      {
+        "family": "Zagar",
+        "given": "Christopher A."
+      },
+      {
+        "family": "Lawrence",
+        "given": "Kelley V."
+      }
+    ],
+    "citation-key": "harris.etal_2023",
+    "container-title": "American Family Physician",
+    "container-title-short": "AFP",
+    "ISSN": "1532-0650, 0002-838X",
+    "issue": "3",
+    "issued": {
+      "date-parts": [
+        [
+          "2023",
+          3,
+          15
+        ]
+      ]
+    },
+    "language": "en",
+    "page": "238–246",
+    "source": "www.aafp.org",
+    "title": "Osteoporosis: Common Questions and Answers",
+    "title-short": "Osteoporosis",
+    "type": "article-journal",
+    "URL": "https://www.aafp.org/afp/2023/0300/osteoporosis",
+    "volume": "107"
+  },
+  {
+    "id": "nationalosteoporosisfoundation_2002",
+    "author": [
+      {
+        "family": "National Osteoporosis Foundation",
+        "given": ""
+      }
+    ],
+    "citation-key": "nationalosteoporosisfoundation_2002",
+    "issued": {
+      "date-parts": [
+        [
+          "2002"
+        ]
+      ]
+    },
+    "publisher": "National Osteoporosis Foundation",
+    "publisher-place": "Washington, DC",
+    "title": "America’s Bone Health: The State of Osteoporosis and Low Bone Mass in Our Nation",
+    "type": "report"
+  },
+  {
+    "id": "nationalosteoporosisfoundation_2014",
+    "author": [
+      {
+        "family": "National Osteoporosis Foundation",
+        "given": ""
+      }
+    ],
+    "citation-key": "nationalosteoporosisfoundation_2014",
+    "issued": {
+      "date-parts": [
+        [
+          "2014"
+        ]
+      ]
+    },
+    "publisher": "National Osteoporosis Foundation",
+    "publisher-place": "Washington, DC",
+    "title": "Clinician’s Guide to Prevention and Treatment of Osteoporosis",
+    "type": "report"
+  },
+  {
+    "id": "usdepartmentofhealthandhumanservices_2004",
+    "author": [
+      {
+        "family": "US Department of Health and Human Services",
+        "given": ""
+      }
+    ],
+    "citation-key": "usdepartmentofhealthandhumanservices_2004",
+    "issued": {
+      "date-parts": [
+        [
+          "2004"
+        ]
+      ]
+    },
+    "publisher": "Department of Health and Human Services, Office of the Surgeon General",
+    "publisher-place": "Rockville, Md. U.S.",
+    "title": "Bone Health and Osteoporosis: A Report of the Surgeon General",
+    "type": "report"
   }
 ]
