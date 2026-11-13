@@ -424,6 +424,34 @@ img { max-width: 100%; height: auto; }
 /* Code in a heading reads as part of it, not as a box. */
 .prose :is(h2, h3, h4, h5, h6) code { font-size: .88em; padding: 0; background: none; border: 0; }
 
+/* The author's heading looks for ### to ######, chosen by the number of #s
+   written (class md-hN), whatever level the heading renders at. They keep the
+   spacing above, so the grid holds: the bar, dots and underline add no height,
+   and the ##### label's padding (2 + 2px) is taken from the space below. */
+.prose :is(.md-h3, .md-h4, .md-h5, .md-h6)::before { content: none; }
+/* ###: a green bar down the left */
+.prose .md-h3 {
+  padding-left: .6rem; border-left: 4px solid var(--leaf); background: none;
+  font-size: 1.15rem; color: var(--forest);
+}
+/* ####: a dotted green line underneath */
+.prose .md-h4 {
+  font-size: 1.05rem; color: var(--forest);
+  background: radial-gradient(circle, var(--leaf) 1.3px, transparent 1.7px) left bottom / 7px 4px repeat-x;
+}
+/* #####: a highlighted label */
+.prose .md-h5 {
+  width: fit-content; max-width: 100%;
+  padding: .125rem .75rem .125rem .6rem;
+  font-size: 1.05rem; letter-spacing: normal; text-transform: none; color: var(--lime-ink);
+  background: var(--lime); border-left: 6px solid var(--leaf-ink); box-shadow: 3px 3px 0 var(--shadow);
+}
+/* ######: underlined */
+.prose .md-h6 {
+  background: none; font-size: 1.1rem; font-style: normal; color: var(--forest);
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em;
+}
+
 /* Table titles and figure captions ("Table 2.1—…", "Figure: …") */
 .prose .cap-table { margin: var(--half) 0 0; font: 700 .95rem/var(--lh) var(--font-body); color: var(--forest); }
 .prose .cap-figure { font: italic 400 .92rem/var(--lh) var(--font-body); color: var(--muted); }
