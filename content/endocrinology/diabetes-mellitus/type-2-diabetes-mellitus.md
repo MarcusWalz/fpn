@@ -52,24 +52,21 @@ aliases: [T2DM, Type 2 DM, T2 DM]
 - Treatment -> Lifestyle factors, improve glycemic management, hormonal therapies, consider FDA-approved meds for hypoactive sexual desire disorder
 #### Metabolic Dysfunction-Associated Steatotic Liver Disease ([MASLD](../../gastroenterology/liver/metabolic-associated-steatotic-liver-disease.md)) and [Metabolic Dysfunction-Associated Steatohepatitis](../../gastroenterology/liver/metabolic-dysfunction-associated-steatohepatitis.md) (MASH)
 - *Screen all adults with T2DM for MASH spectrum*  using FIB-4 score even if they have normal liver enzymes
-	- “The goal of screening for MASLD is to identify people with at-risk MASH to prevent future cirrhosis, HCC, liver transplantation, and all-cause mortality (193–196).” pg S76
-- ~70% of people w/T2DM have MASLD; ~50% of T2DM + MASLD have MASH
--  FIB-4: estimates risk of hepatic cirrhosis. Uses age, AST, ALT, platelets. 
-	- < 1.3 is low risk
-	- >=1.3 is higher risk of clinically significant fibrosis;  Get a Liver Stiffness Measurement. <8.0kPa has good NPV. Continue to follow in Primary Care w/ repeate testing every 3 years. 
-	- >=2.67 high risk of advanced fibrosis ->  refer to GI w/o additional testing
-#### Management
-- Weight loss: 5-10% loss improves liver histology
-- Pharma:  style="color:rgb(56, 229, 163)">Semaglutide is FDA approved for treatment of MASH.  style="color:rgb(56, 229, 163)">Pioglitazone has also been shown to reverse steatohepatitis. 
-	- Yes to  style="color:rgb(56, 229, 163)">Statin use unless has decompensated cirrhosis. 
-- Metabolic surgery can improve MASH and Cardiometabolic health.
-### Obstructive Sleep Apnea
-- Rates are likely very high in DM + Obesity
+  - FIB-4: estimates risk of hepatic cirrhosis. Age, AST, ALT, platelets. 
+    - <1.3 is low risk
+    - ≥1.3 is higher risk of clinically significant fibrosis;  Get a Liver Stiffness Measurement. <8.0kPa has good NPV. Continue to follow in Primary Care w/ repeat testing q3yrs. 
+    - ≥2.67 high risk of advanced fibrosis ->  refer to GI w/o additional testing
+- “The goal of screening for MASLD is to identify people with at-risk MASH to prevent future cirrhosis, HCC, liver transplantation, and all-cause mortality (193–196).” pg S76
+- ~70% of people w/T2DM have MASLD
+- ~50% of T2DM + MASLD have MASH
+##### Management
+- Weight loss: 5-10% loss improves liver histology. Metabolic surgery can improve MASH and cardiometabolic health.
+- Semaglutide is FDA approved for treatment of MASH.
+- Pioglitazone has also been shown to reverse steatohepatitis. 
+- Use statins unless decompensated cirrhosis. 
+#### Obstructive Sleep Apnea
 - Refer for sleep study if indicated
-### Pancreatitis
-- Twice as likely in people w/ diabetes
-### Sensory Impairment
-- Hearing impairment 2x nondiabetic population
+
 
 
 
