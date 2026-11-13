@@ -1,6 +1,7 @@
 // fpn client: quick title search, sidebar panels, menu. Pages work without it.
 (() => {
   const base = document.documentElement.dataset.base || "/";
+  if (new URLSearchParams(location.search).has("grid")) document.documentElement.classList.add("show-grid"); // baseline grid, for checking rhythm
 
   // Sidebar panels start collapsed (good on phones); open them on wide screens.
   if (matchMedia("(min-width: 960px)").matches) {
@@ -18,76 +19,57 @@
     });
   }
 
-  // ---- collapsible sections ----
-  // Every heading folds the content under it (down to the next heading of
-  // the same or a higher level). Pages open with everything collapsed;
-  // "Expand all" / "Collapse all" sit above the first heading. Links to a
-  // spot inside a collapsed section (contents, citations, "Linked from")
-  // open the sections around it. Not in the editor preview, which shows the
-  // whole page so it can scroll with the text.
-  const article = document.querySelector("article.prose");
-  let reveal = () => {};
-  if (article && location.protocol !== "about:") {
-    const lvl = (el) => +((/^H([2-6])$/.exec(el.tagName) || [])[1] || 0);
-    const heads = [...article.children].filter(lvl);
-    const setFolded = (h, v) => { h.dataset.folded = v ? "1" : ""; h.querySelector(".fold-btn").setAttribute("aria-expanded", String(!v)); };
-    const update = () => {
-      const stack = [];
-      for (const el of article.children) {
-        const L = lvl(el);
-        if (L) while (stack.length && stack[stack.length - 1] >= L) stack.pop();
-        if (stack.length) { if (!el.hidden) el.setAttribute("hidden", "until-found"); }
-        else el.removeAttribute("hidden");
-        if (L && el.dataset.folded) stack.push(L);
-      }
+  // ---- "On this page": highlight the section you're reading ----
+  // Wide screens show the contents on the left; narrow ones show a bar that
+  // sticks under the top bar with the current section's name.
+  const tocLinks = [...document.querySelectorAll(".toc a[href^='#']")];
+  const tocBar = document.querySelector("[data-toc-bar]");
+  const tocCurrent = document.querySelector("[data-toc-current]");
+  const tocPanel = document.querySelector(".side");
+  const heads = [...new Set(tocLinks.map((a) => decodeURIComponent(a.getAttribute("href").slice(1))))]
+    .map((id) => document.getElementById(id)).filter(Boolean);
+  if (heads.length) {
+    // Room taken by sticky bars, so "current" means "just under them".
+    const topbar = document.querySelector(".topbar");
+    const offset = () => (topbar ? topbar.offsetHeight : 0) + (tocBar && tocBar.offsetParent ? tocBar.offsetHeight : 0) + 12;
+    const setVars = () => {
+      document.documentElement.style.setProperty("--topbar-h", (topbar ? topbar.offsetHeight : 0) + "px");
+      document.documentElement.style.setProperty("--sticky-h", offset() + "px");
     };
-    reveal = (el) => {
-      let b = el;
-      while (b && b.parentElement !== article) b = b.parentElement;
-      if (!b) return;
-      let L = lvl(b) || 7;
-      if (lvl(b)) setFolded(b, false);
-      for (let p = b.previousElementSibling; p; p = p.previousElementSibling) {
-        const pl = lvl(p);
-        if (pl && pl < L) { setFolded(p, false); L = pl; }
-      }
-      update();
-    };
-    if (heads.length) {
-      heads.forEach((h) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "fold-btn";
-        if (h.querySelector("a, button")) { btn.classList.add("fold-icon"); btn.setAttribute("aria-label", "Show or hide this section"); h.prepend(btn); }
-        else { btn.append(...h.childNodes); h.append(btn); }
-        btn.addEventListener("click", () => { setFolded(h, !h.dataset.folded); update(); });
-        setFolded(h, true);
+    let current = null;
+    const mark = () => {
+      const y = offset() + 4;
+      let h = null;
+      for (const el of heads) { if (el.getBoundingClientRect().top <= y) h = el; else break; }
+      // At the very bottom, the last section counts even if its heading can't reach the top.
+      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) h = heads[heads.length - 1];
+      // (Re-check the mark too: the editor preview may have replaced it in place.)
+      if (h === current && (!h || document.querySelector(".toc a[aria-current]"))) return;
+      current = h;
+      const id = h ? h.id : "";
+      tocLinks.forEach((a) => {
+        if (decodeURIComponent(a.getAttribute("href").slice(1)) === id) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
       });
-      const tools = document.createElement("div");
-      tools.className = "fold-tools";
-      for (const [label, folded] of [["Expand all", false], ["Collapse all", true]]) {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.textContent = label;
-        b.addEventListener("click", () => { heads.forEach((h) => setFolded(h, folded)); update(); });
-        tools.append(b);
+      if (tocCurrent) tocCurrent.textContent = h ? h.textContent.trim() : "";
+      // Keep the highlighted entry visible in the left column (without scrolling the page).
+      const on = tocPanel && tocPanel.querySelector(".toc-panel a[aria-current]");
+      if (on && tocPanel.scrollHeight > tocPanel.clientHeight) {
+        const r = on.getBoundingClientRect(), p = tocPanel.getBoundingClientRect();
+        if (r.top < p.top + 40) tocPanel.scrollTop -= p.top + 40 - r.top;
+        else if (r.bottom > p.bottom - 40) tocPanel.scrollTop += r.bottom - (p.bottom - 40);
       }
-      heads[0].before(tools);
-      update();
-      // Browser find (Cmd+F) opens the section a match is in.
-      article.addEventListener("beforematch", (e) => reveal(e.target));
-      // Same-page links (contents, citations): open the section first.
-      document.addEventListener("click", (e) => {
-        const a = e.target.closest && e.target.closest('a[href^="#"]');
-        const t = a && document.getElementById(decodeURIComponent(a.getAttribute("href").slice(1)));
-        if (t && article.contains(t)) reveal(t);
-      }, true);
-      const fromHash = () => {
-        const t = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
-        if (t && article.contains(t)) { reveal(t); t.scrollIntoView(); }
-      };
-      fromHash();
-      addEventListener("hashchange", fromHash);
+    };
+    let raf = 0;
+    const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(mark); };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", () => { setVars(); onScroll(); });
+    setVars(); mark();
+    if (tocBar) {
+      // Picking a section closes the list; so do Escape and a tap outside it.
+      tocBar.addEventListener("click", (e) => { if (e.target.closest("a")) tocBar.open = false; });
+      document.addEventListener("click", (e) => { if (tocBar.open && !tocBar.contains(e.target)) tocBar.open = false; });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && tocBar.open) { tocBar.open = false; tocBar.querySelector("summary").focus(); } });
     }
   }
 
@@ -108,7 +90,7 @@
       !a.closest(".links-panel") && a.origin === location.origin && norm1(a.pathname) === target);
     history.replaceState(null, "", location.pathname + location.search);
     if (!hits.length) return;
-    hits.forEach((a) => { reveal(a); for (let d = a.closest("details"); d; d = d.parentElement.closest("details")) d.open = true; });
+    hits.forEach((a) => { for (let d = a.closest("details"); d; d = d.parentElement.closest("details")) d.open = true; });
     hits[0].scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     hits.forEach((a) => a.classList.add("link-flash"));
     setTimeout(() => hits.forEach((a) => a.classList.remove("link-flash")), 2600);

@@ -171,6 +171,7 @@ func Build(cfg Config) (*Result, error) {
 		b.renderSitemapPage,
 		b.renderProgressPage,
 		b.renderHudsonPage,
+		b.renderTypographyPage,
 		b.render404,
 		b.writePagesJSON,
 		b.writeSitemapXML,
@@ -332,6 +333,23 @@ func (b *builder) renderHudsonPage() error {
 		Title:  "Hudson",
 		Crumbs: []*content.Node{b.tree.Root},
 	})
+}
+
+// renderTypographyPage writes /typography/: a specimen of every text style,
+// rendered from templates/typography.md through the normal page pipeline, for
+// checking heading sizes and spacing. Nothing links to it.
+func (b *builder) renderTypographyPage() error {
+	md, err := fs.ReadFile(b.cfg.Web, "templates/typography.md")
+	if err != nil {
+		return nil // a custom web/ folder may not have it
+	}
+	n := &content.Node{
+		Rel: "typography.md", Slug: "typography", URL: b.cfg.Base + "typography/",
+		Title: "Typography", Body: md, Parent: b.tree.Root, Depth: 1,
+	}
+	_, d, _ := b.pageData(n)
+	d.EditPath, d.Siblings, d.LinksOut, d.LinksIn = "", nil, nil, nil
+	return b.write("typography/index.html", "page", d)
 }
 
 func (b *builder) render404() error {

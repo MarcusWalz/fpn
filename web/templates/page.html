@@ -1,15 +1,27 @@
 {{define "main"}}
 {{template "crumbs" .}}
-<div class="layout">
+<div class="layout{{if ge (len .TOC) 2}} has-toc{{end}}">
+  {{if ge (len .TOC) 2}}
+  {{/* Phones and narrow windows: a bar that sticks under the top bar, showing
+       the section you're in; tap it for the full list. */}}
+  <details class="toc-bar" data-toc-bar>
+    <summary aria-label="{{.Node.Title}}: sections on this page"><span class="toc-bar-text"><span class="toc-bar-label">{{icon "star"}}<span>{{.Node.Title}}</span></span><span class="toc-bar-current" data-toc-current></span></span></summary>
+    <ol class="toc">
+      {{range .TOC}}<li class="l{{.Level}}"><a href="#{{.ID}}">{{.Text}}</a></li>
+      {{end}}
+    </ol>
+  </details>
+  {{end}}
   <aside class="side">
     {{if ge (len .TOC) 2}}
-    <details class="panel card" data-auto-open>
-      <summary>{{icon "star"}}<span>On this page</span></summary>
+    {{/* Wide screens: always open on the left, the current section highlighted. */}}
+    <nav class="toc-panel card" aria-label="Sections on this page">
+      <h2 class="toc-title">{{icon "star"}}<span>{{.Node.Title}}</span></h2>
       <ol class="toc">
         {{range .TOC}}<li class="l{{.Level}}"><a href="#{{.ID}}">{{.Text}}</a></li>
         {{end}}
       </ol>
-    </details>
+    </nav>
     {{end}}
     {{if gt (len .Siblings) 1}}
     <details class="panel card" data-auto-open>

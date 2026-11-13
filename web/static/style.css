@@ -57,7 +57,7 @@
 
 /* ---------- base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--sticky-h, 5rem); } /* --sticky-h: set by app.js on pages with contents */
 body {
   margin: 0;
   min-height: 100vh;
@@ -286,10 +286,65 @@ img { max-width: 100%; height: auto; }
 
 /* ---------- page layout ---------- */
 .layout { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
+/* Narrow: contents bar, then the page, then the chapter's other pages. */
+.layout > .prose { order: 1; }
+.layout > .side { order: 2; }
 @media (min-width: 960px) {
-  .layout { grid-template-columns: minmax(0, 1fr) 280px; align-items: start; }
-  .side { order: 2; position: sticky; top: 5.25rem; max-height: calc(100vh - 6.5rem); overflow-y: auto; padding: 0 8px 8px 0; }
+  /* Wide: contents and chapter on the left, beside the page. */
+  .layout { grid-template-columns: 270px minmax(0, 1fr); align-items: start; }
+  .layout > .side { order: 0; position: sticky; top: calc(var(--topbar-h, 4rem) + 1.25rem); max-height: calc(100vh - var(--topbar-h, 4rem) - 2.5rem); overflow-y: auto; padding: 0 8px 8px 0; scrollbar-width: thin; }
+  .toc-bar { display: none; }
 }
+@media (max-width: 959.98px) { .side .toc-panel { display: none; } }
+
+/* ---------- "On this page" ---------- */
+.toc { list-style: none; margin: 0; padding: .4rem; }
+.toc li a {
+  display: block; padding: .32rem .55rem .32rem .65rem; border-left: 4px solid transparent;
+  color: var(--ink); text-decoration: none; line-height: 1.35; font-size: .95rem;
+}
+.toc li a:hover { background: var(--mint); border-left-color: var(--leaf); }
+.toc li.l3 a { padding-left: 1.45rem; font-size: .9rem; color: var(--muted); }
+.toc li a[aria-current] { background: var(--lime); color: var(--lime-ink); border-left-color: var(--forest); font-weight: 700; }
+.toc-panel { margin-bottom: 1rem; }
+.toc-title {
+  display: flex; align-items: center; gap: .55rem; margin: 0; padding: .7rem .85rem;
+  font: 700 .95rem/1.25 var(--font-head); text-transform: uppercase; color: var(--bar-ink); overflow-wrap: break-word;
+  background: var(--bar); border-bottom: var(--bw) solid var(--line);
+}
+.toc-title .px { flex: none; color: #d9f99d; --px-hi: #22c55e; }
+.toc-title span { min-width: 0; }
+
+/* the sticky bar (narrow screens) */
+.toc-bar {
+  position: sticky; top: var(--topbar-h, 3.6rem); z-index: 20; order: 0;
+  background: var(--surface);
+  border: var(--bw) solid var(--line); box-shadow: 0 var(--sh) 0 var(--shadow);
+}
+.toc-bar > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: .6rem;
+  min-height: 44px; padding: .4rem .75rem;
+}
+.toc-bar > summary::-webkit-details-marker { display: none; }
+/* topic on top, the section you're in under it */
+.toc-bar-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .15rem; }
+.toc-bar-label {
+  display: flex; align-items: center; gap: .4rem; min-width: 0;
+  font: 700 .78rem/1.2 var(--font-head); text-transform: uppercase; letter-spacing: .02em; color: var(--leaf-ink);
+}
+.toc-bar-label > span, .toc-bar-current { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.toc-bar-label .px { flex: none; width: 1rem; height: 1rem; }
+.toc-bar-current { font-weight: 700; line-height: 1.25; color: var(--forest); }
+.toc-bar-current:empty::before { content: "Jump to a section"; font-weight: 400; color: var(--muted); }
+.toc-bar > summary::after { content: ""; flex: none; width: .5em; height: .5em; margin: 0 .2rem .2rem; border-right: .16em solid var(--forest); border-bottom: .16em solid var(--forest); transform: rotate(45deg); transition: transform .15s; }
+.toc-bar[open] > summary::after { transform: rotate(-135deg); margin-bottom: -.2rem; }
+.toc-bar[open] > summary { border-bottom: 2px dashed var(--line); }
+.toc-bar > .toc {
+  position: absolute; left: calc(-1 * var(--bw)); right: calc(-1 * var(--bw)); top: 100%;
+  max-height: min(60vh, 28rem); overflow-y: auto; overscroll-behavior: contain;
+  background: var(--surface); border: var(--bw) solid var(--line); border-top: 0; box-shadow: 0 var(--sh) 0 var(--shadow);
+}
+@media (prefers-reduced-motion: reduce) { .toc-bar > summary::after { transition: none; } }
 .side:empty { display: none; }
 .panel { margin-bottom: 1rem; }
 .panel > summary {
@@ -319,64 +374,67 @@ img { max-width: 100%; height: auto; }
 /* ---------- prose (rendered Markdown) ---------- */
 .prose { padding: 1.25rem 1.1rem 1.5rem; min-width: 0; overflow-wrap: break-word; }
 @media (min-width: 640px) { .prose { padding: 2rem 2.25rem 2.25rem; } }
-.prose .page-title { margin: 0 0 1.25rem; font: 700 clamp(1.6rem, 6vw, 2.5rem)/1.12 var(--font-head); color: var(--forest); overflow-wrap: break-word; }
-.prose > :first-child { margin-top: 0; }
-.prose h1, .prose h2 {
-  margin: 2.25rem 0 .9rem; padding-bottom: .5rem;
-  font: 700 1.45rem/1.25 var(--font-head); color: var(--forest);
-  background: repeating-linear-gradient(90deg, var(--leaf) 0 8px, transparent 8px 12px) left bottom / 100% 4px no-repeat;
-}
-.prose h3 { margin: 1.75rem 0 .6rem; font: 700 1.15rem/1.3 var(--font-head); color: var(--forest); }
-.prose h4, .prose h5, .prose h6 { margin: 1.5rem 0 .5rem; font-size: 1.02rem; color: var(--forest); }
-/* Styles follow the number of #s written, whatever level a heading renders
-   at (skipped levels are renumbered for screen readers). */
-/* ### headings: a green bar down the left */
-.prose .md-h3 {
-  margin: 1.75rem 0 .6rem; padding: 0 0 0 .6rem; background: none;
-  border-left: 4px solid var(--leaf);
-  font: 700 1.15rem/1.3 var(--font-head); color: var(--forest);
-}
-/* #### headings: a dotted line underneath */
-.prose .md-h4 {
-  margin: 1.5rem 0 .5rem; padding: 0 0 .3rem; background: none;
-  border-bottom: 3px dotted var(--leaf);
-  font: 700 1.05rem/1.3 var(--font-head); color: var(--forest);
-}
-/* ##### headings: a highlighted label, whatever level they render at */
-.prose .md-h5 {
-  width: fit-content; max-width: 100%;
-  margin: 1.75rem 0 .6rem; padding: .3rem .75rem .3rem .6rem;
-  font: 700 1.05rem/1.3 var(--font-head); color: var(--lime-ink);
-  background: var(--lime); border-left: 6px solid var(--leaf-ink);
-  box-shadow: 3px 3px 0 var(--shadow);
-}
-.prose .md-h5::before { content: none; }
-/* ###### headings: small and underlined */
-.prose .md-h6 {
-  margin: 1.25rem 0 .4rem; padding: 0; background: none; border: 0;
-  font: 700 1.1rem/1.35 var(--font-head); color: var(--forest);
-  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em;
-}
-.prose .md-h6::before { content: none; }
+/* Vertical rhythm: every line of body text is 28px (--lh), and every
+   heading, paragraph, list and table takes a whole number of half-lines
+   (--half, 14px) including its margins, so text below any element lands back
+   on the same grid. Add ?grid to a page's URL to see it (try /typography/?grid).
 
-/* Lines starting with the word "Table" or "Figure" get their own pixel font */
-.prose .cap-table {
-  font-family: "Press Start 2P", ui-monospace, Menlo, monospace;
-  font-size: .78rem; font-weight: 400; line-height: 1.8; color: var(--forest);
+   Type scale (body 17px): title 2.375rem > ## 1.5 > ### 1.25 > #### 1.0625 >
+   ##### small caps > ###### italic. ## gets a light dashed rule; ### and ####
+   start with §; the rest differ by size, colour and case. Styles follow the
+   level a heading renders at (skipped levels are renumbered), so the look
+   always matches the outline screen readers and the contents list use. */
+.prose { --lh: 1.75rem; --half: .875rem; line-height: var(--lh); }
+.prose .page-title {
+  margin: 0 0 var(--half); padding: 0; background: none;
+  font: 700 clamp(1.75rem, 6vw, 2.375rem)/2.625rem var(--font-head); letter-spacing: -.01em;
+  color: var(--forest); overflow-wrap: break-word; text-wrap: balance;
 }
-.prose .cap-figure {
-  font-family: "Doto", ui-monospace, Menlo, monospace;
-  font-size: 1.05rem; font-weight: 800; line-height: 1.45;
+.prose > :first-child { margin-top: 0; }
+/* Running text stops at a readable width (about 75–80 characters); tables, code,
+   images and the ## rule may use the full card. */
+.prose > :is(p, ul, ol, dl, blockquote, h3, h4, h5, h6) { max-width: 37rem; }
+.prose :is(h1, h2, h3, h4, h5, h6) { font-family: var(--font-head); font-weight: 700; line-height: var(--lh); color: var(--forest); text-wrap: balance; }
+/* Each heading: space above (margin-top) + space below (padding-bottom) is a
+   multiple of --half, with more above than below so a heading sits with the
+   text it introduces. The space below is padding, not margin, because margins
+   between neighbours collapse into one and would knock the grid out. */
+.prose :is(h1, h2, h3, h4, h5, h6) { margin-bottom: 0; }
+/* ## sections: a light dashed rule underneath, and extra space above (padding
+   on top of the usual margin) so each section starts clearly apart.
+   3 half-lines of margin + 14 + 28 + 14 = whole half-lines, so the grid holds. */
+.prose h2 {
+  margin-top: calc(var(--half) * 3); padding: var(--half) 0;
+  font-size: 1.5rem;
+  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--leaf) 45%, transparent) 0 6px, transparent 6px 10px) left 0 bottom .375rem / 100% 2px no-repeat;
 }
-.prose :is(.cap-table, .cap-figure) :is(strong, b, em, i) { font-weight: inherit; font-style: normal; }
+/* §: topics and sub-topics (###, ####). Decorative, so screen readers skip it. */
+.prose :is(h3, h4)::before { content: "§" / ""; margin-right: .4em; color: var(--leaf-ink); font-weight: 700; }
+.prose h4::before { margin-right: .35em; }
+.prose h3 { margin-top: 1.25rem; padding-bottom: .5rem; font-size: 1.25rem; }               /* 20 + 8 = 28px */
+.prose h4 { margin-top: 1.375rem; padding-bottom: .375rem; font-size: 1.0625rem; color: var(--ink); } /* 22 + 6 */
+.prose h5 { margin-top: 1.5rem; padding-bottom: .25rem; font-size: .8125rem; letter-spacing: .06em; text-transform: uppercase; color: var(--leaf-ink); } /* 24 + 4 */
+.prose h6 { margin-top: 1.5rem; padding-bottom: .25rem; font-size: 1rem; font-style: italic; color: var(--ink); }
+/* A heading straight after another belongs with it: close the gap to one half-line. */
+.prose :is(h3, h4, h5, h6) + h3 { margin-top: .375rem; }               /* 6 + 8 */
+.prose :is(h3, h4, h5, h6) + h4 { margin-top: .5rem; }                 /* 8 + 6 */
+.prose :is(h3, h4, h5, h6) + :is(h5, h6) { margin-top: .625rem; }      /* 10 + 4 */
+/* The first heading under the title and date doesn't need a section's worth of space. */
+.prose :is(.page-title, .updated, .stub-banner) + h2 { margin-top: var(--half); }
+/* Code in a heading reads as part of it, not as a box. */
+.prose :is(h2, h3, h4, h5, h6) code { font-size: .88em; padding: 0; background: none; border: 0; }
+
+/* Table titles and figure captions ("Table 2.1—…", "Figure: …") */
+.prose .cap-table { margin: var(--half) 0 0; font: 700 .95rem/var(--lh) var(--font-body); color: var(--forest); }
+.prose .cap-figure { font: italic 400 .92rem/var(--lh) var(--font-body); color: var(--muted); }
+.prose :is(.cap-table, .cap-figure) :is(strong, b, em, i) { font-weight: inherit; font-style: inherit; }
 /* a table caption sits right on top of its table (and of a short intro line that leads into it) */
-.prose .cap-table { margin-bottom: .25rem; }
-.prose .cap-table + p:has(+ table) { margin-bottom: .25rem; }
-.prose :is(.cap-table, .cap-figure) sup.cite { font-family: var(--font-body); font-weight: 700; }
-.prose p, .prose ul, .prose ol, .prose dl, .prose table, .prose pre, .prose blockquote { margin: 0 0 1rem; }
+.prose .cap-table + p:has(+ table) { margin-bottom: 0; }
+.prose p, .prose ul, .prose ol, .prose dl, .prose table, .prose pre, .prose blockquote { margin: 0 0 var(--half); }
 .prose ul, .prose ol { padding-left: 1.45rem; }
-.prose li { margin: .2rem 0; }
-.prose li > ul, .prose li > ol { margin: .25rem 0 .4rem; }
+/* List items sit line on line; the 28px line already gives them air. */
+.prose li { margin: 0; }
+.prose li > ul, .prose li > ol { margin: 0; }
 @media (max-width: 480px) { .prose li > ul, .prose li > ol { padding-left: 1.05rem; } }
 .prose ul { list-style: none; }
 .prose ul > li { position: relative; }
@@ -390,18 +448,18 @@ img { max-width: 100%; height: auto; }
 .prose code { font: .88em var(--font-mono); padding: .1em .3em; background: var(--code-bg); border: 1px solid color-mix(in srgb, var(--line) 35%, transparent); }
 .prose pre { padding: 1rem; overflow-x: auto; background: #052e16; color: #dcfce7; border: var(--bw) solid #000; box-shadow: var(--sh) var(--sh) 0 var(--shadow); line-height: 1.5; }
 .prose pre code { padding: 0; border: 0; background: none; color: inherit; font-size: .88rem; }
-.prose blockquote { padding: .75rem 1rem; background: var(--mint); border-left: 6px solid var(--leaf); }
+.prose blockquote { padding: var(--half) 1rem; background: var(--mint); border-left: 6px solid var(--leaf); }
 .prose blockquote > :last-child { margin-bottom: 0; }
-.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .95rem; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .95rem; line-height: var(--lh); }
 /* ==highlight== in Markdown renders as <mark> */
 .prose mark { background: var(--lime); color: var(--lime-ink); padding: 0 .15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
 /* a "Note:" paragraph right after a table: smaller, tucked under it */
 .prose table:has(+ .table-note) { margin-bottom: 0; }
-.prose .note { font-size: .85rem; line-height: 1.45; color: var(--muted); }
+.prose .note { font-size: .85rem; line-height: var(--lh); color: var(--muted); }
 .prose :is(ul, ol):has(+ .list-note) { margin-bottom: 0; }
-.prose :is(.table-note, .list-note) { margin-top: 0; padding-top: .35rem; }
-.prose th, .prose td { padding: .45rem .65rem; border: 2px solid var(--line); text-align: left; vertical-align: top; }
+.prose :is(.table-note, .list-note) { margin-top: 0; padding-top: 0; }
+.prose th, .prose td { padding: .4375rem .65rem; border: 2px solid var(--line); text-align: left; vertical-align: top; } /* 7 + 28 + 7: a row is three half-lines (collapsed borders add no height) */
 .prose th { background: var(--mint); font-family: var(--font-head); font-weight: 700; }
 .prose tr:nth-child(even) td { background: color-mix(in srgb, var(--mint) 55%, transparent); }
 .prose img { display: block; margin: 1.25rem auto; border: var(--bw) solid var(--line); box-shadow: var(--sh) var(--sh) 0 var(--shadow); background: var(--surface); }
@@ -455,26 +513,6 @@ img { max-width: 100%; height: auto; }
 .foot a { color: #d9f99d; text-decoration: none; }
 .foot a:hover { text-decoration: underline; }
 
-/* Collapsible sections (built by app.js) */
-.fold-tools { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1rem; }
-.fold-tools button {
-  min-height: 32px; padding: .3rem .75rem; border: 2px solid var(--line); border-radius: 4px;
-  background: var(--surface); color: var(--forest); font: 700 .85rem/1 var(--font-body); cursor: pointer;
-}
-.fold-tools button:hover { background: var(--mint); }
-.prose .fold-btn {
-  all: unset; box-sizing: border-box; cursor: pointer; display: inline; min-height: 24px;
-}
-.prose .fold-btn::after {
-  content: ""; display: inline-block; width: .42em; height: .42em; margin-left: .55em; vertical-align: .18em;
-  border-right: .14em solid currentColor; border-bottom: .14em solid currentColor; transform: rotate(45deg); transition: transform .15s;
-}
-.prose .fold-btn[aria-expanded="false"]::after { transform: rotate(-45deg); }
-.prose .fold-btn.fold-icon { display: inline-block; min-width: 24px; text-align: center; margin-right: .25em; }
-.prose .fold-btn.fold-icon::after { margin-left: 0; }
-.prose .fold-btn:focus-visible { outline: 3px solid var(--forest); outline-offset: 3px; border-radius: 2px; }
-@media print { .fold-tools, .prose .fold-btn::after { display: none; } .prose [hidden] { display: revert !important; content-visibility: visible; } }
-
 /* "Linked from" jump: the link to the page you came from flashes briefly */
 .prose a { transition: background-color .8s ease, box-shadow .8s ease; }
 .prose a.link-flash { background: var(--lime); color: var(--lime-ink); box-shadow: 0 0 0 3px var(--lime); border-radius: 2px; transition: none; }
@@ -484,7 +522,7 @@ img { max-width: 100%; height: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 @media print {
-  .topbar, .foot, .side, .pager, .crumbs, .skip { display: none !important; }
+  .topbar, .foot, .side, .toc-bar, .pager, .crumbs, .skip { display: none !important; }
   body { background: #fff; color: #000; }
   .card { border: 0; box-shadow: none; }
   .prose { padding: 0; }
@@ -579,7 +617,7 @@ img { max-width: 100%; height: auto; }
 .links-book { margin: .7rem .45rem .15rem; font: 700 .84rem/1.7 var(--font-px); text-transform: uppercase; color: var(--forest); border-bottom: 2px dashed color-mix(in srgb, var(--line) 35%, transparent); padding-bottom: .15rem; }
 
 /* "Updated … by …" line under titles */
-.updated { display: flex; align-items: center; gap: .4rem; margin: -.6rem 0 1.25rem; font-size: .88rem; color: var(--muted); }
+.updated { display: flex; align-items: center; gap: .4rem; margin: calc(-1 * var(--half, .875rem)) 0 var(--lh, 1.75rem); line-height: var(--lh, 1.75rem); font-size: .88rem; color: var(--muted); }
 .updated .px { width: .9rem; height: .9rem; color: var(--leaf-ink); }
 .updated strong { color: var(--ink); font-weight: 600; }
 .sec-head .updated { margin: .2rem 0 .1rem; font-size: .8rem; }
@@ -612,3 +650,10 @@ img { max-width: 100%; height: auto; }
 /* Editor preview only: links that don't resolve (the site build never emits this class). */
 a.broken-link { color: #c2410c; text-decoration: underline wavy #c2410c; text-underline-offset: 3px; cursor: help; }
 @media (prefers-color-scheme: dark) { a.broken-link { color: #fb923c; text-decoration-color: #fb923c; } }
+
+/* ?grid in the URL (app.js): show the 28px baseline grid over the page text. */
+.show-grid .prose {
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 calc(1.75rem - 1px), rgba(220, 38, 38, .28) calc(1.75rem - 1px) 1.75rem) content-box,
+    var(--surface);
+}
