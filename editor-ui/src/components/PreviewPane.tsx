@@ -22,7 +22,10 @@ interface Props {
   onLoad(): void;
 }
 
-const HEADER = 80; // the site's sticky header inside the preview
+// Height of the site's sticky bars inside the preview (top bar, plus the
+// "On this page" bar on narrow pages); app.js publishes it as --sticky-h.
+const headerOf = (doc: Document | null | undefined) =>
+  parseFloat(doc ? getComputedStyle(doc.documentElement).getPropertyValue("--sticky-h") : "") || 80;
 
 const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html, pageKey, onLink, onScrollLine, onLoad }, ref) {
   const frame = useRef<HTMLIFrameElement>(null);
@@ -78,7 +81,7 @@ const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html
         let i = as.length - 1;
         while (i > 0 && as[i].line > line) i--;
         const a = as[i], b = as[i + 1] || { line: totalLines + 1, y: win.document.documentElement.scrollHeight };
-        y = a.y + (b.y - a.y) * ((line - a.line) / Math.max(1, b.line - a.line)) - HEADER;
+        y = a.y + (b.y - a.y) * ((line - a.line) / Math.max(1, b.line - a.line)) - headerOf(win.document);
       }
       quietUntil.current = performance.now() + 200;
       win.scrollTo(0, Math.max(0, y));
@@ -101,7 +104,7 @@ const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html
         if (href.startsWith("#")) {
           const id = decodeURIComponent(href.slice(1));
           const el = id ? doc.getElementById(id) : null;
-          if (el) win.scrollTo(0, el.getBoundingClientRect().top + win.scrollY - HEADER);
+          if (el) win.scrollTo(0, el.getBoundingClientRect().top + win.scrollY - headerOf(doc));
           else if (!id) win.scrollTo(0, 0);
           return;
         }
@@ -116,7 +119,7 @@ const PreviewPane = forwardRef<PreviewHandle, Props>(function PreviewPane({ html
           const as = anchors();
           if (!as.length) return;
           if (win.scrollY <= 2) { onScrollLine(1); return; }
-          const y = win.scrollY + HEADER;
+          const y = win.scrollY + headerOf(win.document);
           let i = as.length - 1;
           while (i > 0 && as[i].y > y) i--;
           const a = as[i], b = as[i + 1];
