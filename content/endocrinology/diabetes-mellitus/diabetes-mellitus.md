@@ -25,7 +25,6 @@ Any one of the following:
 | FPG | 100 mg/dL (5.6 mmol/L) to 125 mg/dL (6.9 mmol/L) (IFG) |
 | 2-h OGTT | 140 mg/dL (7.8 mmol/L) to 199 mg/dL (11.0 mmol/L) (IGT) |
 
-
 Note: **A1C may not be always be reliable**
     - “A1C is an indirect measure of glucose exposure, and factors that affect hemoglobin concentrations or erythrocyte turnover can affect A1C (e.g., thalassemia or folate deficiency) (Table 2.3). **A1C may not be a suitable diagnostic test in people with anemia, people treated with erythropoietin, or people undergoing hemodialysis or HIV treatment.**” [@ADA_2026, p. 529]
 
@@ -216,13 +215,13 @@ Note: ASCVD, atherosclerotic cardiovascular disease; MASH, metabolic dysfunction
 - **Religious Fasting**: Use the Diabetes and Ramadan International Alliance risk calculator. Prefasting education -> increase frequency of glucose monitoring, timing of monitoring(last few hours >50% of hypoglycemic events) *See Table 5.4*
 - **Physical Activity**
 - **Smoking Cessation**: Ask about all types of tobacco use. Educate about the possibility of DKA w/ Cannabis Hyperemesis
-### Psychosocial Care
-- Problem Areas in Diabetes (PAID) scale
-- Diabetes Distress Scale (DDS-17)
-- T1 Diabetes Distress Scale (T1-DDS)
-- Hypoglycemia Fear Survey-II (HFS-II W)
-- Insulin Treatment Appraisal Scale (ITAS)
-- PHQ-9 + GAD-7
+- [**Diabetes Psychosocial Care**](https://professional.diabetes.org/sites/default/files/media/ada_mental_health_toolkit_questionnaires.pdf$0)
+  - Problem Areas in Diabetes (PAID) scale
+  - Diabetes Distress Scale (DDS-17)
+  - T1 Diabetes Distress Scale (T1-DDS)
+  - Hypoglycemia Fear Survey-II (HFS-II W)
+  - Insulin Treatment Appraisal Scale (ITAS)
+  - PHQ-9 + GAD-7
 
 **Table 5.4—Changes in medications during fasting** [@ADA_2026]
 
@@ -239,50 +238,95 @@ Note: DPP-4, dipeptidyl peptidase 4; GLP-1, glucagon-like peptide 1; SGLT2, sodi
 
 ## Section 6: Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises
 ### Assessment of Glycemic Status 
-- ==A1c== reflects average glycemia over approximately 2-3 months. Test at least every 6 months. 
+- A1c reflects average glycemia over approximately 2-3 months. Test at least q6mo. 
+- CGM is useful in people at risk for hypoglycemia (anyone who uses insulin). > 70% TIR ≈ A1c 7%. 
 
-(missing image: Pasted image 20261101210442.png)
+**Table 6.1—Equivalent A1C levels and estimated average glucose (eAG)** [@ADA_2026]
 
-- ==CGM== is useful in people at risk for hypoglycemia. >70% TIR  ~~ A1c of 7%. Hypoglycemia. Additional Goals listed below. Use CGM data to inform changes to diabetes management
+| A1C (%) | A1C (mmol/mol) | eAG mg/dL\* | eAG mmol/L\* |
+|:-:|:-:|:-:|:-:|
+| 5 | 31 | 97 (76–120) | 5.4 (4.2–6.7) |
+| 6 | 42 | 126 (100–152) | 7.0 (5.5–8.5) |
+| 7 | 53 | 154 (123–185) | 8.6 (6.8–10.3) |
+| 8 | 64 | 183 (147–217) | 10.2 (8.1–12.1) |
+| 9 | 75 | 212 (170–249) | 11.8 (9.4–13.9) |
+| 10 | 86 | 240 (193–282) | 13.4 (10.7–15.7) |
+| 11 | 97 | 269 (217–314) | 14.9 (12.0–17.5) |
+| 12 | 108 | 298 (240–347) | 16.5 (13.3–19.3) |
 
-(missing image: Pasted image 20261101211301.png)
+**Table 6.2—CGM metrics for clinical care in nonpregnant individuals with T1 or T2DM** [@ADA_2026]
+
+| Metric | Interpretation | Goals |
+|---|---|---|
+| *Metrics for valid CGM wear* | | |
+| Wear time | # days CGM is worn | ≥14-day wear for pattern management |
+| Active percentage time | % time CGM  is active | 70% per 14 days |
+| *Glycemic metrics* | | |
+| Mean glucose | Mean of glucose values | \* |
+| Glucose management indicator (GMI) | Calculated value approximating A1C (not always equivalent) | \* |
+| Glucose coefficient of variation (CV) | Spread of glucose values | ≤36% |
+| TAR >250 mg/dL| % time in **level 2 hyperglycemia** | <5% (most adults); <10% (if old/ill) |
+| TAR >180 mg/dL | % time in **level 1 hyperglycemia** | <25% (most adults); <50% ((if old/ill) |
+| TIR 70–180 mg/dL | % time **in range** | >70% (most adults); >50% (if old/ill) |
+| TBR <70 mg/dL | % time in **level 1 hypoglycemia** | <4% (most adults); <1% (if old/ill) |
+| TBR <54 mg/dL | % time in **level 2 hypoglycemia** | <1% |
 
 ### Glycemic Goals
 - A1c <7.0%
 - Preprandial plasma glucose 80-130 mg/dL
 - Peak postprandial plasma glucose <180mg/dL
 ### Hypoglycemia assessment, prevention, and treatment
-- Level 1: 54<= Glucose <70 mg/dL
-- Level 2: Glucose <54
-- Level 3: Severe event requiring assistance
-#### Risk Assessment
-- Prior Level 2/3 events are strongest risk factors for recurrence
-- Meds that cause hypoglycemia: Insulin, Sulfonylureas, Meglitinides
-- Screen for hypoglycemia unawareness (hypoglycemia-associated autonomic failure) annually. "Can you always feel when your BG is low?"
-
-(missing image: Pasted image 20261101212057.png)
-
-#### Treatment
-- Counsel to use 15g of fast-acting carbs @ alert value of 70 mg/dL, recheck glucose after 15 mins. 
-- Glucagon can be injected if needed. 
-#### Prevention
-- Diabetes Education
-- CGMs
-- Modification of DM treatment during illness
-	- Hold Metformin and SGLT2i if not PO or AKI occurs
-	- Hold GLP-1s in GI illness
-	- Hold sulfonylureas w/ Abx and azoles
-- If hypoglycemic unaware, relax glycemic goals for a few weeks to allow counterregulation to reoccur and support hypoglycemic awareness
-### Hyperglycemic Crises
+- Definitions:
+  - Level 1: 54<= Glucose <70 mg/dL
+  - Level 2: Glucose <54
+  - Level 3: Severe event requiring assistance
+- **Risk Assessment**: Prior Level 2/3 events = strongest risk factors. Meds that cause hypoglycemia: *Insulin, Sulfonylureas, Meglitinides*. Screen for hypoglycemia unawareness (hypoglycemia-associated autonomic failure) annually. "Can you always feel when your BG is low?"
+- **Treatment**: 15g fast-acting carbs @ alert value of 70 mg/dL, recheck glucose after 15 mins. Glucagon if needed
+- **Prevention**
+  - Diabetes Education
+  - CGMs
+  - Modification of DM treatment during illness
+    - Hold Metformin and SGLT2i if not PO or AKI occurs
+    - Hold GLP-1s in GI illness
+    - Hold sulfonylureas w/ Abx and azoles
+  - If hypoglycemic unaware, relax glycemic goals for a few weeks to allow counterregulation to reoccur and support hypoglycemic awareness
+### Hyperglycemic Crises (DKA, HHS)
 - Risk factors include very-low carb diets, fasting, dehydration, alcohol, and autoimmunity 
-- Provide all T1DM and insulin using T2DM w/ ketone tests and educate on ketotic states. 
-	- Can self manage w/ frequent glucose/ketone monitoring + SQ insulin
+- Provide all T1DM and insulin using T2DM w/ ketone tests and educate on ketotic states. Can self manage w/ frequent glucose/ketone monitoring + SQ insulin
 ## Section 7: Diabetes Technology
 ### Blood Glucose monitoring and CGMs
 - All persons using MDI or pump insulin should be offered a CGM
 - Glucose monitors do not work well in the setting of: critical illness, O2 therapy, hypoxia, excessively high or low temps, and some interfering substances
-	- (missing image: Pasted image 20261105150202.png)
-	- (missing image: Pasted image 20261105150319.png)
+
+**Table 7.2—Some of the more common interfering substances and/or conditions that affect blood glucose meters (for inpatient and outpatient use)** [@ADA_2026]
+
+| Substance or condition | Potential effects on glucose readings measured by BGMs\* |
+|---|---|
+| Maltose† | Falsely higher blood glucose readings |
+| Galactose | Falsely higher blood glucose readings |
+| Xylose | Falsely higher blood glucose readings |
+| *N*-Acetylcysteine | Falsely higher or lower blood glucose readings (depending on BGM design) |
+| Acetaminophen | Falsely higher or lower blood glucose readings (depending on BGM design) |
+| Dopamine | Falsely higher or lower blood glucose readings (depending on BGM design) |
+| Pralidoxime (2-PAM) | Falsely higher or lower blood glucose readings (depending on BGM design) |
+| Hydroxyurea | Falsely higher or lower blood glucose readings (depending on BGM design) |
+| Vitamin C | Falsely higher or lower blood glucose readings (depending on BGM design) |
+| Hematocrit (high) | Falsely lower blood glucose readings |
+| Hematocrit (low) | Falsely higher blood glucose readings |
+
+**Table 7.4—Continuous glucose monitoring device interfering substances** [@ADA_2026]
+
+| Medication | Systems affected | Effect |
+|---|---|---|
+| *Acetaminophen* | | |
+| >4 g/day | Dexcom G6, Dexcom G7 | Higher sensor readings than actual glucose |
+| Any dose | Medtronic Guardian 4 | Higher sensor readings than actual glucose |
+| Ascorbic acid (vitamin C), >500 mg/day | FreeStyle Libre 2, FreeStyle Libre 3 | Higher sensor readings than actual glucose |
+| Ascorbic acid (vitamin C), >1,000 mg/day | FreeStyle Libre 2 Plus, FreeStyle Libre 3 Plus | Higher sensor readings than actual glucose |
+| Hydroxyurea | Dexcom G6, Dexcom G7, Medtronic Guardian 4 | Higher sensor readings than actual glucose |
+| Mannitol (intravenously or as peritoneal dialysis solution) | Senseonics Eversense365 | Higher sensor readings than actual glucose |
+| Sorbitol (intravenously or as peritoneal dialysis solution) | Senseonics Eversense365 | Higher sensor readings than actual glucose |
+
 ### Insulin delivery
 - Pens are preferred over syringes. "Connected pens" calculate doses and record them. 
 - Inhaled insulin is an option!
@@ -290,45 +334,33 @@ Note: DPP-4, dipeptidyl peptidase 4; GLP-1, glucagon-like peptide 1; SGLT2, sodi
 - In T2DM - patch like insulin delivery works well. 
 - Continue CGMs and insulin pump when hospitalized as appropriate
 
-## Section 8: Obesity and Weight Management for the Prevention and Treatment of DM
-- Consistent evidence that obesity management can delay the progression from prediabetes to T2DM and that its beneficial in T2DM. 
-- BMI is imperfect but is a fast heuristic and is a close approximation of excess adiposity in most people
-- *Check out The Obesity Association's guidelines to recognize and address weight bias and stigma*
-### Behavioral Interventions
-- The only thing that works are *intensive* lifestyle interventions. 
-- No single nutrition/diet plan is best
-- Consider use of Weight (-) or (~) rather than (+) insulin, sulfonylureas, meglitinides, or thiazolidinediones
-### Obesity Pharmacotherapy
-- GLP-1 and GIP/GLP-1 classes are best for weight and glucose management. They are some of the only meds that reduce CVD events!
-- Weight loss is typically less than what is seen in ppl w/o DM
-- Considerations
-	- Tirzepatide may reduce the efficacy of OCP due to delayed gastric emptying - must use back up contraception for 4 weeks after all dose increases.
-	- Nutritional Deficiencies - Vit D is most common
-	- Discontinue Sulfonylureas w/ GLP +/- GIPs
-- Monitoring: Montly x3, then q3mo
-
-(missing image: Pasted image 20261106194043.png)
-
-(missing image: Pasted image 20261106194222.png)
-
-### Metabolic Surgery
-- Rapid and strong reduction of risk across multiple domains
-- Types: Vertical sleeve gastrectomy,  Roux-en-Y gastric bypass - Both result in a smaller stomach pouch and changes in enteroendocrine hormones. 
-- Can use GLP +/- GIP for additional weight loss
 
 ## Section 9: Pharmacologic Approaches to Glycemic Treatment
 ### Approaches for T1DM
 
-(missing image: Pasted image 20261106202020.png)
+![Flowchart: starting insulin in type 1 diabetes at 0.4 to 0.5 units/kg/day split between basal and prandial, reassessing with CGM or SMBG, then adjusting for hypoglycemia, fasting hyperglycemia or postprandial hyperglycemia](images/t1dm-insulin-initiation-and-adjustment.png)
+*Initiation and adjustment of insulin using multiple daily dosing in individuals with type 1 diabetes. Source: [@ADA_2026]*
 
 - Better glycemic control = less microvascular events
 - ==Insulin Replacement Plans== = ==Basal insulin== (30-50%) + ==mealtime insulin== (remainder)+ ==correction insulin==
 	- Total daily Insulin = 0.5units/kg/day is starting dose
 	- Basal insulin = Long Acting Analogue (LAA)
 
-(missing image: Pasted image 20261106201455.png)
+**Table 9.1—Examples of subcutaneous insulin treatment plans** [@ADA_2026]
 
-(missing image: Pasted image 20261106201510.png)
+| Plans | Timing and distribution | Advantages | Disadvantages | Adjusting doses |
+|---|---|---|---|---|
+| ***Plans that more closely mimic normal insulin secretion*** | | | | |
+| ==Insulin pump therapy==, including conventional CSII, sensor-augmented pump, low-glucose suspend; AID systems such as hybrid closed loop | Basal delivery of ==URAA or RAA; generally 30–50% of TDD.==<br>Mealtime and correction: ==URAA or RAA by bolus== based on ICR and/or ISF and target glucose, with premeal insulin ∼15 min before eating. | Can adjust basal rates for varying insulin sensitivity by time of day, for exercise, and for sick days.<br>Flexibility in meal timing and content.<br>Pump can deliver insulin in increments of fractions of units.<br>Potential for integration with CGM for AID systems.<br>TIR % highest and TBR % lowest with: hybrid closed-loop > low-glucose suspend > sensor-augmented open-loop > conventional CSII. | Most expensive plan.<br>Must continuously wear one or more devices.<br>Risk of rapid development of ketosis or DKA with interruption of insulin delivery.<br>Potential reactions to adhesives and site infections.<br>Most technically complex approach (harder for people with lower numeracy or literacy skills). | ==Mealtime insulin==: if carbohydrate counting is accurate, change ICR if glucose after meal consistently out of target.<br>==Correction insulin==: adjust ISF and/or target glucose if correction does not consistently bring glucose into range.<br>==Basal rates==: adjust based on overnight, fasting or daytime glucose outside of activity of URAA/RAA bolus.<br>==AID systems==: carbohydrate ratio, insulin on board, targets, and/or ISF may be adjusted, depending on the system; make sure to review and adjust manual mode settings, if available. |
+| ==MDI==: LAA + flexible doses of URAA or RAA at meals | ==LAA once daily== (insulin detemir or insulin glargine may require twice-daily dosing); generally 30–50% of TDD.<br>==Mealtime and correction:== URAA or RAA based on ICR and/or ISF and target glucose. | Can use pens for all components.<br>Flexibility in meal timing and content.<br>Insulin analogs cause less hypoglycemia than human insulins. | At least four daily injections.<br>Most costly insulins.<br>Smallest increment of insulin is 1 unit (0.5 unit with some pens).<br>LAAs may not cover strong dawn phenomenon (rise in glucose in early morning hours) as well as pump therapy. | Mealtime insulin: if carbohydrate counting is accurate, change ICR if glucose after meal consistently out of target.<br>Correction insulin: adjust ISF and/or target glucose if correction does not consistently bring glucose into range.<br>LAA: based on overnight or fasting glucose or daytime glucose outside of activity time course, or URAA or RAA injections. |
+| ***MDI plans with less flexibility*** | | | | |
+| ==Four injections daily with fixed doses of N and RAA== | ==Pre-breakfast: RAA ∼20%== of TDD. ==Pre-lunch: RAA ∼10%== of TDD.<br>==Pre-dinner: RAA ∼10%== of TDD.<br>==Bedtime: N ∼50%== of TDD. | May be feasible if ==unable to carbohydrate count==.<br>All meals have RAA coverage.<br>N is less expensive than LAAs. | Shorter duration RAA may lead to basal deficit during day; may need twice-daily N.<br>Greater risk of nocturnal hypoglycemia with N.<br>Requires relatively consistent mealtimes and carbohydrate intake. | Pre-breakfast RAA: based on BGM after breakfast or before lunch.<br>Pre-lunch RAA: based on BGM after lunch or before dinner.<br>Pre-dinner RAA: based on BGM after dinner or at bedtime.<br>Evening N: based on fasting or overnight BGM. |
+| ==Four injections daily with fixed doses of N and R== | Pre-breakfast: R ==∼20%== of TDD.<br>Pre-lunch: R ==∼10%== of TDD.<br>Pre-dinner: R ==∼10%== of TDD.<br>Bedtime: ==N ∼50%== of TDD. | May be feasible if ==unable to carbohydrate count==.<br>R can be dosed based on ICR and correction.<br>All meals have R coverage.<br>Least expensive insulins. | Greater risk of nocturnal hypoglycemia with N.<br>Greater risk of delayed post-meal hypoglycemia with R.<br>Requires relatively consistent mealtimes and carbohydrate intake.<br>R must be injected at least 30 min before meal for better effect. | Pre-breakfast R: based on BGM after breakfast or before lunch.<br>Pre-lunch R: based on BGM after lunch or before dinner.<br>Pre-dinner R: based on BGM after dinner or at bedtime.<br>Evening N: based on fasting or overnight BGM. |
+| ***==Plans with fewer daily injections==*** | | | | |
+| ==Three injections daily: N + R or N + RAA== | Pre-breakfast: ==N ∼40% TDD== + R or ==RAA ∼15%== TDD.<br>Pre-dinner: ==R or RAA ∼15%== TDD.<br>Bedtime: ==N ∼30%== TDD. | Morning insulins can be mixed in one syringe.<br>May be appropriate for those ==who cannot take injection in middle of day.==<br>Morning N covers lunch to some extent.<br>Same advantages of RAAs over R.<br>Least (N + R) or less expensive insulins than MDI with analogs. | ==Greater risk of nocturnal hypoglycemia with N than LAAs==.<br>Greater risk of delayed post-meal hypoglycemia with R than RAAs.<br>==Requires relatively consistent mealtimes and carbohydrate intake==.<br>Coverage of post-lunch glucose often suboptimal.<br>==R must be injected at least 30 min before meal for better effect.== | Morning N: based on pre-dinner BGM.<br>Morning R: based on pre-lunch BGM.<br>Morning RAA: based on post-breakfast or pre-lunch BGM.<br>Pre-dinner R: based on bedtime BGM.<br>Pre-dinner RAA: based on post-dinner or bedtime BGM.<br>Evening N: based on fasting BGM. |
+| ==Twice-daily “split-mixed”: N + R or N + RAA== | Pre-breakfast: N ==∼40%== TDD + ==R or RAA ∼15% TDD.==<br>Pre-dinner: ==N ∼30%== TDD + ==R or RAA ∼15% TDD.== | Least number of injections for people with strong preference for this.<br>Insulins can be mixed in one syringe.<br>Least (N + R) or less (N + RAA) expensive insulins vs. analogs.<br>Eliminates need for doses during the day. | ==Risk of hypoglycemia in afternoon or middle of night from N.==<br>Fixed mealtimes and meal content.<br>Coverage of post-lunch glucose often suboptimal.<br>==Difficult to reach targets for blood glucose without hypoglycemia.== | Morning N: based on pre-dinner BGM.<br>Morning R: based on pre-lunch BGM.<br>Morning RAA: based on post-breakfast or pre-lunch BGM.<br>Evening R: based on bedtime BGM.<br>Evening RAA: based on post-dinner or bedtime BGM.<br>Evening N: based on fasting BGM. |
+
+Note: AID, automated insulin delivery; BGM, blood glucose monitoring; CGM, continuous glucose monitoring; CSII, continuous subcutaneous insulin infusion; ICR, insulin-to-carbohydrate ratio; ISF, insulin sensitivity factor; LAA, long-acting analog; MDI, multiple daily injections; ==N, NPH insulin==; R, short-acting (regular) insulin; RAA, rapid-acting analog; TBR, time below range; TDD, total daily insulin dose; TIR, time in range; URAA, ultra-rapid-acting analog (inhaled insulin may be considered if appropriate). Adapted from Holt et al. (4).
 
 Non-insulin treatments
 - Pramlintide - amylin analogue
@@ -337,7 +369,8 @@ Non-insulin treatments
 - Pancreas/Islet Transplantation
 ### Approaches in T2DM
 
-(missing image: Pasted image 20261106201942.png)
+![Flowchart: choosing glucose-lowering medications in type 2 diabetes. One path for cardiovascular and kidney risk reduction (ASCVD, high CVD risk, heart failure, CKD) using GLP-1 RA and SGLT2i; one for weight and glycemic goals, with medications ranked by efficacy; then agents for MASLD or MASH](images/t2dm-glucose-lowering-medications.png)
+*Use of glucose-lowering medications in the management of type 2 diabetes. Source: [@ADA_2026]*
 
 - Most common practice is to start with Metformin (although no CVD/CKD benefit) - pill, few side effects (GI), cheap
 - ==All T2DM adults w/ risk of ASCVD, HF +/- CKD therapy should  include SGLT2i or GLP1 regardless of A1c==
@@ -385,7 +418,8 @@ Non-insulin treatments
 	- Resistant: Add Spironolactone or eplerenone
 	- Monitor K+ and Cr
 
-(missing image: Pasted image 20261107111544.png)
+![Flowchart: initial BP 130/80 to 150/90 start one agent, 150/90 or higher start two agents; choose ACEi or ARB if albuminuria or CAD; reassess BP goals and adverse effects, add a complementary class, then consider a mineralocorticoid receptor antagonist and specialist referral](images/fig-10-2-hypertension-treatment.png)
+*Figure 10.2—Recommendations for the treatment of confirmed hypertension in nonpregnant people with diabetes. Source: [@ADA_2026]*
 
 ### Lipid Management
 - Lifestyle management 
@@ -409,7 +443,8 @@ Non-insulin treatments
 		- CAC to guide risk assessment
 	- Do not screen asymptomatic individuals
 
-(missing image: Pasted image 20261107132347.png)
+![Flowchart: prevention of ASCVD in type 2 diabetes. Established ASCVD: high-intensity statin, GLP-1 RA, SGLT2i, then aspirin plus rivaroxaban or single antiplatelet therapy depending on vascular beds and age. No ASCVD: high-intensity statin, GLP-1 RA and SGLT2i if high risk, otherwise moderate- or high-intensity statin](images/ascvd-prevention-type-2-diabetes.png)
+*Prevention of ASCVD in people with type 2 diabetes. Source: [@ADA_2026]*
 
 - HF
 	- Screen Asymptomatic T2DM w/ BNP. If >=50 pg/mL high risk
@@ -417,7 +452,8 @@ Non-insulin treatments
 		- Remember CKD, Pulm HTN, COPD, OSA, Stroke, and anemia can raise levels.
 	- If (+) get an ECHO
 
-(missing image: Pasted image 20261107132400.png)
+![Flowchart: heart failure in diabetes. Symptomatic HF is treated by ejection fraction (HFrEF or HFmrEF/HFpEF guideline-directed therapy). Without symptoms, use echocardiogram if available, otherwise BNP or NT-proBNP screening](images/heart-failure-screening-and-treatment.png)
+*Screening and treatment of heart failure in people with diabetes. Source: [@ADA_2026]*
 
 - PAD
 	- Symptoms of claudication are uncommon. 
@@ -430,7 +466,18 @@ Non-insulin treatments
 ## Section 11: CKD risk management
 ### Assess Albuminuria and eGFR
 
-(missing image: Pasted image 20261107132832.png)
+**CKD classification by GFR and albuminuria categories** [@ADA_2026]
+
+| GFR category (mL/min/1.73 m²) | | A1: Normal to mildly increased (<30 mg/g; <3 mg/mmol) | A2: Moderately increased (30–299 mg/g; 3–29 mg/mmol) | A3: Severely increased (≥300 mg/g; ≥30 mg/mmol) |
+|---|---|---|---|---|
+| **G1** Normal or high | ≥90 | Screen, 1 (low risk) | Treat, 1 (moderate risk) | Treat and refer, 2 (high risk) |
+| **G2** Mildly decreased | 60–89 | Screen, 1 (low risk) | Treat, 1 (moderate risk) | Treat and refer, 2 (high risk) |
+| **G3a** Mildly to moderately decreased | 45–59 | Treat, 1 (moderate risk) | Treat, 2 (high risk) | Treat and refer, 3 (very high risk) |
+| **G3b** Moderately to severely decreased | 30–44 | Treat, 2 (high risk) | Treat and refer, 3 (very high risk) | Treat and refer, 3 (very high risk) |
+| **G4** Severely decreased | 15–29 | Treat and refer, 3 (very high risk) | Treat and refer, 3 (very high risk) | Treat and refer, 4+ (very high risk) |
+| **G5** Kidney failure | <15 | Treat and refer, 4+ (very high risk) | Treat and refer, 4+ (very high risk) | Treat and refer, 4+ (very high risk) |
+
+Note: CKD is classified based on GFR (G) and albuminuria (A). Risk is shown in words in place of the original colours: low risk (if no other markers of kidney disease, no CKD), moderately increased, high, and very high.
 
 - Check Ur Albumin/Cr and eGFR annually. If abnormal check again in 3 mo, if still abnormal then consider person to have moderate/severely elevated albuminuria. 
 	- eGFR <60 +/- Ur Albumin/Cr >30 = abnormal
@@ -440,7 +487,8 @@ Non-insulin treatments
 - 1ª Prevention: Only A1c <7% and BP <130/80 helps. Use of ACE/ARB doesn't do much
 - 2ª Prevention: Simultaneous initiation of SGLT2i and nsMRA (finerenone) should be considered in T2DM w/ Urine Albumin/Cr >=100 w/ eGFR 30-90 on ACE/ARB
 
-(missing image: Pasted image 20261107133631.png)
+![Flowchart: kidney and heart risk reduction in diabetes. Lifestyle, then RAS inhibitor, then first-line SGLT2i and/or GLP-1 RA (type 2 only), CCB or diuretic for BP, and statin; then additional risk-based therapy such as nsMRA, steroidal MRA, antiplatelet agents and further lipid lowering](images/kidney-and-heart-risk-treatment.png)
+*Holistic approach to reducing kidney and cardiovascular risk in people with diabetes and CKD. Source: [@ADA_2026]*
 
 ## Section 12: Retinopathy, Neuropathy, and Foot Care
 - Diabetic Retinopathy -> Diabetic Macular Edema or retinal detachment.
@@ -466,11 +514,19 @@ Non-insulin treatments
 	- Examine skin integrity, Loss Of Protective Sensation (LOPS) using monofilament, pulse exam, and assessment for deformities (bunions, hammertoes, prominent metatarsals)
 	- If PAD possible refer or Arterial doppler US w/ pulse volume recordings. Toe systolic BP is more accurate than ankle in DM. If <30 then suggestive of PAD. Screen starting @ 50 and every 5 years after. 
 
-(missing image: Pasted image 20261107141159.png)
+**Table 12.1—International Working Group on Diabetic Foot risk stratification system and corresponding foot screening frequency** [@ADA_2026]
+
+| Category | Ulcer risk | Characteristics | Examination frequency\* |
+|:-:|---|---|---|
+| 0 | Very low | No LOPS and no PAD | Annually |
+| 1 | Low | LOPS or PAD | Every 6–12 months |
+| 2 | Moderate | LOPS + PAD, or<br>LOPS + foot deformity, or<br>PAD + foot deformity | Every 3–6 months |
+| 3 | High | LOPS or PAD and one or more of the following:<br>• History of foot ulcer<br>• Amputation (minor or major)<br>• Kidney failure | Every 1–3 months |
 
 ## Section 13: Older Adults w/DM
 
-(missing image: Pasted image 20261107141607.png)
+![The 4Ms framework in four boxes: What Matters Most, Medications, Mentation and Mobility, each listing issues that can affect diabetes management in older adults](images/fig-13-1-4ms-framework.png)
+*Figure 13.1—Using the 4Ms framework of age-friendly health systems to address person-specific issues that can affect diabetes management. Source: [@ADA_2026]*
 
 - Assess all geriatric syndromes annually for age >65 
 	- Cognitive impariment - Mini Cog
@@ -490,7 +546,15 @@ Non-insulin treatments
 	- Dizziness - Orthostatic vital signs, neuro exam
 	- Reduced Executive Functioning - Trail making test B
 
-(missing image: Pasted image 20261107142249.png)
+**Table 13.2—Framework for considering treatment goals for glycemia, blood pressure, and dyslipidemia in older adults with diabetes** [@ADA_2026]
+
+| Characteristics and health status of person with diabetes | Rationale | Reasonable A1C goal\* | Reasonable CGM goals | Fasting or preprandial glucose | Bedtime glucose | Blood pressure | Lipids |
+|---|---|---|---|---|---|---|---|
+| Healthy (few coexisting chronic illnesses, intact cognitive and functional status) | Longer remaining life expectancy | <7.0–7.5% (<53–58 mmol/mol) | TIR 70–180 mg/dL (3.9–10.0 mmol/L) of ≥70%, and TBR ≤70 mg/dL (≤3.9 mmol/L) of ≤4% | 80–130 mg/dL (4.4–7.2 mmol/L) | 80–180 mg/dL (4.4–10.0 mmol/L) | <130/80 mmHg | Statin, unless contraindicated or not tolerated |
+| Complex/intermediate (multiple coexisting chronic illnesses† or two or more ADL impairments or mild to moderate cognitive impairment) | Variable life expectancy. Individualize goals, considering:<br>• Severity of comorbidities<br>• Cognitive and functional limitations<br>• Frailty<br>• Risk-to-benefit ratio of diabetes medications<br>• Individual preference | <8.0% (<64 mmol/mol) | TIR 70–180 mg/dL (3.9–10.0 mmol/L) of ≥50% and TBR <70 mg/dL (<3.9 mmol/L) of <1% | 90–150 mg/dL (5.0–8.3 mmol/L) | 100–180 mg/dL (5.6–10.0 mmol/L) | <130/80 mmHg | Statin, unless contraindicated or not tolerated |
+| Very complex/poor health (PALTC or end-stage chronic illnesses‡ or moderate to severe cognitive impairment or two or more ADL impairments) | Limited remaining life expectancy makes benefit minimal | Avoid reliance on A1C; glucose management decisions should be based on avoiding hypoglycemia and symptomatic hyperglycemia | | 100–180 mg/dL (5.6–10.0 mmol/L) | 110–200 mg/dL (6.1–11.1 mmol/L) | <140/90 mmHg | Consider likelihood of benefit with statin |
+
+Note: This table represents a consensus framework for considering treatment goals for glycemia, blood pressure, and dyslipidemia in older adults with diabetes. The characteristic categories are general concepts. Not every individual will clearly fall into a particular category. Consideration of individual and care partner preferences, care partner engagement, abilities, and resources is an important aspect of treatment individualization. Additionally, an individual’s health status and preferences may change over time. ADL, activities of daily living; CGM, continuous glucose monitoring; PALTC, post-acute and long-term care; TBR, time below range; TIR, time in range. \*A lower A1C goal may be set for an individual if achievable without recurrent or severe hypoglycemia or undue treatment burden. †Coexisting chronic illnesses are conditions serious enough to require medications or lifestyle management and may include arthritis, cancer, heart failure, depression, emphysema, falls, hypertension, incontinence, stage 3 or worse chronic kidney disease, myocardial infarction, and stroke. “Multiple” means at least three, but many individuals may have five or more (193). ‡The presence of a single end-stage chronic illness, such as stage 3–4 heart failure or oxygen-dependent lung disease, chronic kidney disease requiring dialysis, or uncontrolled metastatic cancer, may cause significant symptoms or impairment of functional status and significantly reduce life expectancy. Adapted from Kirkman et al. (5).
 
 - Consider Simplification as people age +/- functional status becomes more difficult
 
@@ -502,20 +566,37 @@ Non-insulin treatments
 | Poor Health                    | Avoid hypoglycemia, symptomatic hyperglycemia | No benefits of control. Most important outcomes are cognitive and functional status | Inconsistent eating pattern. The individual wants to.                    | Taking med w/o clear benefits                      |
 | End of life                    | Avoid hypoglycemia, symptomatic hyperglycemia | Goal is to provide comfort and to avoid all tasks that cause pain/discomfort        | Pain or discomfort. Stress to care partners                              | Taking med w/o clear benefit                       |
 
-(missing image: Pasted image 20261107142423.png)
+![Flowchart: simplifying insulin in older adults with type 2 diabetes. Move basal insulin to the morning and titrate to fasting goal 90 to 150 mg/dL; reduce or stop prandial insulin and add noninsulin agents; premixed insulin becomes 70 percent of the dose as morning basal](images/fig-13-3-simplifying-insulin.png)
+*Figure 13.3—Algorithm to simplify insulin administration plans in older individuals. Source: [@ADA_2026]*
 
 ## Section 14: Children and Adolescents
 
-(missing image: Pasted image 20261107143241.png)
+![Flowchart: new-onset diabetes in youth with overweight or obesity. Treatment by A1C below or at least 8.5 percent, or acidosis/DKA/HHS; then pancreatic autoantibodies decide between the type 2 pathway (metformin, then GLP-1 RA or SGLT2i, then insulin) and the type 1 pathway](images/fig-14-1-youth-type-2-diabetes.png)
+*Figure 14.1—Management of new-onset diabetes in youth with overweight or obesity with clinical suspicion of type 2 diabetes. Source: [@ADA_2026]*
 
 ## Section 15: DM and Pregnancy
 
 ## Section 16: Diabetes in the Hospital 
 ### DKA and HHS
 
-(missing image: Pasted image 20261107143437.png)
+**Table 16.1—Diagnostic criteria for DKA and HHS** [@ADA_2026]
 
-(missing image: Pasted image 20261107143424.png)
+| Criterion | Definition |
+|---|---|
+| ***DKA*** | |
+| Diabetes/hyperglycemia | Glucose ≥200 mg/dL (11.1 mmol/L) or prior history of diabetes |
+| Ketosis | β-Hydroxybutyrate concentration ≥3.0 mmol/L or urine ketone strip 2+ or greater |
+| Metabolic acidosis | pH <7.3 and/or bicarbonate concentration <18 mmol/L |
+| ***HHS*** | |
+| Hyperglycemia | Plasma glucose ≥600 mg/dL (33.3 mmol/L) |
+| Hyperosmolarity | Calculated effective serum osmolality >300 mOsm/kg (calculated as [2 × Na⁺ (mmol/L) + glucose (mmol/L)] or total serum osmolality >320 mOsm/kg [2 × Na⁺ (mmol/L) + glucose (mmol/L) + urea (mmol/L)] |
+| Absence of significant ketonemia | β-Hydroxybutyrate concentration <3.0 mmol/L OR urine ketone strip less than 2+ |
+| Absence of acidosis | pH ≥7.3 and bicarbonate concentration ≥15 mmol/L |
+
+Note: Adapted from Umpierrez et al. (165).
+
+![Treatment pathways for DKA and HHS in three columns: IV fluids by hydration status, insulin by severity (mild DKA, moderate or severe DKA, HHS), and potassium replacement by serum potassium level](images/fig-16-1-dka-hhs-treatment.png)
+*Figure 16.1—Treatment pathways for diabetic ketoacidosis (DKA) and hyperglycemic hyperosmolar state (HHS). Source: [@ADA_2026]*
 
 ## Section 17: Diabetes Advocacy
 
