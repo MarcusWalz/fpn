@@ -1,5 +1,5 @@
 ---
-title: Hypertension
+title: Essential Hypertension
 aliases: []
 ---
 
