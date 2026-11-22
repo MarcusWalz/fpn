@@ -4,14 +4,14 @@ aliases: []
 ---
 
 ## Suicidal Ideation
-- Lifetime prevelance of Suicidal Ideation is 9%
+- Lifetime prevalence of Suicidal Ideation is 9%
 - Probability of suicide attempt for those with SI is ~30%
 
 ## Risk of Suicide Completion
 ### Demographics
 - Age: Mean 47 years, high rates occur in persons >70 yrs
 - Sex: Men > Women; LGBTQ > cis/straight
-- Rurality: Dose effect, the more rural a place is the highter the rate of suicide
+- Rurality: Dose effect, the more rural a place is the higher the rate of suicide
 ### Psychiatric Hx
 - Hx previous suicide attempt (highest w/in 1st week and year)
 - Psychiatric disorders 
@@ -19,7 +19,7 @@ aliases: []
     - MDD
     - Bipolar
     - Psychotic Disorders
-  - Severity (dose dependent relationship. ie if someone has needed to be hospitalized for psychatric disorder their lifetime rate of suidice ⬆)
+  - Severity (dose dependent relationship. ie if someone has needed to be hospitalized for psychiatric disorder their lifetime rate of suicide ⬆)
 
 ### Other Risk Factors
 - Access to firearms
