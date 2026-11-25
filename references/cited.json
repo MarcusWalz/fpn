@@ -361,6 +361,51 @@
     "volume": "90"
   },
   {
+    "id": "marzani.neff_2021",
+    "abstract": "Bipolar disorders are common, recurrent mental health conditions of variable severity that are difficult to diagnose. Affected individuals have higher rates of other mental health disorders, substance use disorders, and comorbid chronic medical illnesses. New diagnostic criteria and specifiers with attention on mixed features and anxious distress aid the physician in recognizing episode severity and prognosis. Physicians should consider bipolar disorder in any patient presenting with depression. Pharmacotherapy with mood stabilizers, such as lithium, anticonvulsants, and antipsychotics, is a first-line treatment that should be continued indefinitely because of the risk of patient relapse. Active lifestyle approaches include good nutrition, exercise, sleep hygiene, and proper weight management. Monotherapy with antidepressants is contraindicated during episodes with mixed features, manic episodes, and in bipolar I disorder. Ongoing management involves monitoring for suicidal ideation, substance use disorders, treatment adherence, and recognizing medical complications of pharmacotherapy. Psychotherapy is a useful adjunct to pharmacotherapy. Patients and their support systems should be educated about the chronic nature of this illness, possible relapse, suicidality, environmental triggers (e.g., seasonal light changes, shift work, other circadian disruption), and the effectiveness of early intervention to reduce complications.",
+    "accessed": {
+      "date-parts": [
+        [
+          "2026",
+          11,
+          25
+        ]
+      ]
+    },
+    "author": [
+      {
+        "family": "Marzani",
+        "given": "Gabrielle"
+      },
+      {
+        "family": "Neff",
+        "given": "Amy Price"
+      }
+    ],
+    "citation-key": "marzani.neff_2021",
+    "container-title": "American Family Physician",
+    "container-title-short": "AFP",
+    "ISSN": "1532-0650, 0002-838X",
+    "issue": "4",
+    "issued": {
+      "date-parts": [
+        [
+          "2021",
+          2,
+          15
+        ]
+      ]
+    },
+    "language": "en",
+    "page": "227–239",
+    "source": "www.aafp.org",
+    "title": "Bipolar Disorders: Evaluation and Treatment",
+    "title-short": "Bipolar Disorders",
+    "type": "article-journal",
+    "URL": "https://www.aafp.org/afp/2021/0215/p227",
+    "volume": "103"
+  },
+  {
     "id": "nationalosteoporosisfoundation_2002",
     "author": [
       {
