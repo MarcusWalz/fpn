@@ -1,5 +1,5 @@
 ---
-title: Cyclothimia
+title: Cyclothymia
 aliases: []
 ---
 
