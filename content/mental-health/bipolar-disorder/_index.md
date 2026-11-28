@@ -1,5 +1,5 @@
 ---
-title: Bipolar Disorder
+title: Bipolar Disorders
 legacy: Psych/Bipolar/
 planned:
     - 

@@ -32,4 +32,6 @@ aliases: []
 - Typically present for treatment w/ depression or anxiety. Physicians should explicitly ask about symptoms of mania/[hypomania](hypomanic-episode.md). 
 
 ## Evaluation
-- Screen all pt >12yrs for depression. 
+- Screen all pt >12yrs for depression using Patient Health Questionnaire. 
+- Mood Disorder Questionairre can exclude Bipolar but is not sufficient for diagnosis
+- 
