@@ -4,5 +4,5 @@ aliases: []
 ---
 
 ## Defintion
-- Hypomanic episode + Major depression
+- [Hypomanic episode](hypomanic-episode.md) + Major depression
 - No history of mania 

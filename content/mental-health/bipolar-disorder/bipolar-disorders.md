@@ -9,7 +9,7 @@ aliases: []
 - 75% of pts with bipolar disorder have a history of three additional/concurrent mental health conditions
 -33% will attempt [suicide](../suicide/suicide.md) and 6-7% die by suicide
 
-## AAFP Key Recommendations for Practice
+## AAFP Key Recommendations for Practice [@marzani.neff_2021]
 - Screen all pt >12yr for depression
 - Acute Mania: 
   - Monotherapy: Lithium, valproic acid, and some antipsychotics
@@ -29,6 +29,7 @@ aliases: []
 - [Bipolar disorder, Unspecified](bipolar-disorder-unspecified.md)
 
 ## Clinical Presentation
-- Typically present for treatment w/ depression or anxiety. Physicians should explicitly ask about symptoms of mania/hypomania. 
+- Typically present for treatment w/ depression or anxiety. Physicians should explicitly ask about symptoms of mania/[hypomania](hypomanic-episode.md). 
 
 ## Evaluation
+- Screen all pt >12yrs for depression. 
