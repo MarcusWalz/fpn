@@ -3,7 +3,6 @@ title: Type 1 Diabetes Mellitus
 aliases: [T1DM, T1-DM, Type 1 DM]
 ---
 
-
 ## Classification [@ADA_2026]
 - **Stage 1**: Normoglycemia, non symptomatic; **2+ autoantibodies**. 5yr risk ~44%. ==Screen all people w/ FHx of T1DM or other known genetic risk w/ IA, GAD, IA-2 and ZnT8==
   - Free Screening https://www.askhealth.org
@@ -48,7 +47,7 @@ aliases: [T1DM, T1-DM, Type 1 DM]
 -  Female sexual dysfunction is very common - consider screening with the [Female Sexual Function Index (FSFI)](https://www.apta.org/contentassets/a10dbafd45234c7a98ae3dd98385cdab/fsfi_test.pdf$0). Score ≤ 26 is (+) 
 - Treatment -> Lifestyle factors, improve glycemic management, hormonal therapies, consider FDA-approved meds for hypoactive sexual desire disorder
 ### Obstructive Sleep Apnea
-- Rates are likely very high in DM + Obesity
+- Rates are likely very high in [DM](diabetes-mellitus.md) + Obesity
 - Refer for sleep study if indicated
 ### Pancreatitis
 - Twice as likely in people w/ diabetes

@@ -447,7 +447,7 @@ Note: DPP-4, dipeptidyl peptidase 4; GLP-1, glucagon-like peptide 1; SGLT2, sodi
 	- Delirium - 4AT
 	- Depression - GDS-5
 	- Falls - STEADI tool
-	- Frailty - Clinical Frailty Scale
+	- [Frailty](../../geriatric-medicine/frailty.md) - Clinical Frailty Scale
 	- Malnutrition - Mini Nutritional Assessment SF
 	- Pain - Numeric Pain Rating Scale
 	- Polypharmacy - Beers Criteria

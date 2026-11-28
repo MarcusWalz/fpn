@@ -6,7 +6,7 @@ aliases: [T2DM, Type 2 DM, T2 DM]
 ## Overview
 ## Prevention
 ### Lifestyle Behavior Change
-- Refer all T2DM to diabetes prevention program. Goal: Weight reduction of 5-7% + >150 min/week of physical activity
+- Refer all T2DM to diabetes-prevention-program. Goal: Weight reduction of 5-7% + >150 min/week of physical activity
 - Recommend Mediterranean-style, plant-based, DASH, or low-carb diets to all T2DM
 ### Pharmacologic Interventions
 - Metformin
@@ -108,7 +108,7 @@ aliases: [T2DM, Type 2 DM, T2 DM]
 - Provide w/ ketone tests and educate on ketotic states. Can self manage w/ frequent glucose/ketone monitoring + SQ insulin
 
 ## Obesity and Weight Management
-- Consistent evidence that obesity management can delay the progression from prediabetes to T2DM and that its beneficial in T2DM. 
+- Consistent evidence that obesity management can delay the progression from [prediabetes](prediabetes.md) to T2DM and that its beneficial in T2DM. 
 - BMI is imperfect but is a fast heuristic and is a close approximation of excess adiposity in most people
 - *Check out The Obesity Association's guidelines to recognize and address weight bias and stigma*
 ### Behavioral Interventions

@@ -16,7 +16,7 @@ Any one of the following:
 | 2-h OGTT | 140 mg/dL (7.8 mmol/L) to 199 mg/dL (11.0 mmol/L) (IGT) |
 
 ### Screening
-**Table 2.5—Criteria for screening for diabetes or prediabetes in asymptomatic adults**[@ADA_2026]
+**Table 2.5—Criteria for screening for [diabetes](diabetes-mellitus.md) or prediabetes in asymptomatic adults**[@ADA_2026]
 
 1. **adults with overweight or obesity (BMI ≥25 kg/m²)** w/ risk factors:
     - FHx DM

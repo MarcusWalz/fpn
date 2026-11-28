@@ -5,7 +5,7 @@ aliases: []
 
 ## Suicidal Ideation
 - Lifetime prevalence of Suicidal Ideation is 9%
-- Probability of suicide attempt for those with SI is ~30%
+- Probability of [suicide](suicide.md) attempt for those with SI is ~30%
 
 ## Risk of Suicide Completion
 ### Demographics

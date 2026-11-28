@@ -20,7 +20,7 @@ aliases: []
 - Start w/ non-fasting unless TG ≥400 then get fasting to assess for hypertrigliceridemia
 - Only use Lipid panel to screen children unless significant genetic risk
 #### ApoB
-1. In adults on LLT w/ ASCVD, Metabolic syndrome, T2DM, or elevated TG *measure apoB* to guide decisions for more intensive treatment. 
+1. In adults on LLT w/ ASCVD, Metabolic syndrome, [T2DM](../../endocrinology/diabetes-mellitus/type-2-diabetes-mellitus.md), or elevated TG *measure apoB* to guide decisions for more intensive treatment. 
 2. In adults not on LLT, measure apoB for better risk assessment. 
 
 **Rationale:** ApoB directly quantifies the number of atherogenic lipoproteins which is more accurate than LDL which reflects the cholesterol mass carried by LDL particles. *This is cliniclally relevant in populations with metabolic syndrome* who may have atypically low LDL readings even with high Apo B. Possible nonstatin therapeutics include:
@@ -103,7 +103,7 @@ https://tools.acc.org/LDL/StatinIntolerance/ App for statin Drug-Drug interactio
 (missing image: Pasted image 20261028101151.png)
 
 - *Consider testing high sensitivity CRP if risk is borderline.* If there is no identifiable underlying cause consider high intensity statin therapy. 
-- Women have special considerations w/ *early menarche (<10 yrs), PMOS, early menopause <40 yrs and adverse pregnancy outcomes* acting as risk enhancers
+- Women have special considerations w/ *early menarche (<10 yrs), [PMOS](../../endocrinology/metabolic-disorders/polyendocrine-metabolic-ovarian-syndrome.md), early menopause <40 yrs and adverse pregnancy outcomes* acting as risk enhancers
 ###### Selective Imaging - CAC scoring
 - If decision is uncertain use CAC scoring. Below is for Borderline and Intermediate PREVENT-ASCVD Risk scoring
 - **If CAC score is 0** + preference to avoid pharmacology + no high risk conditions -> *defer therapy and reassess w/ CAC in 3-7 years.* CAC = 0 is strongly associated with a low 10-yr risk of ASCVD. In *adults with DM*, is low for 5 years, then reassess. *Smokers* remain at higher risk.
@@ -142,7 +142,7 @@ https://tools.acc.org/LDL/StatinIntolerance/ App for statin Drug-Drug interactio
 	- If LDL @ goal *on statin* ==but TG>150==, add ==Icosapent Ethyl== (specialized Omega 3s)
 -  If high risk or w/ multiple risk factors *initate high intesnity ==statin==* w/ Goal: ==LDL <70 and non HDL <100==
 - In adults >75 yrs and estimated life expectancy >2.5 yrs consider moderate intensity statin
-- ==In adults 20-39== yrs w/ ==Diabetes Specific Risk Factors== {>=10 yrs T2DM or >=20 yrs T1DM, or albuminuria (>30 albumin/cr) or eGFR <60, or retinopathy/neuropathy} ==initiate moderate intensity statin==
+- ==In adults 20-39== yrs w/ ==Diabetes Specific Risk Factors== {>=10 yrs T2DM or >=20 yrs [T1DM](../../endocrinology/diabetes-mellitus/type-1-diabetes-mellitus.md), or albuminuria (>30 albumin/cr) or eGFR <60, or retinopathy/neuropathy} ==initiate moderate intensity statin==
 ----
 #### Secondary Prevention 
 
