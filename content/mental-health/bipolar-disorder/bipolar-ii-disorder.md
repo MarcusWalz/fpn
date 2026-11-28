@@ -3,6 +3,6 @@ title: Bipolar II Disorder
 aliases: []
 ---
 
-## Overview
-
-- 
+## Defintion
+- Hypomanic episode + Major depression
+- No history of mania 
